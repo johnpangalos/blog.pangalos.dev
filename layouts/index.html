@@ -1,9 +1,54 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>blog.pangalos.dev</title>
-  </head>
-  <body>
-    <div>Hello world!</div>
-  </body>
-</html>
+{{ define "main" }}
+  <div id="list-page">
+    <div class="font-bold text-4xl pb-3">Articles</div>
+    {{ $pages := .Site.RegularPages }}
+    {{ $paginator := .Paginate ($pages) }}
+    {{ range $paginator.Pages }}
+      {{ $title := .Title }}
+      {{ $summary := .Summary }}
+      {{ $date := dateFormat "Jan 2, 2006" .Date }}
+      <section class="item">
+        <div class="flex justify-between items-baseline">
+          <div class="font-bold text-2xl pb-2">
+            <a href="{{ .RelPermalink }}">{{ $title }}</a>
+          </div>
+          <div>{{ $date }}</div>
+        </div>
+
+        <div class="pb-5">{{ $summary | plainify | htmlUnescape }}</div>
+        <div class="flex justify-end">
+          <a href="{{ .RelPermalink }}" class="btn btn-dark dark:btn-light"
+            >read.more</a
+          >
+        </div>
+      </section>
+    {{ end }}
+
+    {{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
+      <div class="pagination">
+        {{ if $paginator.HasPrev }}
+          <span class="prev">
+            <a href="{{ .Paginator.Prev.URL }}">
+              <span class="arrow">?</span>
+              {{ with .Site.Params.newerPosts }}
+                {{ . }}{{ else }}Newer Posts{{ end }}
+
+            </a>
+          </span>
+        {{ end }}
+
+        {{ if $paginator.HasNext }}
+          <span class="next">
+            <a href="{{ .Paginator.Next.URL }}">
+              {{ with .Site.Params.olderPosts }}
+                {{ . }}{{ else }}Older Posts{{ end }}
+
+
+              <span class="arrow">?</span>
+            </a>
+          </span>
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+{{ end }}

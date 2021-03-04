@@ -1,0 +1,24 @@
+baseURL: https://blog.pangalos.dev/
+languageCode: "en-us"
+title: "blog.pangalos.dev"
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    guessSyntax: false
+    style: swapoff
+
+params:
+  author: John Pangalos
+  bio: Web Developer
+  description: My Blog
+  copyright: Copyright 2021 John Pangalos
+
+
+module:
+  mounts:
+    - source: assets
+      target: assets
+  

@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply font-bold py-2 px-4 rounded;
+}
+
+.btn-dark {
+  @apply bg-gray-800 hover:bg-gray-700 text-white;
+}
+
+.dark .dark\:btn-light {
+  @apply bg-white hover:bg-gray-200 text-gray-800;
+}

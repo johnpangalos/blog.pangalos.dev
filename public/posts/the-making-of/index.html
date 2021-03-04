@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset=utf-8><title>blog.pangalos.dev</title><link rel=stylesheet href=/index.css><link rel=stylesheet href=/syntax.css></head><body><div id=root><div class="px-4 pb-10 min-h-screen bg-white text-gray-800 dark:bg-gray-900 dark:text-white"><header class="max-w-2xl mx-auto flex justify-between py-4"><a href=/ class="text-xl font-bold">blog.pangalos.dev</a>
+<button onclick=toggleDarkMode()><svg id="moon" class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><rect fill="none" height="24" width="24"/><path fill="currentcolor" d="M12 3c-4.97.0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98.0-5.4-2.42-5.4-5.4.0-1.81.89-3.42 2.26-4.4C12.92 3.04 12.46 3 12 3z"/></svg><svg id="sun" class="w-8 h-8 hidden" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><rect fill="none" height="24" width="24"/><path fill="currentcolor" d="M12 7c-2.76.0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55.0 1-.45 1-1s-.45-1-1-1H2c-.55.0-1 .45-1 1s.45 1 1 1zm18 0h2c.55.0 1-.45 1-1s-.45-1-1-1h-2c-.55.0-1 .45-1 1S19.45 13 20 13zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1S11 19.45 11 20zM5.99 4.58c-.39-.39-1.03-.39-1.41.0-.39.39-.39 1.03.0 1.41l1.06 1.06c.39.39 1.03.39 1.41.0s.39-1.03.0-1.41L5.99 4.58zM18.36 16.95c-.39-.39-1.03-.39-1.41.0-.39.39-.39 1.03.0 1.41l1.06 1.06c.39.39 1.03.39 1.41.0.39-.39.39-1.03.0-1.41l-1.06-1.06zM19.42 5.99c.39-.39.39-1.03.0-1.41-.39-.39-1.03-.39-1.41.0l-1.06 1.06c-.39.39-.39 1.03.0 1.41s1.03.39 1.41.0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03.0-1.41-.39-.39-1.03-.39-1.41.0l-1.06 1.06c-.39.39-.39 1.03.0 1.41s1.03.39 1.41.0l1.06-1.06z"/></svg></button></header><main id=main class="max-w-2xl mx-auto" tabindex=-1><section id=main><div class="font-bold text-4xl pb-3">the.making.of</div><div class=pb-8><article id=content class="prose dark:prose-light"><p>Blogs! Everybody loves them! They&rsquo;re filled with top ten lists and rants about
+obscure topics. This blog post falls into the category of the latter. I recently
+decided to create a video game and was advised to make a blog of my experiences
+as to keep me motivated. While I am unsure that having me do more work will keep
+me motivated, I am sure that I like distractions so I decided to take on writing
+a blog.</p><p>Speaking of, let&rsquo;s get distracted from this post with a top ten list of the best
+distractions.</p><h2 id=toptenbestdistractions>top.ten.best.distractions</h2><ol><li>Shiny things</li><li>Candy crush</li><li>Family and friends</li><li>Something is on fire</li><li>You&rsquo;re on fire</li><li>Love</li><li>Dessert</li><li>Celebrity prank shows</li><li><a href=https://www.reddit.com/r/Awww/ target=_blank>Awww! Subreddit</a>
+(SO CUTE!!!)</li><li>Blogging</li></ol><h2 id=whatwasitalkingabout>what.was.i.talking.about?</h2><p>Oh yeah, creating a blog is easy. I&rsquo;ve done it several times with several
+different technologies. Making a blog should be a walk in the park. I planned to
+be done within a couple hours. So first things first, decide what framework to
+use. After Binging &lsquo;SSG&rsquo; or static site generator (THAT&rsquo;S RIGHT I USE BING) I
+found
+<a href=https://www.military-ranks.org/army/staff-sergeant target=_blank>this</a>.</p><p>STUPID BING!</p><p>I switched search terms to &lsquo;static site generators&rsquo; and found
+<a href=https://jamstack.org/generators/ target=_blank>this</a>.</p><p>HOLY CRAP! Three hundred twenty two different SSGs! I can&rsquo;t even decide what to
+eat for breakfast. So I decided to go with the devil I know and use
+<a href=https://www.gatsbyjs.com/ target=_blank>Gatsby</a>. I had already
+setup a blog for my sister using Gatsby (it&rsquo;s unreleased so I&rsquo;m not linking it
+here), so I figured why not give it a shot.</p><p>Full disclosure, there was going to be a rant here about how slow Gatsby was and
+I was going to say something witty about that mediocre Baz Luhrmann movie of the
+same name<a href=#1><sup>1</sup></a> but yesterday Gatsby came out with an update that
+makes it significantly faster so now I have nothing to complain about. Are you
+happy now JavaScript? Even still, I went with
+<a href=https://gohugo.io/ target=_blank>Hugo</a>.</p><h2 id=hugoagogo>hugo.a.go.go</h2><p>So once I understood how the templating system works, or rather more accurately
+a fair bit of coping from
+<a href=https://github.com/nodejh/hugo-theme-mini target=_blank>this
+theme</a>, I was ready to go. My only problem? I forgot how annoying it is to
+actually write CSS. So I decided to add
+<a href=https://tailwindcss.com/ target=_blank>tailwindcss</a> through the
+JavaScript ecosystem (Are you happy <em>now</em> JavaScript?) along with the
+tailwindcss
+<a href=https://github.com/tailwindlabs/tailwindcss-typography target=_blank>typography
+plugin</a>. For those of you who aren&rsquo;t familiar with tailwindcss and utility
+first CSS frameworks please read
+<a href=https://tailwindcss.com/docs/utility-first target=_blank>this</a>.</p><h2 id=adarkwindcometh>a.dark.wind.cometh</h2><p>The most important thing a blog needs is dark mode and luckily for me
+tailwindcss, as of version 2, has this. But unfortunately for me the tailwindcss
+typography plugin does not. So in dark mode all my blog posts started out having
+black text on a black background. While this is extremely
+metal<a href=#2><sup>2</sup></a> it&rsquo;s not exactly user friendly.</p><p>At first I tried just hacking it using a tailwind function called apply.</p><div class=highlight><pre style=color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-css data-lang=css>.prose <span style=font-weight:700>h1</span>, <span style=font-weight:700>h2</span>, <span style=font-weight:700>h3</span>, <span style=font-weight:700>h4</span>, <span style=font-weight:700>h5</span>, <span style=font-weight:700>h6</span>, <span style=font-weight:700>a</span> {
+  <span style=color:red>@apply</span> dark:<span style=color:#fff;font-weight:700>text</span>-<span style=color:#fff;font-weight:700>white</span>
+}
+</code></pre></div><p>Though this worked it felt wrong, and had a few issues. For one, it didn&rsquo;t fix
+all the cases that I needed. Some specific cases could not easily be overwritten
+due to CSS precedence. Secondly, the whole point of this was to <em>not</em> write CSS.</p><p>After a quick search in the issues on Github I found
+<a href=https://github.com/tailwindlabs/tailwindcss-typography/issues/69#issuecomment-752946920 target=_blank>this</a>
+from one of the creators of tailwindcss. Following his advice led me to this
+<a href="https://play.tailwindcss.com/LgsL0iVTpL?file=config" target=_blank>tailwindcss
+config</a> with a few tweaks.</p><p>Dark mode achieved, ship it!</p><h2 id=cyberpunkdwithashtonkutcher>cyberpunk&rsquo;d.with.ashton.kutcher</h2><p>Oh crap, my site was as buggy as the initial release of
+Cyberpunk<a href=#3><sup>3</sup></a>. Hold on, did they
+<a href=https://www.imdb.com/title/tt10521204/ target=_blank>remade punk&rsquo;d
+with Chance the Rapper</a>? Anyway, what was I saying? Right, the purge, I
+forgot about the purge! When using tailwindcss one of the major benefits is that
+you can easily get rid of all the unused CSS classes through a process called
+purging. But when I did this, my beautiful dark mode disappears to a eye burning
+light mode. What did I forget? So I headed back to Github issues to find
+<a href=https://github.com/tailwindlabs/tailwindcss/issues/3061 target=_blank>this</a>.
+Stupid me, I forgot to add the JavaScript (Damn you JavaScript!) file that adds
+the class &ldquo;dark&rdquo; to the root element.</p><h2 id=conclusion>conclusion</h2><p>What have we learned? Well I learned that there are more Static Site Generators
+than members of The Wu Tang Clan. That dark mode is the most important part of
+any site and should be implemented at any cost. And that there is a new season
+of Punk&rsquo;d out. Now if you&rsquo;ll excuse me, I&rsquo;m going to enjoy some celebrities
+getting pranked.</p><h2 id=footnotes>footnotes</h2><p><a id=1><sup>1</sup></a> The joke was going to be: Just like the Baz Luhrman
+movie of the same name Gastby is bloated and takes a lot longer than you&rsquo;d want.
+Boom! I said it.</p><p><a id=2><sup>2</sup></a> <span class="text-gray-900 bg-black">The devil,
+woooo, the devil. Slayer rules!</span></p><p><a id=3><sup>3</sup></a> Ouuu,
+<a href=https://twitter.com/GenePark/status/1339662024268247043 target=_blank>cheapshot</a>.</p></article></div></section></main></div></div><script src=/dark-mode.js></script></body></html>

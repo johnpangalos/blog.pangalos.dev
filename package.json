@@ -1,0 +1,32 @@
+{
+  "name": "blog.pangalos.dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tailwind": "NODE_ENV=production pnpx tailwindcss-cli build ./tailwind.css -o ./static/index.css",
+    "tailwind:dev": "pnpx tailwindcss-cli build ./tailwind.css -o ./assets/css/index.css",
+    "start": "hugo serve -D",
+    "build": "rimraf public && pnpm tailwind && hugo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnPangalos/blog.pangalos.dev.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/JohnPangalos/blog.pangalos.dev/issues"
+  },
+  "homepage": "https://github.com/JohnPangalos/blog.pangalos.dev#readme",
+  "dependencies": {
+    "@tailwindcss/typography": "^0.4.0",
+    "autoprefixer": "^10.2.4",
+    "postcss-import": "^14.0.0",
+    "prettier": "^2.2.1",
+    "prettier-plugin-go-template": "^0.0.10",
+    "rimraf": "^3.0.2",
+    "tailwindcss": "^2.0.3",
+    "tailwindcss-cli": "^0.1.2"
+  }
+}

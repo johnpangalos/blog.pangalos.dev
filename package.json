@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "tailwind": "NODE_ENV=production pnpx tailwindcss-cli build ./tailwind.css -o ./static/index.css",
-    "tailwind:dev": "pnpx tailwindcss-cli build ./tailwind.css -o ./assets/css/index.css",
+    "tailwind": "NODE_ENV=production pnpx tailwindcss-cli build ./styles.css -o ./static/index.css",
+    "tailwind:dev": "pnpx tailwindcss-cli build ./styles.css -o ./assets/css/index.css",
     "start": "hugo serve -D",
     "build": "rimraf public && pnpm tailwind && hugo"
   },

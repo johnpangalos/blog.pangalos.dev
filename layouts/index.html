@@ -15,7 +15,9 @@
           <div>{{ $date }}</div>
         </div>
 
-        <div class="pb-5">{{ $summary | plainify | htmlUnescape }}</div>
+        <div class="text-gray-300 pb-5">
+          {{ $summary | plainify | htmlUnescape }}
+        </div>
         <div class="flex justify-end">
           <a href="{{ .RelPermalink }}" class="btn btn-dark dark:btn-light"
             >read.more</a

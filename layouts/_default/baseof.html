@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -16,7 +16,7 @@
       >
         <header class="max-w-2xl mx-auto flex justify-between py-4">
           <a href="/" class="text-xl font-bold">blog.pangalos.dev</a>
-          <button onClick="toggleDarkMode()">
+          <button onClick="toggleDarkMode()" aria-label="Toggle dark mode">
             <svg
               id="moon"
               class="w-8 h-8"
@@ -47,7 +47,7 @@
             </svg>
           </button>
         </header>
-        <main id="main" class="max-w-2xl mx-auto" tabindex="-1">
+        <main class="max-w-2xl mx-auto" tabindex="-1">
           {{ block "main" . }} {{ end }}
         </main>
       </div>

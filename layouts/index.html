@@ -19,9 +19,11 @@
           {{ $summary | plainify | htmlUnescape }}
         </div>
         <div class="flex justify-end">
-          <a href="{{ .RelPermalink }}" class="btn btn-dark dark:btn-light"
-            >read.more</a
-          >
+          <a href="{{ .RelPermalink }}">
+            <button class="btn btn-dark dark:btn-light" aria-label="Read more">
+              read.more
+            </button>
+          </a>
         </div>
       </section>
     {{ end }}

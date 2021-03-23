@@ -2,7 +2,7 @@
 author = "John Pangalos"
 title = "the.making.of"
 date = "2021-03-03"
-description = "How I made this blog. This goes through the wonders of JAM stack and this blogs choices of technology."
+summary = "How I made this blog. This goes through the wonders of JAM stack and this blog's choices of technology. Includes info on Hugo, Gastby and the greatest search engine of them all... Bing!"
 tags = [ "blogging", "ssg", "css" ]
 categories = [ "web" ]
 +++

@@ -94,13 +94,13 @@ No not the TV channel that airs such great films as _The Santa Squad_:
 </div>
 
 Are you done watching? Did you watch the whole thing? Good stuff
-right?<a id="5"><sup>5</sup></a> Anyway Lifetimes are essentially just a way to
-make sure memory stays around when you need it. Do you remember how we don't
-have to manage memory in Rust, well we sometimes have to. The link I linked
-earlier does a better job of explaining it so I would just read that. What I
-learned was that in these situations it's good to have someone to help you go
-through your code. I even made a visual example, I hope you like highly
-derivative comics!<a id="7"><sup>7</sup></a>
+right?[<sup>5</sup>](#5) Anyway Lifetimes are essentially just a way to make
+sure memory stays around when you need it. Do you remember how we don't have to
+manage memory in Rust, well we sometimes have to. The link I linked earlier does
+a better job of explaining it so I would just read that. What I learned was that
+in these situations it's good to have someone to help you go through your code.
+I even made a visual example, I hope you like highly derivative
+comics![<sup>7</sup>](#7)
 
 ![Rust lifetimes comic](/rust-lifetimes.png)
 
@@ -124,8 +124,7 @@ I dated that duck or that bear.</br> <a id="4"><sup>4</sup></a> Kind of like
 alzheimer's but in a good way.</br> <a id="5"><sup>5</sup></a> My record if 15
 seconds before I stop watching. Also is that the guy from
 <a href="https://www.remedygames.com/games/quantumbreak/" target="_blank">Quantum
-Break?</a><a id="6"><sup>6</sup></a></br> <a id="6"><sup>6</sup></a> No wait
-that is
+Break?</a>... [<sup>6</sup>](#6)</br> <a id="6"><sup>6</sup></a> No wait that is
 <a href="https://en.wikipedia.org/wiki/Aaron_Ashmore" target="_blank">his</a>
 <a href="https://en.wikipedia.org/wiki/Shawn_Ashmore" target="_blank">brother</a>.</br>
 <a id="7"><sup>7</sup></a> [xkcd](https://xkcd.com/) and

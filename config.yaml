@@ -8,7 +8,7 @@ markup:
       unsafe: true
   highlight:
     guessSyntax: false
-    style: swapoff
+    style: native
 
 params:
   author: John Pangalos

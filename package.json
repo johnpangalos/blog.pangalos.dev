@@ -7,7 +7,7 @@
     "tailwind": "NODE_ENV=production yarn tailwindcss-cli build ./styles.css -o ./static/index.css",
     "tailwind:dev": "yarn tailwindcss-cli build ./styles.css -o ./static/index.css",
     "start": "hugo serve -D",
-    "build": "hugo gen chromastyles --style=native > syntax.css && rimraf public && yarn tailwind && hugo"
+    "build": "hugo gen chromastyles --style=native > static/syntax.css && rimraf public && yarn tailwind && hugo"
   },
   "repository": {
     "type": "git",

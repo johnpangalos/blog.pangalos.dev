@@ -100,7 +100,7 @@ manage memory in Rust, well we sometimes have to. The link I linked earlier does
 a better job of explaining it so I would just read that. What I learned was that
 in these situations it's good to have someone to help you go through your code.
 I even made a visual example, I hope you like highly derivative
-comics![<sup>7</sup>](#7)
+comics[<sup>7</sup>](#7)!
 
 ![Rust lifetimes comic](/rust-lifetimes.png)
 

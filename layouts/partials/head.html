@@ -1,0 +1,39 @@
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width,minimum-scale=1" />
+<title>{{ block "title" . }} {{ .Site.Title }} {{ end }}</title>
+
+{{ $styles := resources.Get "css/main.css" | postCSS }}
+
+{{ if .Site.IsServer }}
+  <link rel="stylesheet" href="{{ $styles.RelPermalink }}" />
+  {{ else }}
+  {{ $styles := $styles | minify | fingerprint | resources.PostProcess }}
+  <link
+    rel="stylesheet"
+    href="{{ $styles.RelPermalink }}"
+    integrity="{{ $styles.Data.Integrity }}"
+  />
+{{ end }}
+
+{{ $styles := resources.Get "css/syntax.css" | postCSS }}
+
+{{ if .Site.IsServer }}
+  <link rel="stylesheet" href="{{ $styles.RelPermalink }}" />
+  {{ else }}
+  {{ $styles := $styles | minify | fingerprint | resources.PostProcess }}
+  <link
+    rel="stylesheet"
+    href="{{ $styles.RelPermalink }}"
+    integrity="{{ $styles.Data.Integrity }}"
+  />
+{{ end }}
+
+{{ $js := resources.Get "js/main.js" }}
+
+{{ if .Site.IsServer }}
+  <script type="text/javascript" src="{{ $js.RelPermalink }}" defer></script>
+  {{ else }}
+  {{ $js := $js | minify | fingerprint }}
+  <script type="text/javascript" src="{{ $js.RelPermalink }}" defer integrity="{{ $js.Data.Integrity }}"></script>
+{{ end }}

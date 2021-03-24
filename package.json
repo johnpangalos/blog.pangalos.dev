@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "tailwind": "NODE_ENV=production yarn tailwindcss-cli build ./styles.css -o ./static/index.css",
-    "tailwind:dev": "yarn tailwindcss-cli build ./styles.css -o ./static/index.css",
     "start": "hugo serve -D",
-    "build": "hugo gen chromastyles --style=native > static/syntax.css && rimraf public && yarn tailwind && hugo"
+    "build": "hugo gen chromastyles --style=native > assets/css/syntax.css && rimraf public && hugo"
   },
   "repository": {
     "type": "git",
@@ -21,12 +19,17 @@
   "homepage": "https://github.com/JohnPangalos/blog.pangalos.dev#readme",
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
-    "autoprefixer": "^10.2.4",
+    "autoprefixer": "^10.2.5",
     "postcss-import": "^14.0.0",
     "prettier": "^2.2.1",
     "prettier-plugin-go-template": "^0.0.10",
     "rimraf": "^3.0.2",
-    "tailwindcss": "^2.0.3",
+    "tailwindcss": "^2.0.4",
     "tailwindcss-cli": "^0.1.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/jit": "^0.1.8",
+    "postcss": "^8.2.8",
+    "postcss-cli": "^8.3.1"
   }
 }

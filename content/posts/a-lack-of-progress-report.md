@@ -106,7 +106,7 @@ comics&excl;[<sup>7</sup>](#7)
 
 ## conclusion
 
-What have we learned? Well I learned that "C++ &gt; Rust" and that while coding
+What have we learned? Well I learned that "C++ &lt; Rust" and that while coding
 Rust make sure you have a someone you can talk to and ask questions. Don't have
 someone to go to for Rust help? Rust has quite a large
 <a href="https://www.rust-lang.org/community" target="_blank">community</a> of

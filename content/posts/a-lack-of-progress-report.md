@@ -39,7 +39,7 @@ them in Rust.</a>
 
 ## make.it.rust
 
-I really like Rust, I mean like really like it, I've started putting in on my
+I really like Rust, I mean like really like it, I've started putting it on my
 sandwiches! Well until I got tetanus.
 (<a href="https://www.mcgill.ca/oss/article/did-you-know/rust-doesnt-cause-tetanus" target="_blank">Well
 Actually</a> 🤓) Anyway, in the context of game development there are three

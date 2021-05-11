@@ -13,3 +13,7 @@
 .dark .dark\:btn-light {
   @apply bg-white hover:bg-gray-200 text-gray-800;
 }
+
+.tooltip, .tooltip a {
+  @apply font-bold bg-yellow-200 dark:bg-yellow-500 dark:text-gray-800 p-0.5 pr-0.5;
+}

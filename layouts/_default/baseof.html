@@ -42,10 +42,21 @@
             </svg>
           </button>
         </header>
-        <main class="max-w-2xl mx-auto no-outline" tabindex="-1">
+        <main class="max-w-2xl mx-auto outline-none" tabindex="-1">
           {{ block "main" . }} {{ end }}
         </main>
       </div>
     </div>
+
+    {{ if .Site.IsServer }}
+      <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+      <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+      {{ else }}
+      <script src="https://unpkg.com/@popperjs/core@2"></script>
+      <script src="https://unpkg.com/tippy.js@6"></script>
+    {{ end }}
+    <script>
+      tippy("[data-tippy-content]", { allowHTML: true });
+    </script>
   </body>
 </html>

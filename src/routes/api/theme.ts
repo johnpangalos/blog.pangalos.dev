@@ -9,7 +9,6 @@ interface Cookie {
   maxAge?: number;
   path?: string;
   sameSite?: string;
-  secrets?: string[];
   secure?: boolean;
 }
 
@@ -38,7 +37,6 @@ export const put: RequestHandler = async ({ request }) => {
     maxAge: 60 * 60 * 24 * 30,
     path: "/",
     sameSite: "lax",
-    secrets: ["secret"],
     secure: !dev,
   };
 

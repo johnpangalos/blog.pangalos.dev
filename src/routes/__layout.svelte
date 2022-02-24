@@ -1,10 +1,6 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import "../app.css";
   import { setTheme, theme } from "$lib/stores/theme";
-
-  theme.subscribe((value) => {
-    if (value === "dark") document.documentElement.classList.add("dark");
-  });
 </script>
 
 <div class="m-auto h-full max-w-2xl">
@@ -15,8 +11,13 @@
       blog.pangalos.dev
     </div>
     <div>
-      <button on:click={() => setTheme($theme === "dark" ? "light" : "dark")}
-        >{$theme === "dark" ? "light" : "dark"}</button
+      <button
+        on:click={() => {
+          setTheme($theme === "dark" ? "light" : "dark");
+          if ($theme === "light")
+            document.documentElement.classList.add("dark");
+          else document.documentElement.classList.remove("dark");
+        }}>{$theme === "dark" ? "light" : "dark"}</button
       >
     </div>
   </nav>
@@ -24,5 +25,3 @@
     <slot />
   </main>
 </div>
-
-<!-- <div class="text-stone-900 dark:bg-stone-900 dark:text-white"> -->

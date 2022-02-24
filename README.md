@@ -1,22 +1,40 @@
-# Welcome to Remix!
+# create-svelte
 
-- [Remix Docs](https://remix.run/docs)
+Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
-## Development
+## Creating a project
 
-You will be utlizing Wrangler for local development to emulate the Cloudflare runtime. This is already wired up in your package.json as the `dev` script:
+If you're seeing this, you've probably already done this step. Congrats!
 
-```sh
-# start the remix dev server and wrangler
-$ npm run dev
+```bash
+# create a new project in the current directory
+npm init svelte@next
+
+# create a new project in my-app
+npm init svelte@next my-app
 ```
 
-Open up [http://127.0.0.1:8788](http://127.0.0.1:8788) and you should be ready to go!
+> Note: the `@next` is temporary
 
-## Deployment
+## Developing
 
-Cloudflare Pages are currently only deployable through their Git provider integrations.
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-If you don't already have an account, then [create a Cloudflare account here](https://dash.cloudflare.com/sign-up/pages) and after verifying your email address with Cloudflare, go to your dashboard and follow the [Cloudflare Pages deployment guide](https://developers.cloudflare.com/pages/framework-guides/deploy-anything).
+```bash
+npm run dev
 
-Configure the "Build command" should be set to `npm run build`, and the "Build output directory" should be set to `public`.
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
+
+## Building
+
+To create a production version of your app:
+
+```bash
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

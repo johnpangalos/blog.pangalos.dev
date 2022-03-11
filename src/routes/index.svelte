@@ -2,12 +2,10 @@
   export async function load({ fetch }) {
     const response = await fetch("/api/posts");
 
-    const temp = response.ok && (await response.json());
-    console.log(temp);
     return {
       status: response.status,
       props: {
-        posts: temp,
+        posts: response.ok && (await response.json()),
       },
     };
   }

@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@sveltejs/adapter-auto': next
-  '@sveltejs/adapter-cloudflare': ^0.0.1
+  '@sveltejs/adapter-cloudflare': ^1.0.0-next.15
   '@sveltejs/adapter-static': ^1.0.0-next.28
   '@sveltejs/kit': ^1.0.0-next.283
   '@tailwindcss/typography': ^0.5.2
@@ -25,7 +25,7 @@ specifiers:
 
 devDependencies:
   '@sveltejs/adapter-auto': 1.0.0-next.31
-  '@sveltejs/adapter-cloudflare': 0.0.1
+  '@sveltejs/adapter-cloudflare': 1.0.0-next.15
   '@sveltejs/adapter-static': 1.0.0-next.28
   '@sveltejs/kit': 1.0.0-next.283_svelte@3.46.4
   '@tailwindcss/typography': 0.5.2_tailwindcss@3.0.23
@@ -139,12 +139,6 @@ packages:
       '@sveltejs/adapter-cloudflare': 1.0.0-next.15
       '@sveltejs/adapter-netlify': 1.0.0-next.50
       '@sveltejs/adapter-vercel': 1.0.0-next.46
-    dev: true
-
-  /@sveltejs/adapter-cloudflare/0.0.1:
-    resolution: {integrity: sha512-7VYmm5YB7Ce3f2hfQqvcuiSTukCzGPQICldzZtBqoels6OxQ8cAV8Ixeq8MwCd9Y8T3CuJDDLMLke+0kYLnSkA==}
-    dependencies:
-      esbuild: 0.14.23
     dev: true
 
   /@sveltejs/adapter-cloudflare/1.0.0-next.15:

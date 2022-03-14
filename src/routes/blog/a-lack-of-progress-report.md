@@ -7,6 +7,8 @@ tags: ["lazy-foo", "rust", "sdl"]
 categories: ["game-development"]
 ---
 
+# a.<wbr>lack.<wbr>of.<wbr>progress.<wbr>report
+
 Hobbies, side hustles, pastimes everybody's got them and about 95% are
 abandoned[<sup>1</sup>](#1). Many of mine can be found on my
 <a href="https://github.com/JohnPangalos" target="_blank">Github account.</a> I
@@ -16,7 +18,7 @@ video game it would be in good company.
 
 <!--more-->
 
-## top.ten.abandoned.side.projects
+## top.<wbr>ten.<wbr>abandoned.<wbr>side.<wbr>projects
 
 1. Kitchen Remodel
 2. Fix my overflowing toilet
@@ -53,7 +55,7 @@ to game development, is the error handling. Take a look at these examples:
 
 ### c++.error.example
 
-```c++
+```cpp
 const result = func();
 if( someErrorCheckFunction(result) ) // Even more hidden code
 {

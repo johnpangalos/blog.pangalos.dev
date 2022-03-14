@@ -7,6 +7,8 @@ tags: ["web-dev", "svelte"]
 categories: ["game-development"]
 ---
 
+# looking.svelte
+
 So when I started this blog I promised myself that I would write at least one
 blog entry a month, and I have already failed. I blame the month of April, did
 you know it only has 30 days? I was planning on writing the article on April
@@ -52,7 +54,7 @@ little bit of the history of frontend web development.
 </svg>
 </div>
 
-## a.brief.history.of.web.development
+## a.<wbr>brief.<wbr>history.<wbr>of.<wbr>web.<wbr>development
 
 A long time ago in the year 1995, the JavaScript language was born. It was
 quickly

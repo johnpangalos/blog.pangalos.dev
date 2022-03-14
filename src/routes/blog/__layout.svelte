@@ -1,3 +1,3 @@
-<div class="prose prose-slate dark:prose-invert lg:prose-xl">
+<div class="prose prose-slate py-10 dark:prose-invert lg:prose-lg">
   <slot />
 </div>

@@ -22,15 +22,13 @@ weeks because I've been busy working on this:
 
 <div class="text-center">
   <Tooltip>
-    <div slot="main">Hover/Touch me!</div>
-    <div slot="hover">Wow cool!</div>
+    <span slot="main">Hover/Touch me!</span>
+    <span slot="hover">Wow cool!</span>
   </Tooltip>
 </div>
 
-Pretty good <Tooltip><div slot="main">right?</div><div slot="hover">Right???</div></Tooltip>
-Anyway, I am writing this article to talk about
-<span class="tooltip" data-tippy-content="Svelte in Swedish means starving, isn't language is neat!">Svelte.</span>
-No not the thing you call an older man with salt and pepper chest hair who right
+Pretty good <Tooltip><span slot="main">right?</span><span slot="hover">Right???</span></Tooltip> Anyway,
+I am writing this article to talk about <Tooltip><span slot="main">Svelte.</span><span slot="hover">Svelte in Swedish means starving, isn't language is neat!</span></Tooltip> No not the thing you call an older man with salt and pepper chest hair who right
 before he is about to dive into an infinity pool has a heart attack making you
 realize you could die at any second and that you've wasted your life writing a
 stupid blog that no one reads and that you never finished that video game you

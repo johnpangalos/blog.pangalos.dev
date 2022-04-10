@@ -7,6 +7,10 @@ tags: ["web-dev", "svelte"]
 categories: ["game-development"]
 ---
 
+<script context="module">
+  import Tooltip from "../../components/Tooltip.svelte";
+</script>
+
 # looking.svelte
 
 So when I started this blog I promised myself that I would write at least one
@@ -16,11 +20,14 @@ you know it only has 30 days? I was planning on writing the article on April
 you might ask? I was busy okay, I haven't replied to my Whatsapp messages in
 weeks because I've been busy working on this:
 
-<div class="flex items-center justify-center">
-    <span data-tippy-content="Wow cool!" class="tooltip">Hover/Touch me!</span>
+<div class="text-center">
+  <Tooltip>
+    <div slot="main">Hover/Touch me!</div>
+    <div slot="hover">Wow cool!</div>
+  </Tooltip>
 </div>
 
-Pretty good <span class="tooltip" data-tippy-content="Right???">right?</span>
+Pretty good <Tooltip><div slot="main">right?</div><div slot="hover">Right???</div></Tooltip>
 Anyway, I am writing this article to talk about
 <span class="tooltip" data-tippy-content="Svelte in Swedish means starving, isn't language is neat!">Svelte.</span>
 No not the thing you call an older man with salt and pepper chest hair who right

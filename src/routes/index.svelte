@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+  import Button from "@/components/Button.svelte";
   export async function load({ fetch }) {
     const response = await fetch("/api/posts");
 
@@ -25,10 +26,8 @@
         })}
       </p>
       <p class="pb-2">{post.meta.description}</p>
-      <div
-        class="flex justify-end text-lg text-fuchsia-600 underline dark:text-fuchsia-400"
-      >
-        <a href={post.path}>go.to.article</a>
+      <div class="flex justify-end">
+        <Button to={post.path}>read.more</Button>
       </div>
     </li>
   {/each}

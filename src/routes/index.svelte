@@ -13,7 +13,7 @@
 </script>
 
 <h2 class="py-4 text-4xl font-bold">Articles</h2>
-<ul class="pb-8">
+<ul class="space-y-1 pb-8">
   {#each $$props.posts as post}
     <li>
       <h3 class="pb-2 text-2xl font-bold">{post.meta.title}</h3>

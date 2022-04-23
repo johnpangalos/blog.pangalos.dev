@@ -9,6 +9,8 @@ categories: ["game-development"]
 
 <script context="module">
   import Tooltip from "../../components/Tooltip.svelte";
+  import Link from "../../components/Link.svelte";
+  import NerdAlert from "../../components/NerdAlert.svelte";
 </script>
 
 # looking.svelte
@@ -36,28 +38,14 @@ planned to make...
 
 But I digress.
 
-<a href="https://svelte.dev" target="_blank">Svelte</a> is a web frontend
-framework made by this guy that works at <span class="tooltip"
-data-tippy-content="<i>The</i> The New York Times">The&nbsp;New&nbsp;York&nbsp;Times</span>
+<Link to="https://svelte.dev">Svelte</Link> is a web frontend
+framework made by this guy that works at
+<Tooltip><span slot="main"><i>The New York Times</i></span><span slot="hover"><i><b>The</b> The New York Times</i></span></Tooltip>
 that revolutionized websites as we know it. Well not really, but it is pretty
 cool. And in order to understand why Svelte is cool we need to understand a
 little bit of the history of frontend web development.
 
-<div class="flex items-center w-full justify-center">
-<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-700 dark:text-red-400" viewBox="0 0 20 20" fill="currentColor">
-  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-700 dark:text-red-400" viewBox="0 0 20 20" fill="currentColor">
-  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-</svg>
-<div class="px-2 text-xl font-medium">NERD ALERT</div>
-<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-700 dark:text-red-400" viewBox="0 0 20 20" fill="currentColor">
-  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-700 dark:text-red-400" viewBox="0 0 20 20" fill="currentColor">
-  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-</svg>
-</div>
+<NerdAlert />
 
 ## a.<wbr>brief.<wbr>history.<wbr>of.<wbr>web.<wbr>development
 

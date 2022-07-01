@@ -1,5 +1,8 @@
 .DS_Store
 node_modules
-public
-static/index.css
-resources
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example

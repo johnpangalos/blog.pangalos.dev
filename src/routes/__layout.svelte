@@ -7,7 +7,7 @@
   <nav class="flex items-center justify-between border-b-2 py-3">
     <a
       href="/"
-      class="text-2xl font-extrabold text-fuchsia-700 dark:text-fuchsia-500"
+      class="font-display text-2xl font-extrabold text-fuchsia-700 dark:text-fuchsia-500"
     >
       blog.pangalos.dev
     </a>

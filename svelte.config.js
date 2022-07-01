@@ -15,6 +15,9 @@ const config = {
       extensions: [".md"],
     }),
   ],
+  experimental: {
+    useVitePreprocess: true,
+  },
 
   kit: {
     adapter: adapter(),

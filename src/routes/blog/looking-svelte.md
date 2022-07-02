@@ -2,7 +2,7 @@
 author: "John Pangalos"
 title: "looking.svelte"
 date: "2021-05-02"
-description: "I am a lazy and distracted person... Speaking of, is another post about the history of web-dev and why the JavaScript framework Svelte is interesting."
+description: "I am a lazy and distracted person... Speaking of, this is another post about the history of web-dev and why the JavaScript framework Svelte is interesting."
 tags: ["web-dev", "svelte"]
 categories: ["game-development"]
 ---

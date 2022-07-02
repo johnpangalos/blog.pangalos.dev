@@ -27,7 +27,7 @@
       </p>
       <p class="pb-2">{post.meta.description}</p>
       <div class="flex justify-end">
-        <Button to={post.path}>read.more</Button>
+        <Button to={post.path}>Go to article</Button>
       </div>
     </li>
   {/each}

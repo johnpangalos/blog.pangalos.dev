@@ -17,5 +17,5 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-display dark:text-amber-500;
+  @apply font-display text-amber-600 dark:text-amber-500;
 }

@@ -1,7 +1,7 @@
 ---
 author: "John Pangalos"
 title: "a.lack.of.progress.report"
-date: "2021-03-21"
+date: "March 21, 2021"
 description: "Some news is better than no news. Ten tutorials down, 40 to go. Covers Rust, sdl and the slow goings of rewriting lazy foo's excellent sdl game development tutorials."
 tags: ["lazy-foo", "rust", "sdl"]
 categories: ["game-development"]

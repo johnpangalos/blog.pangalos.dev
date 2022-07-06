@@ -58,7 +58,7 @@
     on:mouseleave={() => (open = false)}
   >
     {#if to && !isMobile}
-      <Link {to}>
+      <Link class="no-underline" {to}>
         <slot name="main" />
       </Link>
     {:else if to}

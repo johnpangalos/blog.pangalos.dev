@@ -1,14 +1,24 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { browser } from "$app/env";
+  import Link from "./Link.svelte";
+
+  export let to: string = "";
+
   let open: boolean = false;
   let openFunc = () => (open = true);
   let el: HTMLElement;
   let elMain: HTMLElement;
   let classXTranslate: string = "-translate-x-1/2";
   let offset = 0;
+  let isMobile = false;
 
   if (browser) {
+    isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
     onMount(() => {
       const updateXPosition = () => {
         const { right, left } = el.getBoundingClientRect();
@@ -28,7 +38,11 @@
 
       window.document.addEventListener(
         "touchstart",
-        () => open && (open = false),
+        (event: TouchEvent) => {
+          if (el.contains(event.target as Node)) return;
+          console.log(event.target);
+          open && (open = false);
+        },
         { capture: true, passive: true }
       );
     });
@@ -43,7 +57,17 @@
     on:mouseenter={openFunc}
     on:mouseleave={() => (open = false)}
   >
-    <slot name="main" />
+    {#if to && !isMobile}
+      <Link {to}>
+        <slot name="main" />
+      </Link>
+    {:else if to}
+      <span class="font-medium text-orange-600 dark:text-orange-400">
+        <slot name="main" />
+      </span>
+    {:else}
+      <slot name="main" />
+    {/if}
   </span>
   <span
     bind:this={el}
@@ -53,6 +77,12 @@
     style={`${offset !== 0 ? `transform: translate(-${offset}px, -100%)` : ""}`}
     on:blur={() => (open = false)}
   >
-    <slot name="hover" />
+    {#if to && isMobile}
+      <a class="text-white underline" href={to} target="_blank">
+        <slot name="hover" />
+      </a>
+    {:else}
+      <slot name="hover" />
+    {/if}
   </span>
 </span>

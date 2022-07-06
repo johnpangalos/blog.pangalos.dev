@@ -164,32 +164,33 @@ their hands to write a bunch of
 <Tooltip>
 <span slot="hover">This blog for example.</span>
 <span slot="main">stuff nobody needs</span>
-</Tooltip>. And that Facebook is an<Tooltip>
+</Tooltip>.
+And that Facebook is an
+<Tooltip to="https://www.oculus.com/blog/a-single-way-to-log-into-oculus-and-unlock-social-features/">
 <span slot="hover">Facebook locked people out of devices they already owned if they didn't have a Facebook account.</span>
 <span slot="main">
-
-<Link to="https://www.oculus.com/blog/a-single-way-to-log-into-oculus-and-unlock-social-features/">evil</Link>
+evil
 </span>
 </Tooltip>
 company full of
-<Tooltip>
+<Tooltip to="https://themarkup.org/citizen-browser/2021/05/06/how-big-pharma-finds-sick-users-on-facebook">
 <span slot="hover">Facebook helps pharamceutical companies track and show ads to sick people.</span>
 <span slot="main">
-<Link to="https://themarkup.org/citizen-browser/2021/05/06/how-big-pharma-finds-sick-users-on-facebook">evil</Link>
+evil
 </span>
 </Tooltip>
 people doing
-<Tooltip>
+<Tooltip to="https://techcrunch.com/2019/01/29/facebook-project-atlas">
 <span slot="hover">Facebook paid people to install spyware on their phones.</span>
 <span slot="main">
-<Link to="https://techcrunch.com/2019/01/29/facebook-project-atlas">evil</Link>
+evil
 </span>
 </Tooltip>
 things. Now if you'll excuse me, I've got some
-<Tooltip>
+<Tooltip to="https://arstechnica.com/tech-policy/2021/01/whatsapp-users-must-share-their-data-with-facebook-or-stop-using-the-app/">
 <span slot="hover">Nooooooooo! Facebook owns Whatsapp too!</span>
 <span slot="main">
-<Link to="https://arstechnica.com/tech-policy/2021/01/whatsapp-users-must-share-their-data-with-facebook-or-stop-using-the-app/">Whatsapp</Link>
+Whatsapp
 </span>
 </Tooltip>
 messages to reply to.

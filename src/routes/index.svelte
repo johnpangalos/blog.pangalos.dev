@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  import Button from "@/components/Button.svelte";
+  import Button from "../components/Button.svelte";
   export async function load({ fetch }) {
     const response = await fetch("/api/posts");
 
@@ -17,14 +17,7 @@
   {#each $$props.posts as post}
     <li>
       <h3 class="pb-2 text-2xl font-bold">{post.meta.title}</h3>
-      <p class="pb-1 font-bold">
-        {new Date(post.meta.date).toLocaleDateString(undefined, {
-          weekday: undefined,
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        })}
-      </p>
+      <p class="pb-1 font-bold">{post.meta.date}</p>
       <p class="pb-2">{post.meta.description}</p>
       <div class="flex justify-end">
         <Button to={post.path}>Go to article</Button>

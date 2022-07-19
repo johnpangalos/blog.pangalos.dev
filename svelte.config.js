@@ -1,4 +1,3 @@
-import path from "path";
 import adapter from "@sveltejs/adapter-cloudflare";
 import preprocess from "svelte-preprocess";
 import { mdsvex } from "mdsvex";
@@ -12,22 +11,11 @@ const config = {
   preprocess: [
     preprocess(),
     mdsvex({
-      extensions: [".md"],
+      extensions: ["md"],
     }),
   ],
-  experimental: {
-    useVitePreprocess: true,
-  },
-
   kit: {
     adapter: adapter(),
-    vite: {
-      resolve: {
-        alias: {
-          "@": path.resolve("./src"),
-        },
-      },
-    },
   },
 };
 

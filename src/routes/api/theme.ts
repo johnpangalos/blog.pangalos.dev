@@ -26,7 +26,7 @@ function genCookie(cookie: Cookie): string {
     .join(";");
 }
 
-export const put: RequestHandler = async ({ request }) => {
+export const PUT: RequestHandler = async ({ request }) => {
   const res = await request.json();
 
   const cookie: Cookie = {

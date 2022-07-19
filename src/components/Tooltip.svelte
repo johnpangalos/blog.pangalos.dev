@@ -21,6 +21,7 @@
 
     onMount(() => {
       const updateXPosition = () => {
+        if (!el || !elMain) return;
         const { right, left } = el.getBoundingClientRect();
         const { width } = elMain.getBoundingClientRect();
         const windowWidth = window.document.body.clientWidth;
@@ -40,7 +41,6 @@
         "touchstart",
         (event: TouchEvent) => {
           if (el.contains(event.target as Node)) return;
-          console.log(event.target);
           open && (open = false);
         },
         { capture: true, passive: true }
@@ -49,7 +49,7 @@
   }
 </script>
 
-<span class="relative inline-flex">
+<span class="relative !my-0 inline-flex">
   <span
     class="border-b-2 border-dotted border-fuchsia-700"
     bind:this={elMain}

@@ -59,7 +59,7 @@ categories: ["web"]
   what's my gimmick?
 </p>
 
-## List of gimmicks
+## list.of.gimmicks
 
 1. Replace me with someone younger and better looking.
 1. <Tooltip>
@@ -78,11 +78,18 @@ categories: ["web"]
    </Tooltip>
 1. Start writing in an accent.
 
-## Still starving
+## still.starving
 
-In the end I decided to try using Svelte, <Link to="/blog/looking-svelte">something I've gushed at length about before.</Link>
+<p>
+In the end I decided to try using
+<Tooltip>
+  <span slot="main">Svelte,</span>
+  <span slot="hover">Still means starving, still super cool!</span>
+</Tooltip>
+something I've gushed at length about <Link to="/blog/looking-svelte">before.</Link>
 Specifically I decided to use an SSR framework powered by Svelte called SvelteKit.
 That statement might leave you with a few questions, like:
+</p>
 
 - What's an SSR framework?
 - Why does "tech" have so many "achronyms"?
@@ -95,4 +102,63 @@ You wouldn't eat too much ice cream
   <span slot="main">would you?</span>
   <span slot="hover">My stomach hurts.</span>
 </Tooltip>
+Second, you have to learn yet <i>another</i> achronym.
+</p>
+
+<NerdAlert />
+
+## ¡please.no.more.achronyms!
+
+<p>
+Achronyms are just like scoops of ice cream, 
+<Tooltip>
+  <span slot="main">one more wont hurt!</span>
+  <span slot="hover">Why?! No more, I'm gonna vommit!</span>
+</Tooltip>
+The new way technology that my blog uses is called SSR, but before we try and understand that
+we'll have to understand a bit about how websites work.
+</p>
+
+<p>
+Let's say you're an
+<Tooltip>
+  <span slot="main">intrepid young-ish blogger</span>
+  <span slot="hover">Somewhere between 30 and 80 years old.</span>
+</Tooltip>
+and you wanted to make a blog from scratch, what are your options. The main options you'd have to choose from are these:
+</p>
+
+<ul>
+  <li>
+    <b>Client side rendering:</b> This is where your web browser takes code from 
+    a computer on the internet and generates a website before your very eyes.</li>
+  <li>
+    <b>Server side rendering:</b> SSR for those of you that like achronyms,
+    this is where your website is generated on a computer
+      <Tooltip>
+        <span slot="main">somewhere on the internet</span>
+        <span slot="hover">Ahhh! The internet is <i>scary!</i> It's where memes and Elon Musk's twitter account live!</span>
+      </Tooltip>
+    and then sent to your browser.
+  </li>
+  <li>
+    <b>Static site generation:</b> <Link to="/blog/the-making-of">Which I wrote another blog entry about,</Link>
+    is where all the pages on a site are pre-generated and just sent from a computer on the internet to your browser.
+  </li>
+  <li>
+    <Tooltip>
+      <span slot="main">Ask someone younger for help</span>
+      <span slot="hover">While you're at it, might as well ask them how to log into your email. Don't forget to forget your password!</span>
+    </Tooltip>
+  </li>
+</ul>
+
+<p>
+Some of you may be thinking, why would I ever <Tooltip>
+<span slot="main"><i>not</i> pre-generate all of my site,</span>
+<span slot="hover">And why don't I just wear a bathing suit as underwear?</span>
+</Tooltip>
+it sounds faster.
+Well you're right, it certainly would be faster to not have to generate a page
+when a user asks for it.
 </p>

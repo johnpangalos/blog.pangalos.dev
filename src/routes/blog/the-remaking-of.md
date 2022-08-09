@@ -102,12 +102,14 @@ You wouldn't eat too much ice cream
   <span slot="main">would you?</span>
   <span slot="hover">My stomach hurts.</span>
 </Tooltip>
-Second, you have to learn yet <i>another</i> achronym.
+Second, you have to learn
+<Tooltip>
+  <span slot="main">yet <i>another</i> achronym.</span>
+  <span slot="hover">Oh god no, not another achronym!</span>
+</Tooltip>
 </p>
 
 <NerdAlert />
-
-## ¡please.no.more.achronyms!
 
 <p>
 Achronyms are just like scoops of ice cream, 
@@ -115,12 +117,66 @@ Achronyms are just like scoops of ice cream,
   <span slot="main">one more wont hurt!</span>
   <span slot="hover">Why?! No more, I'm gonna vommit!</span>
 </Tooltip>
-The new way technology that my blog uses is called SSR, but before we try and understand that
-we'll have to understand a bit about how websites work.
+The new way technology that my blog uses is called SSR, but before we try and 
+understand that we'll have to understand a bit about how websites work.
+</p>
+
+## ¿what.is.a.website?
+
+<p>
+You ever hear of a little something called 
+<Tooltip>
+  <span slot="main">"the internet"?</span>
+  <span slot="hover">
+    Gah! No more quotes, not even for sarcasm. Give the reader some credit!
+  </span>
+</Tooltip>
+Well the internet in simplest terms is a way to access files on computers that 
+aren't yours. If you want to see watch
+<Link to="https://www.youtube.com/c/unboxtherapy">a person open boxes,</Link> 
+<Link to="https://bookriot.com/harry-potter-erotica/">
+  read some Harry Potter fanfiction erotica,
+ </Link>
+<Link to="https://cats.pangalos.dev">or look at some cat pictures from some weirdo</Link>
+the internet has it all. And what these all are in reality are a way for you to
+get files from computers somewhere out there in the world, be it text, pictures
+or videos.
 </p>
 
 <p>
-Let's say you're an
+But not every computer can be accessed by the internet, you have to open the
+<Tooltip>
+  <span slot="main">door to the internet.</span>
+  <span slot="hover">
+    It's like the door to hell, if hell was filled with annoying jerks who do
+    things like harass women on Twitter, and Instagram, and Facebook, and Reddit
+    and... oh my god, the internet sucks.
+  </span>
+</Tooltip>
+This is not something that happens with normal computers, instead programmers
+use special computers called <i>servers</i>. A <i>server</i> is just sort of
+waits around for someone on the internet to request a file and then 
+<Tooltip>
+  <span slot="main"><i>"serves"</i></span>
+  <span slot="hover">
+    Why did I do that? You had to have understood the connection there, right?
+    RIGHT?!... I think I have a problem.
+  </span>
+</Tooltip>
+the file to the person who requested the file.
+</p>
+
+<p>
+But you don't just look at files on the websites, websites can be look cool 
+and extremly interactive. That's where you're web browser comes in. Your web
+browser downloads some files, interprets them and then displays a website.
+</p>
+
+## okay.so.what's.the.achronym
+
+<p>
+Okay now that we understand the internet and browsers, let's try a hypothetical. Let's say
+you're an
 <Tooltip>
   <span slot="main">intrepid young-ish blogger</span>
   <span slot="hover">Somewhere between 30 and 80 years old.</span>
@@ -130,25 +186,29 @@ and you wanted to make a blog from scratch, what are your options. The main opti
 
 <ul>
   <li>
-    <b>Client side rendering:</b> This is where your web browser takes code from 
-    a computer on the internet and generates a website before your very eyes.</li>
-  <li>
-    <b>Server side rendering:</b> SSR for those of you that like achronyms,
-    this is where your website is generated on a computer
-      <Tooltip>
-        <span slot="main">somewhere on the internet</span>
-        <span slot="hover">Ahhh! The internet is <i>scary!</i> It's where memes and Elon Musk's twitter account live!</span>
-      </Tooltip>
-    and then sent to your browser.
+    <b>Client side rendering:</b> This is where your web browser takes code from
+    a server the internet and generates a website before your very eyes.
   </li>
   <li>
-    <b>Static site generation:</b> <Link to="/blog/the-making-of">Which I wrote another blog entry about,</Link>
-    is where all the pages on a site are pre-generated and just sent from a computer on the internet to your browser.
+    <b>Server side rendering:</b> SSR for those of you that like achronyms,
+    this is where your website is generated on server and then sent to your
+    browser.
+  </li>
+  <li>
+    <b>Static site generation:</b>
+    <Link to="/blog/the-making-of">
+      Which I wrote another blog entry about,
+    </Link>
+    is where all the pages on a website are pre-generated and just sent from a 
+    server to your web browser.
   </li>
   <li>
     <Tooltip>
       <span slot="main">Ask someone younger for help</span>
-      <span slot="hover">While you're at it, might as well ask them how to log into your email. Don't forget to forget your password!</span>
+      <span slot="hover">
+        While you're at it, might as well ask them how to log into your email. 
+        Don't forget to forget your password!
+      </span>
     </Tooltip>
   </li>
 </ul>
@@ -160,5 +220,11 @@ Some of you may be thinking, why would I ever <Tooltip>
 </Tooltip>
 it sounds faster.
 Well you're right, it certainly would be faster to not have to generate a page
-when a user asks for it.
+when a user asks for it. It is in fact how I originally made my blog, but there was only one issue with that... dark mode.
 </p>
+
+## drink.8.glasses.of.water.a.day
+
+So what was the issue with my beloved dark mode on my old website? Well if you
+were to go to my old website and turn on dark mode and reloaded the page what
+would you see?

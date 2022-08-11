@@ -47,7 +47,7 @@ categories: ["web"]
 </p>
 
 <div class="flex justify-center aspect-video">
-  <iframe class="w-full" src="https://www.youtube.com/embed/V02lqEpbk2Y" title="The Lake House (2006) | Movie Trailer | Sandra Bullock, Keanu Reeves" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <iframe class="w-full" height="378px" src="https://www.youtube.com/embed/V02lqEpbk2Y" title="The Lake House (2006) | Movie Trailer | Sandra Bullock, Keanu Reeves" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 <p>
@@ -220,7 +220,8 @@ Some of you may be thinking, why would I ever <Tooltip>
 </Tooltip>
 it sounds faster.
 Well you're right, it certainly would be faster to not have to generate a page
-when a user asks for it. It is in fact how I originally made my blog, but there was only one issue with that... dark mode.
+when a user asks for it. It is in fact how I originally made my blog, but there
+was only one issue with that... dark mode.
 </p>
 
 ## drink.8.glasses.of.water.a.day
@@ -228,3 +229,106 @@ when a user asks for it. It is in fact how I originally made my blog, but there 
 So what was the issue with my beloved dark mode on my old website? Well if you
 were to go to my old website and turn on dark mode and reloaded the page what
 would you see?
+
+<video height="403.52px" controls>
+  <source src="/see.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+Did you see it? Dear god, the horror! What was happening there to cause that
+aweful flicker? Well for this we're going to need some arrows.
+
+The order of how the website appears in dark mode in my old website happens
+like this:
+
+<div class="flex flex-col font-bold font-mono text-center">
+  <div>
+  Broswer asks for file from server
+  </div>
+  <div>
+  &darr;
+  </div>
+  <div>
+  Server sends file Browser 
+  </div>
+  <div>
+  &darr; 
+  </div>
+  <div>
+  Website appears in light mode
+  </div>
+  <div>
+  &darr; 
+  </div>
+  <div>
+  Website appears in dark mode 
+  </div>
+</div>
+
+<p>
+So what's the issue here? The issue is that the website is showing up before
+we have the neccessary to show the page in dark mode. So instead of going
+directly to dark mode, we end up having to use this 
+<Tooltip>
+  <span slot="main">in-between state.</span>
+  <span slot="hover">
+    It's like whatever is between the Pokémon Squirtle and Blastoise, I don't
+    know and I don't want to know... Seriously don't tell me, I will be
+    physically and purposefully ill.
+  </span>
+</Tooltip>
+</p>
+
+How do we fix this egregious error? One way is to know what mode your in before
+you send the files from the server to the browser, like some sort of computer
+Nostradamus. And how do we know this?
+
+## c.is.for."tracking".cookie
+
+<p>
+What I use to make dark mode work in this website is the  
+<Link to="https://truthinadvertising.org/articles/facebooks-tracking-cookies/">
+  same technology that Facebook uses to track all of your internet browsing,
+</Link>
+and it's called a cookie. What is a cookie you might ask? It's just a bit of
+text that is saved in you browser and is mostly used to communicate with servers
+to let them know you're logged in, and in this website's case it's used to save
+if you're using dark mode. Our new arrow diagram looks like this:
+</p>
+
+<div class="flex flex-col font-bold font-mono text-center">
+  <div>
+  Broswer asks for file from server with cookie
+  </div>
+  <div>
+  &darr;
+  </div>
+  <div>
+  Server reads cookie 
+  </div>
+  <div>
+  &darr; 
+  </div>
+  <div>
+  Server sends file Browser 
+  </div>
+  <div>
+  &darr; 
+  </div>
+  <div>
+  Website appears in dark mode 
+  </div>
+</div>
+
+<p>
+And voila, we our problem with having light mode show up on refresh is gone, and
+it only took over a year to make! Well
+<Tooltip>
+  <span slot="main">at least we learned something.</span>
+  <span slot="hover">
+    Oh my god, a Squirtle evolves into a Wartortle? Why not Warturtle? It sounds like
+    the way a walrus walks into battle. What a terrible name! If you'll excuse me
+    I need to be purposefully sick now...
+  </span>
+</Tooltip>
+</p>

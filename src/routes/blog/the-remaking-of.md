@@ -20,7 +20,7 @@ categories: ["web"]
   IT'S BEEN OVER A YEAR?! I guess time flies when you're not writing a blog.
   Well I have a very good reason I haven't posted in so long, <Tooltip
     ><span slot="main">I'M OUT OF IDEAS!</span><span slot="hover"
-      >Oh and I'm out of toliet paper, I should go get some when I'm out picking
+      >Oh and I'm out of toilet paper, I should go get some when I'm out picking
       up some ideas.</span
     ></Tooltip
   > Time to do the oldest trick in the book... REMAKE!
@@ -88,11 +88,11 @@ In the end I decided to try using
 </Tooltip>
 something I've gushed at length about <Link to="/blog/looking-svelte">before.</Link>
 Specifically I decided to use an SSR framework powered by Svelte called SvelteKit.
-That statement might leave you with a few questions, like:
+That statement might leave you with a few questions, like
 </p>
 
 - What's an SSR framework?
-- Why does "tech" have so many "achronyms"?
+- Why does "tech" have so many "acronyms"?
 - "WHY" "DON'T" "PEOPLE" "USE" "MORE" "QUOTATION" "MARKS"?
 
 <p>
@@ -104,15 +104,15 @@ You wouldn't eat too much ice cream
 </Tooltip>
 Second, you have to learn
 <Tooltip>
-  <span slot="main">yet <i>another</i> achronym.</span>
-  <span slot="hover">Oh god no, not another achronym!</span>
+  <span slot="main">yet <i>another</i> acronym.</span>
+  <span slot="hover">Oh god no, not another acronym!</span>
 </Tooltip>
 </p>
 
 <NerdAlert />
 
 <p>
-Achronyms are just like scoops of ice cream, 
+Acronyms are just like scoops of ice cream, 
 <Tooltip>
   <span slot="main">one more wont hurt!</span>
   <span slot="hover">Why?! No more, I'm gonna vommit!</span>
@@ -168,11 +168,11 @@ the file to the person who requested the file.
 
 <p>
 But you don't just look at files on the websites, websites can be look cool 
-and extremly interactive. That's where you're web browser comes in. Your web
+and extremely interactive. That's where your web browser comes in. Your web
 browser downloads some files, interprets them and then displays a website.
 </p>
 
-## okay.so.what's.the.achronym
+## okay.so.what's.the.acronym
 
 <p>
 Okay now that we understand the internet and browsers, let's try a hypothetical. Let's say
@@ -190,7 +190,7 @@ and you wanted to make a blog from scratch, what are your options. The main opti
     a server the internet and generates a website before your very eyes.
   </li>
   <li>
-    <b>Server side rendering:</b> SSR for those of you that like achronyms,
+    <b>Server side rendering:</b> SSR for those of you that like acronyms,
     this is where your website is generated on server and then sent to your
     browser.
   </li>
@@ -236,14 +236,14 @@ would you see?
 </video>
 
 Did you see it? Dear god, the horror! What was happening there to cause that
-aweful flicker? Well for this we're going to need some arrows.
+awful flicker? Well for this we're going to need some arrows.
 
 The order of how the website appears in dark mode in my old website happens
 like this:
 
 <div class="flex flex-col font-bold font-mono text-center">
   <div>
-  Broswer asks for file from server
+  Browser asks for file from server
   </div>
   <div>
   &darr;
@@ -267,7 +267,7 @@ like this:
 
 <p>
 So what's the issue here? The issue is that the website is showing up before
-we have the neccessary to show the page in dark mode. So instead of going
+we have the necessary to show the page in dark mode. So instead of going
 directly to dark mode, we end up having to use this 
 <Tooltip>
   <span slot="main">in-between state.</span>
@@ -279,7 +279,7 @@ directly to dark mode, we end up having to use this
 </Tooltip>
 </p>
 
-How do we fix this egregious error? One way is to know what mode your in before
+How do we fix this egregious error? One way is to know what mode you're in before
 you send the files from the server to the browser, like some sort of computer
 Nostradamus. And how do we know this?
 
@@ -298,7 +298,7 @@ if you're using dark mode. Our new arrow diagram looks like this:
 
 <div class="flex flex-col font-bold font-mono text-center">
   <div>
-  Broswer asks for file from server with cookie
+  Browser asks for file from server with cookie
   </div>
   <div>
   &darr;

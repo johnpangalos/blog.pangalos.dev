@@ -18,7 +18,7 @@ categories: ["web"]
 <p>
   Wow, it's been a while since I posted, hold on let me just check how long...
   IT'S BEEN OVER A YEAR?! I guess time flies when you're not writing a blog.
-  Well I have a very good reason I haven't posted in so long, <Tooltip
+  Well, I have a very good reason I haven't posted in so long, <Tooltip
     ><span slot="main">I'M OUT OF IDEAS!</span><span slot="hover"
       >Oh and I'm out of toilet paper, I should go get some when I'm out picking
       up some ideas.</span
@@ -55,7 +55,7 @@ categories: ["web"]
     <span slot="main">Surely a love story for the ages.</span>
     <span slot="hover">Why did I decide to put on mascara before I watched the trailer...</span>
   </Tooltip>
-  Well if the it works for The Lake House, it will work for me too. The only question now is
+  Well, if the it works for The Lake House, it will work for me too. The only question now is
   what's my gimmick?
 </p>
 
@@ -131,7 +131,7 @@ You ever hear of a little something called
     Gah! No more quotes, not even for sarcasm. Give the reader some credit!
   </span>
 </Tooltip>
-Well the internet in simplest terms is a way to access files on computers that 
+Well, the internet in simplest terms is a way to access files on computers that 
 aren't yours. If you want to see watch
 <Link to="https://www.youtube.com/c/unboxtherapy">a person open boxes,</Link> 
 <Link to="https://bookriot.com/harry-potter-erotica/">
@@ -220,14 +220,14 @@ Some of you may be thinking, why would I ever <Tooltip>
 <span slot="hover">And why don't I just wear a bathing suit as underwear?</span>
 </Tooltip>
 it sounds faster.
-Well you're right, it certainly would be faster to not have to generate a page
+Well, you're right, it certainly would be faster to not have to generate a page
 when a user asks for it. It is in fact how I originally made my blog, but there
 was only one issue with that... dark mode.
 </p>
 
 ## drink.8.glasses.of.water.a.day
 
-So what was the issue with my beloved dark mode on my old website? Well if you
+So what was the issue with my beloved dark mode on my old website? Well, if you
 were to go to my old website and turn on dark mode and reloaded the page what
 would you see?
 
@@ -237,7 +237,7 @@ would you see?
 </video>
 
 Did you see it? Dear god, the horror! What was happening there to cause that
-awful flicker? Well for this we're going to need some arrows.
+awful flicker? For this we're going to need some arrows.
 
 The order of how the website appears in dark mode in my old website happens
 like this:
@@ -322,8 +322,8 @@ if you're using dark mode. Our new arrow diagram looks like this:
 </div>
 
 <p>
-And voila, we our problem with having light mode show up on refresh is gone, and
-it only took over a year to make! Well at least 
+And voila, we have fixed our problem of having light mode show up on refresh, and
+it only took over a year to make! Well, at least 
 <Tooltip>
   <span slot="main">we learned something.</span>
   <span slot="hover">

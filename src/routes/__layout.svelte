@@ -4,7 +4,7 @@
 </script>
 
 <div class="m-auto h-full max-w-2xl px-4 md:px-0">
-  <nav class="flex items-center justify-between border-b-2 pt-10">
+  <nav class="flex items-center justify-between border-b-2 pt-4 lg:pt-10">
     <a
       href="/"
       class="font-display text-2xl font-extrabold text-fuchsia-700 dark:text-fuchsia-500"

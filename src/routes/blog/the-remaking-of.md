@@ -322,9 +322,9 @@ if you're using dark mode. Our new arrow diagram looks like this:
 
 <p>
 And voila, we our problem with having light mode show up on refresh is gone, and
-it only took over a year to make! Well
+it only took over a year to make! Well at least 
 <Tooltip>
-  <span slot="main">at least we learned something.</span>
+  <span slot="main">we learned something.</span>
   <span slot="hover">
     Oh my god, a Squirtle evolves into a Wartortle? Why not Warturtle? It sounds like
     the way a walrus walks into battle. What a terrible name! If you'll excuse me

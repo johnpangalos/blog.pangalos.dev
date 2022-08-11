@@ -230,8 +230,8 @@ So what was the issue with my beloved dark mode on my old website? Well if you
 were to go to my old website and turn on dark mode and reloaded the page what
 would you see?
 
-<video height="403.52px" controls>
-  <source src="/see.mp4" type="video/mp4">
+<video height="403.52px" src="/see.mp4" controls>
+  <track kind="captions">
   Your browser does not support the video tag.
 </video>
 

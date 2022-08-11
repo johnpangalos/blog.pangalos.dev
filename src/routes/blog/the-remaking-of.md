@@ -181,7 +181,8 @@ you're an
   <span slot="main">intrepid young-ish blogger</span>
   <span slot="hover">Somewhere between 30 and 80 years old.</span>
 </Tooltip>
-and you wanted to make a blog from scratch, what are your options. The main options you'd have to choose from are these:
+and you wanted to make a blog from scratch, what are your options. The main 
+options you'd have to choose from are these:
 </p>
 
 <ul>
@@ -249,7 +250,7 @@ like this:
   &darr;
   </div>
   <div>
-  Server sends file Browser 
+  Server sends file to the Browser 
   </div>
   <div>
   &darr; 
@@ -267,7 +268,7 @@ like this:
 
 <p>
 So what's the issue here? The issue is that the website is showing up before
-we have the necessary to show the page in dark mode. So instead of going
+we have what's necessary to show the page in dark mode. So instead of going
 directly to dark mode, we end up having to use this 
 <Tooltip>
   <span slot="main">in-between state.</span>
@@ -310,7 +311,7 @@ if you're using dark mode. Our new arrow diagram looks like this:
   &darr; 
   </div>
   <div>
-  Server sends file Browser 
+  Server sends file to the Browser 
   </div>
   <div>
   &darr; 

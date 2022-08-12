@@ -75,22 +75,32 @@ categories: ["web"]
 
 ## list.of.gimmicks
 
-1. Replace me with someone younger and better looking.
-1. <Tooltip>
-     <span slot="main">Rewrite the same articles, but in Korean.</span>
-     <span slot="hover">A reverse <i>The Lake House!</i></span>
+<ol>
+  <li>Replace me with someone younger and better looking.</li>
+  <li>
+    Rewrite the same articles, but 
+    <Tooltip>
+      <span slot="main">in Korean.</span>
+      <span slot="hover">A reverse <i>The Lake House!</i></span>
+    </Tooltip>
+  </li>
+  <li>
+    Replace me with someone who 
+    <Tooltip>
+      <span slot="main">is female.</span>
+      <span slot="hover">This would really piss off Reddit, Extra points!</span> 
+    </Tooltip>
+  </li>
+  <li>Cast people as my children who continue my legacy of writing articles about trivial things that no one reads.</li>
+  <li>
+    Replace me with a dog,
+    <Tooltip>
+     <span slot="main">people like dogs.</span>
+     <span slot="hover">Woof!</span>
    </Tooltip>
-1. <Tooltip>
-     <span slot="main">Replace me with someone who is female.</span>
-     <span slot="hover">This would really piss off Reddit, Extra points!</span>
-   </Tooltip>
-1. Cast people as my children who continue my legacy of writing articles about trivial
-   things that no one reads.
-1. Replace me with a dog, <Tooltip>
-   <span slot="main">people like dogs.</span>
-   <span slot="hover">Woof!</span>
-   </Tooltip>
-1. Start writing in an accent.
+  </li>
+  <li>Start writing in an accent.</li>
+</ol>
 
 ## still.starving
 
@@ -177,14 +187,19 @@ for someone on the internet to ask a file. Then the <i>server</i>
     Here, enjoy: """""""""""""""
   </span>
 </Tooltip>
-the file to the person who requester. These requests can come from any sort of
+the file to the requester. These requests can come from any sort of
 application, but in the case of a website, it most often comes from your browser.
 </p>
 
 <p>
-But you don't just look at files on the websites, websites can look cool 
-and be extremely interactive. That's where your web browser comes in. Your web
-browser downloads some files, interprets them to displays a website.
+But websites aren't just text, pictures and videos, that are on can have cool 
+features like 
+<Tooltip>
+  <span slot="main">dark mode.</span>
+  <span slot="hover">Remember this, we'll get back to it later.</span>
+</Tooltip>
+ That's where your web browser comes in. Your web browser downloads some 
+ files, interprets them to displays a website.
 </p>
 
 ## okay.so.what's.the.acronym
@@ -234,7 +249,7 @@ Some of you may be thinking, why would I ever
 <Tooltip>
   <span slot="main"><i>not</i> pre-generate all of my site,</span>
   <span slot="hover">
-    And why aren't my children answer my calls, I've unplugged my
+    And why aren't my children answering my calls, I've unplugged my
     router again and for some reason Netflix isn't working.
   </span>
 </Tooltip>
@@ -254,8 +269,19 @@ would you see?
   Your browser does not support the video tag.
 </video>
 
-Did you see it? Dear God, the horror! What was happening there to cause that
-awful flicker? For this we're going to need some arrows.
+<p>
+  Did you see it? Dear God, 
+  <Tooltip>
+    <span slot="main">THE HORROR!</span>
+    <span slot="hover">
+      But seriously, did you see it? People keep telling me "It's no big deal" 
+      and "I'm crazy" and I keep telling them STOP USING QUOTATION MARKS! YOU'RE
+      WORSE THAN THE SLIGHT FLICKER ON MY OLD WEBSITE!
+    </span>
+  </Tooltip>
+  What was happening there to cause that awful flicker? For this we're going 
+  to need some arrows.
+</p>
 
 <div class="flex flex-col font-bold font-mono text-center py-8">
   <div>

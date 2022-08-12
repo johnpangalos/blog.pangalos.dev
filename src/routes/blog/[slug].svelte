@@ -1,23 +1,16 @@
 <script context="module">
-  // TODO should use a shadow endpoint instead, need to fix a bug first
-  /** @type {import('@sveltejs/kit').Load} */
-  export async function load({ fetch, params }) {
-    const res = await fetch(`/blog/${params.slug}.json`);
-    const { prev, next, section } = await res.json();
-
+  /** @type {import('./__types/[slug]').Load} */
+  export async function load({ params, fetch, session, stuff }) {
     return {
+      status: response.status,
       props: {
-        prev,
-        next,
-        section,
+        slug: response.ok && params.slug,
       },
     };
   }
 </script>
 
 <script>
-  export let prev;
-  export let next;
   export let section;
 </script>
 

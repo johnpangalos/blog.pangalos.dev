@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-  <title>blog</title>
+  <title>some.blog.or.whatever</title>
 </svelte:head>
 
 <h2 class="pt-6 pb-4 text-4xl font-bold">Articles</h2>

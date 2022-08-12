@@ -15,6 +15,12 @@
   }
 </script>
 
+<script>
+  export let prev;
+  export let next;
+  export let section;
+</script>
+
 <svelte:head>
   <title>{section.title} • blog.pangalos.dev</title>
 

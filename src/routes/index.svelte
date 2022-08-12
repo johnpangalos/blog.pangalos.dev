@@ -12,6 +12,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>some.blog.or.whatever</title>
+</svelte:head>
+
 <h2 class="pt-6 pb-4 text-4xl font-bold">Articles</h2>
 <ul class="space-y-1 pb-8">
   {#each $$props.posts as post}

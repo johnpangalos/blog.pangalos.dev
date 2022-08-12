@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-  <title>blog.pangalos.dev</title>
+  <title>blog</title>
 </svelte:head>
 
 <h2 class="pt-6 pb-4 text-4xl font-bold">Articles</h2>

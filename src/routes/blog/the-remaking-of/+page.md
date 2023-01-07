@@ -8,9 +8,11 @@ categories: ["web"]
 ---
 
 <script context="module">
-  import Link from "../../components/Link.svelte";
-  import Tooltip from "../../components/Tooltip.svelte";
-  import NerdAlert from "../../components/NerdAlert.svelte";
+  throw new Error("@migration task: Check code was safely removed (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292722)");
+
+  // import Link from "../../../components/Link.svelte";
+  // import Tooltip from "../../../components/Tooltip.svelte";
+  // import NerdAlert from "../../../components/NerdAlert.svelte";
 </script>
 
 # the.remaking.of

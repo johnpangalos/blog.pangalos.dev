@@ -8,9 +8,11 @@ categories: ["game-development"]
 ---
 
 <script context="module">
-  import FootnoteLink from "../../components/FootnoteLink.svelte"
-  import FootnoteAnchor from "../../components/FootnoteAnchor.svelte"
-  import Link from "../../components/Link.svelte";
+  throw new Error("@migration task: Check code was safely removed (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292722)");
+
+  // import FootnoteLink from "../../../components/FootnoteLink.svelte"
+  // import FootnoteAnchor from "../../../components/FootnoteAnchor.svelte"
+  // import Link from "../../../components/Link.svelte";
 </script>
 
 # a.<wbr>lack.<wbr>of.<wbr>progress.<wbr>report

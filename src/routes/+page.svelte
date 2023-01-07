@@ -1,15 +1,17 @@
 <script context="module" lang="ts">
-  import Button from "../components/Button.svelte";
-  export async function load({ fetch }) {
-    const response = await fetch("/api/posts");
+  throw new Error("@migration task: Check code was safely removed (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292722)");
 
-    return {
-      status: response.status,
-      props: {
-        posts: response.ok && (await response.json()),
-      },
-    };
-  }
+  // import Button from "../components/Button.svelte";
+  // export async function load({ fetch }) {
+  //   const response = await fetch("/api/posts");
+
+  //   return {
+  //     status: response.status,
+  //     props: {
+  //       posts: response.ok && (await response.json()),
+  //     },
+  //   };
+  // }
 </script>
 
 <svelte:head>

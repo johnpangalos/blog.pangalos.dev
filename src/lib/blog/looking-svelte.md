@@ -8,9 +8,9 @@ categories: ["game-development"]
 ---
 
 <script context="module">
-  import Tooltip from "../../components/Tooltip.svelte";
-  import Link from "../../components/Link.svelte";
-  import NerdAlert from "../../components/NerdAlert.svelte";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import Link from "$lib/components/Link.svelte";
+  import NerdAlert from "$lib/components/NerdAlert.svelte";
   let facebookRant1 = `
 Facebook, FACEBOOK! Don't get me started on Facebook.
 You got ten hours. Good. Wait how long should these tooltips be?
@@ -24,8 +24,6 @@ shot JFK from the grassy knoll. Mark Zuckerberg is Luke Skywalkers'
 real father and mother. Don't be fooled!`
   let facebookRant3 = `Holy Mother of God! We can't get away from them, they're god damn everywhere. Noooooo!!!`
 </script>
-
-# looking.svelte
 
 So when I started this blog I promised myself that I would write at least one
 blog entry a month, and I have already failed. I blame the month of April, did

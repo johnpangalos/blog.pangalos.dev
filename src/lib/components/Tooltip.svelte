@@ -1,15 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
   import Link from "./Link.svelte";
 
-  export let to: string = "";
+  export let to = "";
 
-  let open: boolean = false;
+  let open = false;
   let openFunc = () => (open = true);
   let el: HTMLElement;
   let elMain: HTMLElement;
-  let classXTranslate: string = "-translate-x-1/2";
+  let classXTranslate = "-translate-x-1/2";
   let offset = 0;
   let isMobile = false;
 
@@ -78,7 +78,12 @@
     on:blur={() => (open = false)}
   >
     {#if to && isMobile}
-      <a class="text-white underline" href={to} target="_blank">
+      <a
+        rel="noreferrer"
+        class="text-white underline"
+        href={to}
+        target="_blank"
+      >
         <slot name="hover" />
       </a>
     {:else}

@@ -8,12 +8,10 @@ categories: ["web"]
 ---
 
 <script context="module">
-  import Link from "../../components/Link.svelte";
-  import Tooltip from "../../components/Tooltip.svelte";
-  import NerdAlert from "../../components/NerdAlert.svelte";
+  import Link from "$lib/components/Link.svelte";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import NerdAlert from "$lib/components/NerdAlert.svelte";
 </script>
-
-# the.remaking.of
 
 <p>
   Wow, it's been a while since I posted, hold on let me just check how long...

@@ -4,7 +4,7 @@
   import "../app.css";
 
   export let data: LayoutData;
-  let theme = data.theme;
+  let theme = data.theme ?? "light";
 </script>
 
 <div class="m-auto h-full max-w-2xl px-4 md:px-0">

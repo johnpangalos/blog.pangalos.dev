@@ -1,6 +1,6 @@
 <script lang="ts">
   export let to: string;
-  let className: string = "";
+  let className = "";
 
   export { className as class };
 </script>
@@ -10,5 +10,6 @@
     className ? ` ${className}` : ""
   }`}
   href={to}
+  rel="noreferrer"
   target="_blank"><slot /></a
 >

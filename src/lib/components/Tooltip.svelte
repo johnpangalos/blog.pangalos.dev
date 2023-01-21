@@ -78,7 +78,12 @@
     on:blur={() => (open = false)}
   >
     {#if to && isMobile}
-      <a class="text-white underline" href={to} target="_blank">
+      <a
+        rel="noreferrer"
+        class="text-white underline"
+        href={to}
+        target="_blank"
+      >
         <slot name="hover" />
       </a>
     {:else}

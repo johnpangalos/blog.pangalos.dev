@@ -13,9 +13,14 @@ body {
 
 h1,
 h2,
+h2 a,
 h3,
+h3 a,
 h4,
+h4 a,
 h5,
-h6 {
+h5 a,
+h6,
+h6 a {
   @apply font-display text-amber-600 dark:text-amber-500;
 }

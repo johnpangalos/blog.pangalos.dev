@@ -5,6 +5,6 @@
 
 <article>
   <h1 class="!mb-0 pb-2">{data.title}</h1>
-  <p class="font-bold pb-1 !m-0">{data.date}</p>
+  <p class="!m-0 pb-1 font-bold">{data.date}</p>
   <svelte:component this={data.content} />
 </article>

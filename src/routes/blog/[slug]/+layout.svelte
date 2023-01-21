@@ -9,6 +9,8 @@
   <title>{data.title} - {title}</title>
 </svelte:head>
 
-<div class="prose prose-slate pt-10 pb-20 dark:prose-invert lg:prose-lg">
+<div
+  class="prose prose-slate prose-headings:font-display pt-10 pb-20 dark:prose-invert lg:prose-lg prose-headings:font-bold"
+>
   <slot />
 </div>

@@ -18,7 +18,7 @@ Hobbies, side hustles, pastimes everybody's got them and about 95% are
 abandoned<FootnoteLink number={1}/>. Many of mine can be found on my
 <Link to="https://github.com/JohnPangalos">Github account.</Link> I
 am doing my best to make sure that my game (a.k.a. Totally Not Abandoned Video
-Game�) is not one of them. Although, if I were to abandon my upcoming very hyped
+Game&trade;) is not one of them. Although, if I were to abandon my upcoming very hyped
 video game it would be in good company.
 </p>
 
@@ -128,7 +128,7 @@ comics&excl;<FootnoteLink number={7} />
 ## conclusion
 
 <p>
-What have we learned? Well I learned that "C++ &amp;lt; Rust" and that while coding
+What have we learned? Well I learned that "Rust &gt; C++" and that while coding
 Rust make sure you have a someone you can talk to and ask questions. Don't have
 someone to go to for Rust help? Rust has quite a large
 <Link to="https://www.rust-lang.org/community">community</Link> of

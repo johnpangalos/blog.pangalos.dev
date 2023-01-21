@@ -11,16 +11,16 @@ body {
   @apply font-serif;
 }
 
-h1,
-h2,
-h2 a,
-h3,
-h3 a,
-h4,
-h4 a,
-h5,
-h5 a,
-h6,
-h6 a {
+.prose h1,
+.prose h2,
+.prose h2 a,
+.prose h3,
+.prose h3 a,
+.prose h4,
+.prose h4 a,
+.prose h5,
+.prose h5 a,
+.prose h6,
+.prose h6 a {
   @apply font-display text-amber-600 dark:text-amber-500;
 }

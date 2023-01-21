@@ -8,14 +8,10 @@ categories: ["game-development"]
 ---
 
 <script context="module">
-  throw new Error("@migration task: Check code was safely removed (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292722)");
-
-  // import FootnoteLink from "../../../components/FootnoteLink.svelte"
-  // import FootnoteAnchor from "../../../components/FootnoteAnchor.svelte"
-  // import Link from "../../../components/Link.svelte";
+   import FootnoteLink from "$lib/components/FootnoteLink.svelte"
+   import FootnoteAnchor from "$lib/components/FootnoteAnchor.svelte"
+   import Link from "$lib/components/Link.svelte";
 </script>
-
-# a.<wbr>lack.<wbr>of.<wbr>progress.<wbr>report
 
 <p>
 Hobbies, side hustles, pastimes everybody's got them and about 95% are

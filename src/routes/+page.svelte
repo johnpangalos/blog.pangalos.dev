@@ -1,32 +1,25 @@
-<script context="module" lang="ts">
-  throw new Error("@migration task: Check code was safely removed (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292722)");
+<script lang="ts">
+  import type { PageData } from "./$types";
+  import Button from "$lib/components/Button.svelte";
+  import { title } from "$lib/meta";
 
-  // import Button from "../components/Button.svelte";
-  // export async function load({ fetch }) {
-  //   const response = await fetch("/api/posts");
-
-  //   return {
-  //     status: response.status,
-  //     props: {
-  //       posts: response.ok && (await response.json()),
-  //     },
-  //   };
-  // }
+  export let data: PageData;
+  let { posts } = data;
 </script>
 
 <svelte:head>
-  <title>some.blog.or.whatever</title>
+  <title>{title}</title>
 </svelte:head>
 
 <h2 class="pt-6 pb-4 text-4xl font-bold">Articles</h2>
 <ul class="space-y-1 pb-8">
-  {#each $$props.posts as post}
+  {#each posts as post}
     <li>
-      <h3 class="pb-2 text-2xl font-bold">{post.meta.title}</h3>
-      <p class="pb-1 font-bold">{post.meta.date}</p>
-      <p class="pb-2">{post.meta.description}</p>
+      <h3 class="pb-2 text-2xl font-bold">{post.title}</h3>
+      <p class="pb-1 font-bold">{post.date}</p>
+      <p class="pb-2">{post.description}</p>
       <div class="flex justify-end">
-        <Button to={post.path}>Go to article</Button>
+        <Button to={`blog/${post.slug}`}>Go to article</Button>
       </div>
     </li>
   {/each}

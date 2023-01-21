@@ -8,14 +8,10 @@ categories: ["web"]
 ---
 
 <script context="module">
-  throw new Error("@migration task: Check code was safely removed (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292722)");
-
-  // import Link from "../../../components/Link.svelte";
-  // import FootnoteAnchor from "../../../components/FootnoteAnchor.svelte"
-  // import FootnoteLink from "../../../components/FootnoteLink.svelte"
+  import Link from "$lib/components/Link.svelte";
+  import FootnoteAnchor from "$lib/components/FootnoteAnchor.svelte"
+  import FootnoteLink from "$lib/components/FootnoteLink.svelte"
 </script>
-
-# the.making.of
 
 <p>
 Blogs! Everybody loves them! They're filled with top ten lists and rants about

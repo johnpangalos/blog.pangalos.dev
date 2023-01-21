@@ -1,6 +1,10 @@
 <script lang="ts">
+  import { enhance } from "$app/forms";
+  import type { LayoutData } from "./$types";
   import "../app.css";
-  import { setTheme, theme } from "$lib/stores/theme";
+
+  export let data: LayoutData;
+  let theme = data.theme;
 </script>
 
 <div class="m-auto h-full max-w-2xl px-4 md:px-0">
@@ -11,16 +15,22 @@
     >
       blog.pangalos.dev
     </a>
-    <div>
-      <button
-        on:click={() => {
-          setTheme($theme === "dark" ? "light" : "dark");
-          if ($theme === "light")
+    <form
+      method="POST"
+      action="/?/set-theme"
+      use:enhance={() => {
+        return async ({ result }) => {
+          if (result.type !== "success") return;
+
+          if (result.data.theme === "dark")
             document.documentElement.classList.add("dark");
           else document.documentElement.classList.remove("dark");
-        }}>{$theme === "dark" ? "light" : "dark"}</button
-      >
-    </div>
+          theme = result.data.theme;
+        };
+      }}
+    >
+      <button>{theme}</button>
+    </form>
   </nav>
   <main>
     <slot />

@@ -58,7 +58,7 @@
     on:mouseleave={() => (open = false)}
   >
     {#if to && !isMobile}
-      <Link class="no-underline" {to}>
+      <Link class="no-underline" style={"text-wrap: nowrap"} {to}>
         <slot name="main" />
       </Link>
     {:else if to}
@@ -73,7 +73,7 @@
     bind:this={el}
     class:visible={open}
     class:invisible={!open}
-    class={`absolute left-1/2 -mr-[270px] max-w-[250px] -translate-y-full rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white ${classXTranslate}`}
+    class={`absolute left-1/2 -mr-[270px] max-w-[250px] -translate-y-full rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white text-nowrap ${classXTranslate}`}
     style={`${offset !== 0 ? `transform: translate(-${offset}px, -100%)` : ""}`}
     on:blur={() => (open = false)}
   >

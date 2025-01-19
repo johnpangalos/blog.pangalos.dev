@@ -98,7 +98,7 @@ Here is a taste of a teaser I would write, but before that for those of you who 
 <p>
   Brandon Stark, known as Bran, is a weird three eyed freak who can’t walk
   and sees the past by talking to birds. Additionally he also has dark hair and
-  which is why he is known as the Three Eyed Raven. He lives in a cave in the
+  that is why he is known as the Three Eyed Raven. He lives in a cave in the
   frozen tundra with a giant simpleton named Hodor who carries Bran around and
   might chew and regurgitate food into Bran’s mouth like a mother bird. Hodor also
   does DJ sets in his spare time under the name DJ Hodor. Bran also lives with a

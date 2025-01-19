@@ -2,7 +2,7 @@
   <div
     class="flex max-w-md items-center justify-center border-8 border-black bg-white p-3 "
   >
-    <div class="px-2 text-3xl font-medium text-black">SPOLIER ALERT</div>
+    <div class="px-2 text-3xl font-medium text-black">SPOILER ALERT</div>
   </div>
 </div>
 

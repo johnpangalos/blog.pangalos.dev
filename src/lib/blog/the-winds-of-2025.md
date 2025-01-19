@@ -126,13 +126,13 @@ Here is a taste of a teaser I would write, but before that for those of you who 
 > Bran awoke to the sound of his helpful giant Hodor smashing the ground with
 > his great fists in search of worms to eat for breakfast. The cave light was
 > dim and Bran could not say what time of day it was, he could also not say how
-> long he had lived in the cave. Bran broken his fast on regurgitated worms Hodor
-> spat into his mouth. The swamp girl abstained from the eating worms, but after
+> long he had lived in the cave. Bran broke his fast on regurgitated worms Hodor
+> spat into his mouth. The swamp girl abstained from eating worms, but after
 > a few more days she would surely change her mind.
 >
 > Just then the old man, who also <Tooltip><span slot="main">can't walk</span><span slot="hover">Did I forget to mention that?</span></Tooltip>
 > and also is stuck in a <Tooltip><span slot="main">tree</span><span slot="hover">Forgot to mention that too... whoops!</span></Tooltip>,
-> yelled "I've defacated myself, Worm Muncher come clean me up!
+> yelled "I've defacated myself, Worm Muncher come clean me up!"
 
 ## that's.all.folks
 

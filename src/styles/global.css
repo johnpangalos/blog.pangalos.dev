@@ -1,0 +1,21 @@
+@import "./hightlight.css";
+@font-face {
+  font-family: "CustomFont";
+  src: url("/Joan-Regular.woff2") format("woff2");
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-serif;
+}
+
+.prose h1,
+.prose h2 a,
+.prose h3 a,
+.prose h4 a,
+.prose h5 a,
+.prose h6 a {
+  @apply text-amber-600 dark:text-amber-500;
+}

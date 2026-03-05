@@ -1,43 +1,44 @@
 {
-  "name": "blog-svelte",
+  "name": "blog-pangalos-dev",
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "package": "vite package",
-    "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "1.0.2",
-    "@sveltejs/adapter-cloudflare": "1.1.0",
-    "@sveltejs/adapter-static": "1.0.5",
-    "@sveltejs/kit": "1.0.0",
+    "@astrojs/check": "^0.9.6",
     "@tailwindcss/typography": "^0.5.8",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/user-event": "^14.6.1",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
+    "@vitest/browser-playwright": "^4.0.18",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-svelte3": "^4.0.0",
-    "mdsvex": "^0.10.6",
     "postcss": "^8.4.21",
     "prettier": "^2.8.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-external-links": "^2.0.1",
     "rehype-slug": "^5.1.0",
-    "svelte": "^3.55.0",
-    "svelte-check": "^2.10.3",
-    "svelte-preprocess": "^4.10.7",
     "tailwindcss": "^3.2.4",
     "tslib": "^2.4.1",
-    "typescript": "~4.7.4",
-    "vite": "4.0.4"
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.18",
+    "vitest-browser-astro": "^0.2.0"
   },
   "type": "module",
-  "packageManager": "pnpm@8.15.9+sha512.499434c9d8fdd1a2794ebf4552b3b25c0a633abcee5bb15e7b5de90f32f47b513aca98cd5cfd001c31f0db454bc3804edccd578501e4ca293a6816166bbd9f81"
+  "packageManager": "pnpm@8.15.9+sha512.499434c9d8fdd1a2794ebf4552b3b25c0a633abcee5bb15e7b5de90f32f47b513aca98cd5cfd001c31f0db454bc3804edccd578501e4ca293a6816166bbd9f81",
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.12",
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^5.18.0"
+  }
 }

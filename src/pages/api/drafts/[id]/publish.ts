@@ -1,6 +1,22 @@
 import type { APIRoute } from "astro";
 import { checkAuth } from "../../../../lib/auth";
 
+async function ghFetch(
+  url: string,
+  token: string,
+  options: RequestInit = {},
+): Promise<Response> {
+  return fetch(url, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/vnd.github+json",
+      ...(options.headers as Record<string, string>),
+    },
+  });
+}
+
 export const POST: APIRoute = async (ctx) => {
   const authError = checkAuth(ctx as any);
   if (authError) return authError;
@@ -50,35 +66,81 @@ ${content}
     );
   }
 
-  // Create file via GitHub API
-  const apiUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
-  const encoded = btoa(unescape(encodeURIComponent(mdxContent)));
+  const apiBase = `https://api.github.com/repos/${repo}`;
+  const branchName = `blog/${slug}`;
 
-  const ghResponse = await fetch(apiUrl, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-      Accept: "application/vnd.github+json",
-    },
-    body: JSON.stringify({
-      message: `Add blog post: ${frontmatter.title}`,
-      content: encoded,
-    }),
-  });
+  try {
+    // 1. Get the SHA of the main branch HEAD
+    const mainRef = await ghFetch(`${apiBase}/git/ref/heads/main`, token);
+    if (!mainRef.ok) {
+      throw new Error(`Failed to get main branch: ${await mainRef.text()}`);
+    }
+    const mainData = await mainRef.json();
+    const baseSha = mainData.object.sha;
 
-  if (!ghResponse.ok) {
-    const error = await ghResponse.text();
-    return new Response(JSON.stringify({ error: `GitHub API error: ${error}` }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
+    // 2. Create a new branch from main
+    const createRef = await ghFetch(`${apiBase}/git/refs`, token, {
+      method: "POST",
+      body: JSON.stringify({
+        ref: `refs/heads/${branchName}`,
+        sha: baseSha,
+      }),
     });
+    if (!createRef.ok) {
+      const err = await createRef.text();
+      // Branch may already exist — try to continue
+      if (!err.includes("Reference already exists")) {
+        throw new Error(`Failed to create branch: ${err}`);
+      }
+    }
+
+    // 3. Create the file on the new branch
+    const encoded = btoa(unescape(encodeURIComponent(mdxContent)));
+    const createFile = await ghFetch(
+      `${apiBase}/contents/${path}`,
+      token,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          message: `Add blog post: ${frontmatter.title}`,
+          content: encoded,
+          branch: branchName,
+        }),
+      },
+    );
+    if (!createFile.ok) {
+      throw new Error(`Failed to create file: ${await createFile.text()}`);
+    }
+
+    // 4. Create a pull request
+    const createPr = await ghFetch(`${apiBase}/pulls`, token, {
+      method: "POST",
+      body: JSON.stringify({
+        title: `New post: ${frontmatter.title}`,
+        head: branchName,
+        base: "main",
+        body: `## New blog post\n\n**${frontmatter.title}**\n\n${frontmatter.description}\n\n---\n_Published from mobile editor_`,
+      }),
+    });
+    if (!createPr.ok) {
+      throw new Error(`Failed to create PR: ${await createPr.text()}`);
+    }
+
+    const prData = await createPr.json();
+
+    // Delete draft after successful PR creation
+    await kv.delete(`draft:${id}`);
+
+    return new Response(
+      JSON.stringify({ ok: true, slug, pr_url: prData.html_url }),
+      { headers: { "Content-Type": "application/json" } },
+    );
+  } catch (err) {
+    return new Response(
+      JSON.stringify({
+        error: err instanceof Error ? err.message : "Unknown error",
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } },
+    );
   }
-
-  // Delete draft after successful publish
-  await kv.delete(`draft:${id}`);
-
-  return new Response(JSON.stringify({ ok: true, slug }), {
-    headers: { "Content-Type": "application/json" },
-  });
 };

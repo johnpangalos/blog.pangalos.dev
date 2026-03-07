@@ -98,7 +98,7 @@ const draftId = Astro.url.searchParams.get("draft");
         id="publish-btn"
         class="rounded bg-amber-600 px-4 py-2 text-sm font-bold text-white dark:bg-amber-500"
       >
-        Publish
+        Create PR
       </button>
     </div>
     <p id="status" class="pt-2 text-sm"></p>
@@ -198,7 +198,7 @@ const draftId = Astro.url.searchParams.get("draft");
         return;
       }
 
-      if (!confirm("Publish this post? It will be committed to your blog repo.")) {
+      if (!confirm("Create a PR for this post?")) {
         return;
       }
 
@@ -212,10 +212,7 @@ const draftId = Astro.url.searchParams.get("draft");
 
       if (res.ok) {
         const data = await res.json();
-        status.textContent = "Published! Deployment will start shortly.";
-        setTimeout(() => {
-          window.location.href = "/drafts";
-        }, 2000);
+        status.innerHTML = `PR created! <a href="${data.pr_url}" target="_blank" class="underline text-fuchsia-700 dark:text-fuchsia-500">View pull request</a>`;
       } else {
         const err = await res.json();
         status.textContent = `Publish failed: ${err.error}`;

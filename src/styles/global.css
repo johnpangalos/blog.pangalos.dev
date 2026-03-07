@@ -8,7 +8,7 @@
 @tailwind utilities;
 
 body {
-  @apply font-serif;
+  @apply font-serif overflow-x-hidden;
 }
 
 .prose h1,

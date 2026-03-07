@@ -1,5 +1,13 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blog-pangalos-dev",
+  "main": "./dist/_worker.js/index.js",
   "compatibility_date": "2025-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
   "observability": {
     "enabled": true
   },

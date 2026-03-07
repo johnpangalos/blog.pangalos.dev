@@ -9,7 +9,7 @@ interface DraftMeta {
 
 // List all drafts
 export const GET: APIRoute = async (ctx) => {
-  const authError = checkAuth(ctx as any);
+  const authError = await checkAuth(ctx as any);
   if (authError) return authError;
 
   const kv = ctx.locals.runtime.env.DRAFTS;
@@ -28,7 +28,7 @@ export const GET: APIRoute = async (ctx) => {
 
 // Create or update a draft
 export const POST: APIRoute = async (ctx) => {
-  const authError = checkAuth(ctx as any);
+  const authError = await checkAuth(ctx as any);
   if (authError) return authError;
 
   const kv = ctx.locals.runtime.env.DRAFTS;

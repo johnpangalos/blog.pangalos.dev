@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const env = Astro.locals.runtime.env;
-const auth = Astro.cookies.get("write_token")?.value;
-if (auth === env.WRITE_PASSWORD) {
+const kv = Astro.locals.runtime.env.DRAFTS;
+const token = Astro.cookies.get("write_token")?.value;
+const session = token ? await kv.get(`session:${token}`) : null;
+if (session) {
   return Astro.redirect("/write");
 }
 ---

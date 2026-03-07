@@ -3,7 +3,7 @@ import { checkAuth } from "../../../lib/auth";
 
 // Get a single draft
 export const GET: APIRoute = async (ctx) => {
-  const authError = checkAuth(ctx as any);
+  const authError = await checkAuth(ctx as any);
   if (authError) return authError;
 
   const kv = ctx.locals.runtime.env.DRAFTS;
@@ -24,7 +24,7 @@ export const GET: APIRoute = async (ctx) => {
 
 // Delete a draft
 export const DELETE: APIRoute = async (ctx) => {
-  const authError = checkAuth(ctx as any);
+  const authError = await checkAuth(ctx as any);
   if (authError) return authError;
 
   const kv = ctx.locals.runtime.env.DRAFTS;

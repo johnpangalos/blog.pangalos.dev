@@ -1,18 +1,18 @@
 import type { AstroGlobal } from "astro";
 
-export function checkAuth(Astro: AstroGlobal): Response | null {
+export async function checkAuth(Astro: AstroGlobal): Promise<Response | null> {
   const env = Astro.locals.runtime.env;
-  const password = env.WRITE_PASSWORD;
+  const token = Astro.cookies.get("write_token")?.value;
 
-  if (!password) {
-    return new Response(JSON.stringify({ error: "WRITE_PASSWORD not configured" }), {
-      status: 500,
+  if (!token) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
       headers: { "Content-Type": "application/json" },
     });
   }
 
-  const auth = Astro.cookies.get("write_token")?.value;
-  if (auth !== password) {
+  const session = await env.DRAFTS.get(`session:${token}`);
+  if (!session) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },

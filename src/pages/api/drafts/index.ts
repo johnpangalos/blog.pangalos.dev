@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
-import { checkAuth } from "../../../lib/auth";
+import { isAuthed, unauthorized } from "../../../lib/auth";
+import { json } from "../../../lib/response";
 
 interface DraftMeta {
   id: string;
@@ -7,10 +8,8 @@ interface DraftMeta {
   updatedAt: string;
 }
 
-// List all drafts
 export const GET: APIRoute = async (ctx) => {
-  const authError = await checkAuth(ctx as any);
-  if (authError) return authError;
+  if (!(await isAuthed(ctx))) return unauthorized();
 
   const kv = ctx.locals.runtime.env.DRAFTS;
   const list = await kv.list<DraftMeta>({ prefix: "draft:" });
@@ -21,15 +20,11 @@ export const GET: APIRoute = async (ctx) => {
     updatedAt: key.metadata?.updatedAt ?? "",
   }));
 
-  return new Response(JSON.stringify(drafts), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return json(drafts);
 };
 
-// Create or update a draft
 export const POST: APIRoute = async (ctx) => {
-  const authError = await checkAuth(ctx as any);
-  if (authError) return authError;
+  if (!(await isAuthed(ctx))) return unauthorized();
 
   const kv = ctx.locals.runtime.env.DRAFTS;
   const body = await ctx.request.json();
@@ -46,7 +41,5 @@ export const POST: APIRoute = async (ctx) => {
     },
   );
 
-  return new Response(JSON.stringify({ id: draftId }), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return json({ id: draftId });
 };

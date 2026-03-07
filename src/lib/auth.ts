@@ -1,23 +1,18 @@
-import type { AstroGlobal } from "astro";
+import type { APIContext } from "astro";
 
-export async function checkAuth(Astro: AstroGlobal): Promise<Response | null> {
-  const env = Astro.locals.runtime.env;
-  const token = Astro.cookies.get("write_token")?.value;
+const UNAUTHORIZED = new Response(JSON.stringify({ error: "Unauthorized" }), {
+  status: 401,
+  headers: { "Content-Type": "application/json" },
+});
 
-  if (!token) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+export async function isAuthed(ctx: APIContext): Promise<boolean> {
+  const token = ctx.cookies.get("write_token")?.value;
+  if (!token) return false;
 
-  const session = await env.DRAFTS.get(`session:${token}`);
-  if (!session) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+  const session = await ctx.locals.runtime.env.DRAFTS.get(`session:${token}`);
+  return session !== null;
+}
 
-  return null;
+export function unauthorized(): Response {
+  return UNAUTHORIZED.clone();
 }

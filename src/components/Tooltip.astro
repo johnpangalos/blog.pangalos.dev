@@ -32,7 +32,7 @@ const id = `tooltip-${Math.random().toString(36).slice(2, 9)}`;
   <span
     popover="manual"
     id={id}
-    class="tooltip-popup m-0 max-w-[250px] rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
+    class="tooltip-popup m-0 w-max max-w-[250px] rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
     style={`position-anchor: --${id}; position: fixed; inset: auto; position-area: block-start center; margin-bottom: 4px;`}
   >
     {to ? (

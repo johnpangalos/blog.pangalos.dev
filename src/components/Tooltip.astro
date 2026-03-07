@@ -1,0 +1,122 @@
+---
+import Link from "./Link.astro";
+
+interface Props {
+  to?: string;
+}
+
+const { to = "" } = Astro.props;
+---
+
+<span class="tooltip-root relative !my-0 inline-flex" data-to={to}>
+  <span
+    class="tooltip-trigger border-b-2 border-dotted border-fuchsia-700"
+  >
+    {to ? (
+      <Link class="no-underline" style="text-wrap: nowrap" to={to}>
+        <slot name="main" />
+      </Link>
+    ) : (
+      <slot name="main" />
+    )}
+    {/* Mobile-only: styled span shown via JS when mobile + has link */}
+    {to && (
+      <span class="tooltip-mobile-main hidden font-medium text-orange-600 dark:text-orange-400">
+        <slot name="main" />
+      </span>
+    )}
+  </span>
+  <span
+    class="tooltip-popup invisible absolute left-1/2 -mr-[270px] max-w-[250px] -translate-x-1/2 -translate-y-full rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
+  >
+    {to ? (
+      <a
+        rel="noreferrer"
+        class="tooltip-mobile-link hidden text-white underline"
+        href={to}
+        target="_blank"
+      >
+        <slot name="hover" />
+      </a>
+    ) : null}
+    <span class="tooltip-hover-content">
+      <slot name="hover" />
+    </span>
+  </span>
+</span>
+
+<script>
+  document.querySelectorAll(".tooltip-root").forEach((root) => {
+    const to = root.dataset.to || "";
+    const trigger = root.querySelector(".tooltip-trigger");
+    const popup = root.querySelector(".tooltip-popup");
+    const mobileMain = root.querySelector(".tooltip-mobile-main");
+    const mobileLink = root.querySelector(".tooltip-mobile-link");
+    const hoverContent = root.querySelector(".tooltip-hover-content");
+
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
+    // On mobile with a link: swap the desktop Link for styled span, show mobile link in popup
+    if (isMobile && to) {
+      // Hide the desktop link (first child of trigger), show mobile main
+      const desktopLink = trigger.querySelector("a");
+      if (desktopLink) desktopLink.style.display = "none";
+      if (mobileMain) mobileMain.classList.remove("hidden");
+      // Show mobile link, hide regular hover content
+      if (mobileLink) mobileLink.classList.remove("hidden");
+      if (hoverContent) hoverContent.classList.add("hidden");
+    } else {
+      // Desktop or no link: remove mobile elements
+      if (mobileMain) mobileMain.remove();
+      if (mobileLink) mobileLink.remove();
+    }
+
+    const show = () => {
+      popup.classList.remove("invisible");
+      popup.classList.add("visible");
+    };
+
+    const hide = () => {
+      popup.classList.remove("visible");
+      popup.classList.add("invisible");
+    };
+
+    trigger.addEventListener("mouseenter", show);
+    trigger.addEventListener("mouseleave", hide);
+    trigger.addEventListener("touchstart", show);
+
+    // Close on outside touch
+    document.addEventListener(
+      "touchstart",
+      (event) => {
+        if (root.contains(event.target)) return;
+        hide();
+      },
+      { capture: true, passive: true }
+    );
+
+    // Position adjustment to prevent overflow
+    const updateXPosition = () => {
+      const triggerMain = trigger;
+      const { right, left } = popup.getBoundingClientRect();
+      const { width } = triggerMain.getBoundingClientRect();
+      const windowWidth = document.body.clientWidth;
+
+      if (right > windowWidth - 12) {
+        const offset = right - windowWidth + 132 + 12;
+        popup.classList.remove("-translate-x-1/2");
+        popup.style.transform = `translate(-${offset}px, -100%)`;
+      } else if (left < 12) {
+        const offset = Math.ceil(width) / 2;
+        popup.classList.remove("-translate-x-1/2");
+        popup.style.transform = `translate(-${offset}px, -100%)`;
+      }
+    };
+
+    updateXPosition();
+    window.addEventListener("resize", updateXPosition);
+  });
+</script>

@@ -7,11 +7,9 @@ tags: ["lazy-foo", "rust", "sdl"]
 categories: ["game-development"]
 ---
 
-<script context="module">
-   import FootnoteLink from "$lib/components/FootnoteLink.svelte"
-   import FootnoteAnchor from "$lib/components/FootnoteAnchor.svelte"
-   import Link from "$lib/components/Link.svelte";
-</script>
+import FootnoteLink from "../../components/FootnoteLink.astro";
+import FootnoteAnchor from "../../components/FootnoteAnchor.astro";
+import Link from "../../components/Link.astro";
 
 <p>
 Hobbies, side hustles, pastimes everybody's got them and about 95% are
@@ -22,9 +20,9 @@ Game&trade;) is not one of them. Although, if I were to abandon my upcoming very
 video game it would be in good company.
 </p>
 
-<!--more-->
+{/* more */}
 
-## top.<wbr>ten.<wbr>abandoned.<wbr>side.<wbr>projects
+## top.<wbr/>ten.<wbr/>abandoned.<wbr/>side.<wbr/>projects
 
 1. Kitchen Remodel
 2. Fix my overflowing toilet
@@ -109,7 +107,7 @@ No not the TV channel that airs such great films as <i>The Santa Squad:</i>
 </p>
 
 <div class="flex justify-center">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xcn1yJOu23k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xcn1yJOu23k" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
 </div>
 
 <p>

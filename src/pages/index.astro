@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/Button.astro";
+
+const siteTitle = "some.blog.or.whatever";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<BaseLayout title={siteTitle}>
+  <h2
+    class="font-display text-amber-600 dark:text-amber-500 pt-6 pb-4 text-4xl font-bold"
+  >
+    Articles
+  </h2>
+  <ul class="space-y-1 pb-8">
+    {posts.map((post) => (
+      <li>
+        <h3
+          class="pb-2 text-2xl font-bold font-display text-amber-600 dark:text-amber-500"
+        >
+          {post.data.title}
+        </h3>
+        <p class="pb-1 font-bold">{post.data.date}</p>
+        <p class="pb-2">{post.data.description}</p>
+        <div class="flex justify-end">
+          <Button to={`blog/${post.id}`}>Go to article</Button>
+        </div>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

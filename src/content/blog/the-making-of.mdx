@@ -7,11 +7,9 @@ tags: ["blogging", "ssg", "css"]
 categories: ["web"]
 ---
 
-<script context="module">
-  import Link from "$lib/components/Link.svelte";
-  import FootnoteAnchor from "$lib/components/FootnoteAnchor.svelte"
-  import FootnoteLink from "$lib/components/FootnoteLink.svelte"
-</script>
+import Link from "../../components/Link.astro";
+import FootnoteAnchor from "../../components/FootnoteAnchor.astro";
+import FootnoteLink from "../../components/FootnoteLink.astro";
 
 <p>
 Blogs! Everybody loves them! They're filled with top ten lists and rants about
@@ -107,7 +105,7 @@ metal<FootnoteLink number={2} /> it's not exactly user friendly.
 At first I tried just hacking it using a tailwind function called apply.
 </p>
 
-<!-- prettier-ignore -->
+{/* prettier-ignore */}
 ```css
 .prose h1, h2, h3, h4, h5, h6, a {
   @apply dark:text-white
@@ -164,7 +162,7 @@ movie of the same name Gastby is bloated and takes a lot longer than you'd want.
 Boom! I said it.
 </div>
 <div>
-<FootnoteAnchor number={2} /> <span class="text-gray-900 bg-black hover:bg-gray-300 hover:text-red-800 p-0.5 -m-0.5">The devil,
+<FootnoteAnchor number={2} /> <span class="ml-2 text-gray-900 bg-black hover:bg-gray-300 hover:text-red-800 p-0.5 -m-0.5">The devil,
 woooo, the devil. Slayer rules!</span>
 </div>
 <div>

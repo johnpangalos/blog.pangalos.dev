@@ -1,0 +1,23 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  date: string;
+}
+
+const siteTitle = "some.blog.or.whatever";
+const { title, date } = Astro.props;
+---
+
+<BaseLayout title={`${title} - ${siteTitle}`}>
+  <div
+    class="prose prose-slate prose-headings:font-display pt-10 pb-20 dark:prose-invert lg:prose-lg prose-headings:font-bold"
+  >
+    <article>
+      <h1 class="!mb-0 pb-2">{title}</h1>
+      <p class="!m-0 pb-1 font-bold">{date}</p>
+      <slot />
+    </article>
+  </div>
+</BaseLayout>

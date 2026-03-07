@@ -1,5 +1,9 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blog-pangalos-dev",
+  "pages_build_output_dir": "./dist",
   "compatibility_date": "2025-01-01",
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
   },

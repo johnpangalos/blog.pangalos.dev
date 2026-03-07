@@ -1,0 +1,13 @@
+{
+  "compatibility_date": "2025-01-01",
+  "observability": {
+    "enabled": true
+  },
+  "env": {
+    "preview": {
+      "observability": {
+        "enabled": true
+      }
+    }
+  }
+}

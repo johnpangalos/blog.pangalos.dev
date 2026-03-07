@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const env = Astro.locals.runtime.env;
+const auth = Astro.cookies.get("write_token")?.value;
+if (auth === env.WRITE_PASSWORD) {
+  return Astro.redirect("/write");
+}
+---
+
+<BaseLayout title="Login">
+  <div class="py-8">
+    <h2
+      class="font-display text-amber-600 dark:text-amber-500 pb-4 text-4xl font-bold"
+    >
+      Login
+    </h2>
+    <form id="login-form" class="space-y-4">
+      <div>
+        <label for="password" class="block pb-1 font-bold">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="w-full rounded border border-stone-300 bg-white px-3 py-2 text-stone-900 dark:border-stone-600 dark:bg-stone-800 dark:text-white"
+          placeholder="Enter write password"
+          autocomplete="current-password"
+        />
+      </div>
+      <p id="error" class="hidden text-red-500"></p>
+      <button
+        type="submit"
+        class="rounded bg-fuchsia-700 px-4 py-2 font-bold text-white dark:bg-fuchsia-600"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("login-form") as HTMLFormElement;
+    const error = document.getElementById("error")!;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      error.classList.add("hidden");
+
+      const password = (document.getElementById("password") as HTMLInputElement)
+        .value;
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      if (res.ok) {
+        window.location.href = "/write";
+      } else {
+        error.textContent = "Wrong password";
+        error.classList.remove("hidden");
+      }
+    });
+  </script>
+</BaseLayout>

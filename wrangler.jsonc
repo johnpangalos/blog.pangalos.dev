@@ -13,7 +13,7 @@
       "id": "BLOG_PANGALOS_AUTH_KV_NAMESPACE_ID"
     },
     {
-      "binding": "SESSION",
+      "binding": "BLOG_PANGALOS_SESSION",
       "id": "b5c364a241ef458a9333ff51f62862b5"
     }
   ],

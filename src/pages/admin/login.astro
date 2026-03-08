@@ -31,7 +31,8 @@ if (await isAuthenticated(Astro)) {
       </button>
     </form>
 
-    <div id="status" class="mt-4 hidden rounded p-3 text-center text-sm"></div>
+    <div id="status-success" hidden class="mt-4 rounded bg-green-100 p-3 text-center text-sm text-green-700 dark:bg-green-900 dark:text-green-300"></div>
+    <div id="status-error" hidden class="mt-4 rounded bg-red-100 p-3 text-center text-sm text-red-700 dark:bg-red-900 dark:text-red-300"></div>
   </div>
 
   <script src="../../lib/passkey-login.ts"></script>

@@ -8,11 +8,21 @@ import {
   linkPlugin,
   linkDialogPlugin,
   toolbarPlugin,
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  imagePlugin,
+  diffSourcePlugin,
   BoldItalicUnderlineToggles,
   BlockTypeSelect,
   CreateLink,
   ListsToggle,
   UndoRedo,
+  CodeToggle,
+  InsertCodeBlock,
+  InsertImage,
+  InsertThematicBreak,
+  DiffSourceToggleWrapper,
+  Separator,
   markdownShortcutPlugin,
   type MDXEditorMethods,
 } from "@mdxeditor/editor";
@@ -250,15 +260,45 @@ export default function PostEditor() {
               linkPlugin(),
               linkDialogPlugin(),
               markdownShortcutPlugin(),
+              codeBlockPlugin({ defaultCodeBlockLanguage: "js" }),
+              codeMirrorPlugin({
+                codeBlockLanguages: {
+                  js: "JavaScript",
+                  ts: "TypeScript",
+                  jsx: "JSX",
+                  tsx: "TSX",
+                  css: "CSS",
+                  html: "HTML",
+                  json: "JSON",
+                  bash: "Bash",
+                  python: "Python",
+                  go: "Go",
+                  rust: "Rust",
+                  sql: "SQL",
+                  yaml: "YAML",
+                  "": "Plain text",
+                },
+              }),
+              imagePlugin(),
+              diffSourcePlugin({ viewMode: "rich-text" }),
               toolbarPlugin({
                 toolbarContents: () => (
-                  <>
+                  <DiffSourceToggleWrapper>
                     <UndoRedo />
+                    <Separator />
                     <BlockTypeSelect />
+                    <Separator />
                     <BoldItalicUnderlineToggles />
+                    <CodeToggle />
+                    <Separator />
                     <ListsToggle />
+                    <Separator />
                     <CreateLink />
-                  </>
+                    <InsertImage />
+                    <Separator />
+                    <InsertCodeBlock />
+                    <InsertThematicBreak />
+                  </DiffSourceToggleWrapper>
                 ),
               }),
             ]}

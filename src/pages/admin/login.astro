@@ -1,11 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getKV, getSessionToken, verifySession } from "../../lib/auth";
+import { isAuthenticated } from "../../lib/auth";
 
-const kv = getKV(Astro);
-const token = getSessionToken(Astro);
-
-if (token && (await verifySession(kv, token))) {
+if (await isAuthenticated(Astro)) {
   return Astro.redirect("/admin");
 }
 ---
@@ -71,8 +68,7 @@ if (token && (await verifySession(kv, token))) {
         });
 
         if (loginRes.ok) {
-          // User has a passkey registered, authenticate
-          const { options, challengeId } = (await loginRes.json()) as { options: any; challengeId: string };
+          const { options } = (await loginRes.json()) as { options: any };
           showStatus("Tap your passkey to sign in...");
 
           const credential = await startAuthentication({ optionsJSON: options });
@@ -80,7 +76,7 @@ if (token && (await verifySession(kv, token))) {
           const verifyRes = await fetch("/api/auth/login-verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ credential, challengeId }),
+            body: JSON.stringify({ credential }),
           });
 
           if (verifyRes.ok) {
@@ -95,7 +91,6 @@ if (token && (await verifySession(kv, token))) {
           const loginData = (await loginRes.json()) as { error?: string; needsRegistration?: boolean };
 
           if (loginData.needsRegistration || loginRes.status === 404) {
-            // No passkey registered, start registration
             showStatus("No passkey found. Registering a new one...");
 
             const regRes = await fetch("/api/auth/register-options", {
@@ -110,7 +105,7 @@ if (token && (await verifySession(kv, token))) {
               return;
             }
 
-            const { options, challengeId } = (await regRes.json()) as { options: any; challengeId: string };
+            const { options } = (await regRes.json()) as { options: any };
             showStatus("Create your passkey...");
 
             const credential = await startRegistration({ optionsJSON: options });
@@ -118,7 +113,7 @@ if (token && (await verifySession(kv, token))) {
             const verifyRes = await fetch("/api/auth/register-verify", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ credential, challengeId }),
+              body: JSON.stringify({ credential }),
             });
 
             if (verifyRes.ok) {

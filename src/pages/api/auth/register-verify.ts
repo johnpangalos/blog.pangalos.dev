@@ -2,11 +2,8 @@ import type { APIRoute } from "astro";
 import { verifyRegistrationResponse } from "@simplewebauthn/server";
 import {
   getKV,
-  getChallenge,
   getUser,
   saveUser,
-  createSession,
-  setSessionCookie,
   getRpId,
   getOrigin,
 } from "../../../lib/auth";
@@ -14,30 +11,27 @@ import type { UserRecord } from "../../../lib/auth";
 
 export const POST: APIRoute = async (context) => {
   try {
-    const { credential, challengeId } = (await context.request.json()) as {
+    const { credential } = (await context.request.json()) as {
       credential: any;
-      challengeId: string;
     };
 
-    const kv = getKV(context);
-    const challengeData = (await getChallenge(kv, challengeId)) as {
-      challenge: string;
-      email: string;
-    } | null;
+    const challenge = await context.session?.get("challenge");
+    const email = await context.session?.get("challengeEmail");
 
-    if (!challengeData) {
+    if (!challenge || !email) {
       return new Response(
         JSON.stringify({ error: "Challenge expired or invalid" }),
         { status: 400, headers: { "Content-Type": "application/json" } },
       );
     }
 
+    const kv = getKV(context);
     const rpID = getRpId(context);
     const origin = getOrigin(context);
 
     const verification = await verifyRegistrationResponse({
       response: credential,
-      expectedChallenge: challengeData.challenge,
+      expectedChallenge: challenge,
       expectedOrigin: origin,
       expectedRPID: rpID,
       requireUserVerification: false,
@@ -54,7 +48,7 @@ export const POST: APIRoute = async (context) => {
 
     const existingUser = await getUser(kv);
     const user: UserRecord = existingUser ?? {
-      email: challengeData.email,
+      email,
       credentials: [],
     };
 
@@ -67,8 +61,9 @@ export const POST: APIRoute = async (context) => {
 
     await saveUser(kv, user);
 
-    const sessionToken = await createSession(kv);
-    setSessionCookie(context, sessionToken);
+    context.session?.set("challenge", null);
+    context.session?.set("challengeEmail", null);
+    context.session?.set("email", email);
 
     return new Response(JSON.stringify({ verified: true }), {
       headers: { "Content-Type": "application/json" },

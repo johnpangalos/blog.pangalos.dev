@@ -1,11 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getKV, getSessionToken, verifySession } from "../../lib/auth";
+import { isAuthenticated } from "../../lib/auth";
 
-const kv = getKV(Astro);
-const token = getSessionToken(Astro);
-
-if (!token || !(await verifySession(kv, token))) {
+if (!(await isAuthenticated(Astro))) {
   return Astro.redirect("/admin/login");
 }
 ---

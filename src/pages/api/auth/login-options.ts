@@ -4,7 +4,6 @@ import {
   isAllowedEmail,
   getKV,
   getUser,
-  saveChallenge,
   getRpId,
 } from "../../../lib/auth";
 
@@ -35,18 +34,15 @@ export const POST: APIRoute = async (context) => {
       rpID,
       allowCredentials: user.credentials.map((cred) => ({
         id: cred.credentialId,
-        transports: cred.transports as any,
+        transports: cred.transports as AuthenticatorTransport[],
       })),
       userVerification: "preferred",
     });
 
-    const challengeId = crypto.randomUUID();
-    await saveChallenge(kv, challengeId, {
-      challenge: options.challenge,
-      email,
-    });
+    context.session?.set("challenge", options.challenge);
+    context.session?.set("challengeEmail", email);
 
-    return new Response(JSON.stringify({ options, challengeId }), {
+    return new Response(JSON.stringify({ options }), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
@@ -57,3 +53,12 @@ export const POST: APIRoute = async (context) => {
     });
   }
 };
+
+type AuthenticatorTransport =
+  | "ble"
+  | "cable"
+  | "hybrid"
+  | "internal"
+  | "nfc"
+  | "smart-card"
+  | "usb";

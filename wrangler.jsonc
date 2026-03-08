@@ -7,6 +7,12 @@
   "observability": {
     "enabled": true
   },
+  "kv_namespaces": [
+    {
+      "binding": "AUTH_KV",
+      "id": "AUTH_KV_NAMESPACE_ID"
+    }
+  ],
   "env": {
     "preview": {
       "observability": {

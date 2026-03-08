@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getKV, getSessionToken, verifySession } from "../../lib/auth";
+
+const kv = getKV(Astro);
+const token = getSessionToken(Astro);
+
+if (!token || !(await verifySession(kv, token))) {
+  return Astro.redirect("/admin/login");
+}
+---
+
+<BaseLayout title="Admin">
+  <div class="mt-16">
+    <div class="flex items-center justify-between">
+      <h1 class="font-display text-3xl font-bold">Admin</h1>
+      <button
+        id="logout-btn"
+        class="rounded bg-stone-200 px-3 py-1 text-sm hover:bg-stone-300 dark:bg-stone-700 dark:hover:bg-stone-600"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("logout-btn")!.addEventListener("click", async () => {
+      await fetch("/api/auth/logout", { method: "POST" });
+      window.location.href = "/admin/login";
+    });
+  </script>
+</BaseLayout>

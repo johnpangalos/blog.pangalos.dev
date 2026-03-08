@@ -3,7 +3,7 @@ import { EmailMessage } from "cloudflare:email";
 import { createMimeMessage } from "mimetext";
 
 const ALLOWED_EMAIL = "john@pangalos.dev";
-const FROM_EMAIL = "admin@pangalos.dev";
+const FROM_EMAIL = "admin@notify.pangalos.dev";
 const TOKEN_TTL_SECONDS = 600; // 10 minutes
 
 export const POST: APIRoute = async ({ request, locals }) => {

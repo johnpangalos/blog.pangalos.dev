@@ -12,6 +12,9 @@ import {
   codeMirrorPlugin,
   imagePlugin,
   diffSourcePlugin,
+  jsxPlugin,
+  GenericJsxEditor,
+  insertJsx$,
   BoldItalicUnderlineToggles,
   BlockTypeSelect,
   CreateLink,
@@ -24,7 +27,9 @@ import {
   DiffSourceToggleWrapper,
   Separator,
   markdownShortcutPlugin,
+  usePublisher,
   type MDXEditorMethods,
+  type JsxComponentDescriptor,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 
@@ -42,6 +47,175 @@ function parseCsv(val: string): string[] {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
+}
+
+const COMPONENT_PATH = "../../components";
+
+const jsxComponentDescriptors: JsxComponentDescriptor[] = [
+  {
+    name: "Link",
+    kind: "text",
+    source: `${COMPONENT_PATH}/Link.astro`,
+    defaultExport: true,
+    props: [{ name: "to", type: "string", required: true }],
+    hasChildren: true,
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: "Tooltip",
+    kind: "text",
+    source: `${COMPONENT_PATH}/Tooltip.astro`,
+    defaultExport: true,
+    props: [{ name: "to", type: "string" }],
+    hasChildren: true,
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: "FootnoteLink",
+    kind: "text",
+    source: `${COMPONENT_PATH}/FootnoteLink.astro`,
+    defaultExport: true,
+    props: [{ name: "number", type: "number", required: true }],
+    hasChildren: false,
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: "FootnoteAnchor",
+    kind: "text",
+    source: `${COMPONENT_PATH}/FootnoteAnchor.astro`,
+    defaultExport: true,
+    props: [{ name: "number", type: "number", required: true }],
+    hasChildren: false,
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: "NerdAlert",
+    kind: "flow",
+    source: `${COMPONENT_PATH}/NerdAlert.astro`,
+    defaultExport: true,
+    props: [],
+    hasChildren: false,
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: "SpoilerAlert",
+    kind: "flow",
+    source: `${COMPONENT_PATH}/SpoilerAlert.astro`,
+    defaultExport: true,
+    props: [],
+    hasChildren: false,
+    Editor: GenericJsxEditor,
+  },
+  {
+    name: "Button",
+    kind: "text",
+    source: `${COMPONENT_PATH}/Button.astro`,
+    defaultExport: true,
+    props: [{ name: "to", type: "string", required: true }],
+    hasChildren: true,
+    Editor: GenericJsxEditor,
+  },
+];
+
+interface InsertItem {
+  name: string;
+  label: string;
+  kind: "flow" | "text";
+  props: Record<string, string>;
+}
+
+const insertItems: InsertItem[] = [
+  { name: "Link", label: "Link", kind: "text", props: { to: "https://" } },
+  { name: "Tooltip", label: "Tooltip", kind: "text", props: {} },
+  {
+    name: "FootnoteLink",
+    label: "Footnote Link",
+    kind: "text",
+    props: { number: "1" },
+  },
+  {
+    name: "FootnoteAnchor",
+    label: "Footnote Anchor",
+    kind: "text",
+    props: { number: "1" },
+  },
+  { name: "NerdAlert", label: "Nerd Alert", kind: "flow", props: {} },
+  { name: "SpoilerAlert", label: "Spoiler Alert", kind: "flow", props: {} },
+  { name: "Button", label: "Button", kind: "text", props: { to: "https://" } },
+];
+
+function InsertComponentButton() {
+  const insertJsx = usePublisher(insertJsx$);
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div style={{ position: "relative", display: "inline-block" }}>
+      <button
+        type="button"
+        title="Insert component"
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          cursor: "pointer",
+          background: "none",
+          border: "none",
+          padding: "4px 8px",
+          fontSize: "13px",
+          fontWeight: 600,
+        }}
+      >
+        &lt;/&gt; Components ▾
+      </button>
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            zIndex: 50,
+            background: "var(--baseBg, white)",
+            border: "1px solid var(--baseBorder, #ccc)",
+            borderRadius: 4,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            minWidth: 160,
+          }}
+        >
+          {insertItems.map((item) => (
+            <button
+              key={item.name}
+              type="button"
+              onClick={() => {
+                insertJsx({
+                  name: item.name,
+                  kind: item.kind,
+                  props: item.props,
+                });
+                setOpen(false);
+              }}
+              style={{
+                display: "block",
+                width: "100%",
+                textAlign: "left",
+                padding: "6px 12px",
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                fontSize: "13px",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background =
+                  "var(--accentBgHover, #f0f0f0)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "none";
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function PostEditor() {
@@ -279,6 +453,7 @@ export default function PostEditor() {
                   "": "Plain text",
                 },
               }),
+              jsxPlugin({ jsxComponentDescriptors }),
               imagePlugin(),
               diffSourcePlugin({ viewMode: "rich-text" }),
               toolbarPlugin({
@@ -298,6 +473,8 @@ export default function PostEditor() {
                     <Separator />
                     <InsertCodeBlock />
                     <InsertThematicBreak />
+                    <Separator />
+                    <InsertComponentButton />
                   </DiffSourceToggleWrapper>
                 ),
               }),

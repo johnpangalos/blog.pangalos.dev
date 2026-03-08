@@ -11,6 +11,10 @@
     {
       "binding": "BLOG_PANGALOS_AUTH_KV",
       "id": "BLOG_PANGALOS_AUTH_KV_NAMESPACE_ID"
+    },
+    {
+      "binding": "SESSION",
+      "id": "SESSION_KV_NAMESPACE_ID"
     }
   ],
   "env": {

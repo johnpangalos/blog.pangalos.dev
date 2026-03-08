@@ -42,6 +42,6 @@
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.18.0",
-    "resend": "^6.9.3"
+    "mimetext": "^3.0.28"
   }
 }

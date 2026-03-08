@@ -13,6 +13,12 @@
       "id": "AUTH_STORE_PLACEHOLDER"
     }
   ],
+  "send_email": [
+    {
+      "name": "SEND_EMAIL",
+      "destination_address": "john@pangalos.dev"
+    }
+  ],
   "env": {
     "preview": {
       "observability": {

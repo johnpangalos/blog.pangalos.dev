@@ -21,7 +21,7 @@ export function isAllowedEmail(email: string): boolean {
 }
 
 export function getKV(astro: AstroGlobal): KVNamespace {
-  return (astro.locals as any).runtime.env.AUTH_KV;
+  return (astro.locals as any).runtime.env.BLOG_PANGALOS_AUTH_KV;
 }
 
 export async function getUser(kv: KVNamespace): Promise<UserRecord | null> {

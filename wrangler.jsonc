@@ -9,8 +9,8 @@
   },
   "kv_namespaces": [
     {
-      "binding": "AUTH_KV",
-      "id": "AUTH_KV_NAMESPACE_ID"
+      "binding": "BLOG_PANGALOS_AUTH_KV",
+      "id": "BLOG_PANGALOS_AUTH_KV_NAMESPACE_ID"
     }
   ],
   "env": {

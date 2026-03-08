@@ -3,7 +3,7 @@
 type KVNamespace = import("@cloudflare/workers-types").KVNamespace;
 
 type Runtime = import("@astrojs/cloudflare").Runtime<{
-  AUTH_KV: KVNamespace;
+  BLOG_PANGALOS_AUTH_KV: KVNamespace;
   SESSION_SECRET: string;
 }>;
 

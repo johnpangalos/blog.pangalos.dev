@@ -13,21 +13,23 @@ if (await isAuthenticated(Astro)) {
       Admin Login
     </h1>
 
-    <div id="email-step">
+    <form id="login-form">
       <label for="email" class="mb-2 block text-sm font-medium">Email</label>
       <input
         id="email"
+        name="email"
         type="email"
+        required
         placeholder="john@pangalos.dev"
         class="mb-4 w-full rounded border border-stone-300 bg-white px-3 py-2 text-stone-900 focus:border-fuchsia-500 focus:outline-none focus:ring-1 focus:ring-fuchsia-500 dark:border-stone-600 dark:bg-stone-800 dark:text-white"
       />
       <button
-        id="submit-email"
+        type="submit"
         class="w-full rounded bg-fuchsia-700 px-4 py-2 font-medium text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
       >
         Continue with Passkey
       </button>
-    </div>
+    </form>
 
     <div id="status" class="mt-4 hidden rounded p-3 text-center text-sm"></div>
   </div>

@@ -21,8 +21,9 @@ if (!(await isAuthenticated(Astro))) {
   </div>
 
   <script>
+    import { actions } from "astro:actions";
     document.getElementById("logout-btn")!.addEventListener("click", async () => {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await actions.auth.logout({});
       window.location.href = "/admin/login";
     });
   </script>

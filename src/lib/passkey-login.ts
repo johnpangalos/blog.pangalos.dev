@@ -1,7 +1,8 @@
+import { actions, isInputError } from "astro:actions";
 import { startRegistration, startAuthentication } from "@simplewebauthn/browser";
 
-const emailInput = document.getElementById("email") as HTMLInputElement;
-const submitBtn = document.getElementById("submit-email") as HTMLButtonElement;
+const form = document.getElementById("login-form") as HTMLFormElement;
+const submitBtn = form.querySelector("button[type=submit]") as HTMLButtonElement;
 const statusDiv = document.getElementById("status") as HTMLDivElement;
 
 function showStatus(message: string, isError = false) {
@@ -14,8 +15,11 @@ function showStatus(message: string, isError = false) {
   }
 }
 
-submitBtn.addEventListener("click", async () => {
-  const email = emailInput.value.trim();
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+  const email = (formData.get("email") as string).trim();
   if (!email) {
     showStatus("Please enter your email", true);
     return;
@@ -26,72 +30,47 @@ submitBtn.addEventListener("click", async () => {
 
   try {
     // Try login first
-    const loginRes = await fetch("/api/auth/login-options", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    const loginResult = await actions.auth.loginOptions({ email });
 
-    if (loginRes.ok) {
-      const { options } = (await loginRes.json()) as { options: any };
+    if (loginResult.data) {
       showStatus("Tap your passkey to sign in...");
 
-      const credential = await startAuthentication({ optionsJSON: options });
+      const credential = await startAuthentication({ optionsJSON: loginResult.data.options });
 
-      const verifyRes = await fetch("/api/auth/login-verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credential }),
-      });
+      const verifyResult = await actions.auth.loginVerify({ credential });
 
-      if (verifyRes.ok) {
+      if (verifyResult.data) {
         showStatus("Authenticated! Redirecting...");
         window.location.href = "/admin";
         return;
       }
 
-      const verifyData = (await verifyRes.json()) as { error?: string };
-      showStatus(verifyData.error || "Authentication failed", true);
-    } else {
-      const loginData = (await loginRes.json()) as { error?: string; needsRegistration?: boolean };
+      showStatus(verifyResult.error?.message || "Authentication failed", true);
+    } else if (loginResult.error?.code === "NOT_FOUND") {
+      showStatus("No passkey found. Registering a new one...");
 
-      if (loginData.needsRegistration || loginRes.status === 404) {
-        showStatus("No passkey found. Registering a new one...");
+      const regResult = await actions.auth.registerOptions({ email });
 
-        const regRes = await fetch("/api/auth/register-options", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        });
-
-        if (!regRes.ok) {
-          const regData = (await regRes.json()) as { error?: string };
-          showStatus(regData.error || "Registration failed", true);
-          return;
-        }
-
-        const { options } = (await regRes.json()) as { options: any };
-        showStatus("Create your passkey...");
-
-        const credential = await startRegistration({ optionsJSON: options });
-
-        const verifyRes = await fetch("/api/auth/register-verify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ credential }),
-        });
-
-        if (verifyRes.ok) {
-          showStatus("Passkey registered! Redirecting...");
-          window.location.href = "/admin";
-          return;
-        }
-
-        const verifyData = (await verifyRes.json()) as { error?: string };
-        showStatus(verifyData.error || "Registration failed", true);
-      } else {
-        showStatus(loginData.error || "Login failed", true);
+      if (regResult.error) {
+        showStatus(regResult.error.message || "Registration failed", true);
+        return;
       }
+
+      showStatus("Create your passkey...");
+
+      const credential = await startRegistration({ optionsJSON: regResult.data.options });
+
+      const verifyResult = await actions.auth.registerVerify({ credential });
+
+      if (verifyResult.data) {
+        showStatus("Passkey registered! Redirecting...");
+        window.location.href = "/admin";
+        return;
+      }
+
+      showStatus(verifyResult.error?.message || "Registration failed", true);
+    } else {
+      showStatus(loginResult.error?.message || "Login failed", true);
     }
   } catch (err: any) {
     if (err.name === "NotAllowedError") {

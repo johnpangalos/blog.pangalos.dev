@@ -7,6 +7,12 @@
   "observability": {
     "enabled": true
   },
+  "kv_namespaces": [
+    {
+      "binding": "AUTH_STORE",
+      "id": "AUTH_STORE_PLACEHOLDER"
+    }
+  ],
   "env": {
     "preview": {
       "observability": {

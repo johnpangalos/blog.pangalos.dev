@@ -41,6 +41,7 @@
     "@astrojs/cloudflare": "^12.6.12",
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/tailwind": "^6.0.2",
-    "astro": "^5.18.0"
+    "astro": "^5.18.0",
+    "resend": "^6.9.3"
   }
 }

@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const sent = Astro.url.searchParams.get("sent") === "true";
+const error = Astro.url.searchParams.get("error");
+
+let errorMessage = "";
+if (error === "invalid") errorMessage = "That email is not authorized.";
+else if (error === "send-failed") errorMessage = "Failed to send email. Please try again.";
+else if (error === "invalid-token") errorMessage = "Invalid login link.";
+else if (error === "expired") errorMessage = "That login link has expired. Please request a new one.";
+---
+
+<BaseLayout title="Admin Login">
+  <div class="flex flex-col items-center pt-16">
+    <h2 class="font-display text-amber-600 dark:text-amber-500 pb-6 text-4xl font-bold">
+      Admin Login
+    </h2>
+
+    {sent ? (
+      <div class="w-full max-w-sm text-center">
+        <p class="pb-2 text-lg font-bold text-green-600 dark:text-green-400">
+          Check your email!
+        </p>
+        <p>A magic login link has been sent. It expires in 10 minutes.</p>
+      </div>
+    ) : (
+      <form method="POST" action="/api/auth/send-magic-link" class="w-full max-w-sm space-y-4">
+        {errorMessage && (
+          <p class="text-red-600 dark:text-red-400 text-sm font-bold">{errorMessage}</p>
+        )}
+        <div>
+          <label for="email" class="block pb-1 font-bold">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="you@example.com"
+            class="w-full rounded border-2 border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-800 px-3 py-2 text-stone-900 dark:text-white focus:border-fuchsia-500 focus:outline-none"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full rounded bg-fuchsia-700 px-4 py-2 font-bold text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
+        >
+          Send Magic Link
+        </button>
+      </form>
+    )}
+  </div>
+</BaseLayout>

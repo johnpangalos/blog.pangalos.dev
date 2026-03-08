@@ -6,7 +6,7 @@ import {
   getKV,
   getUser,
   saveUser,
-  getRpId,
+  getHostname,
   getOrigin,
 } from "../lib/auth";
 import type { UserRecord } from "../lib/auth";
@@ -28,7 +28,7 @@ export const server = {
           throw new ActionError({ code: "NOT_FOUND", message: "No passkey registered" });
         }
 
-        const rpID = getRpId(context);
+        const rpID = getHostname(context);
 
         const options = await generateAuthenticationOptions({
           rpID,
@@ -54,7 +54,7 @@ export const server = {
         const email = await context.session.get("challengeEmail");
 
         if (!challenge || !email) {
-          throw new ActionError({ code: "BAD_REQUEST", message: "Challenge expired or invalid" });
+          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Challenge expired or invalid" });
         }
 
         const kv = getKV(context);
@@ -67,10 +67,10 @@ export const server = {
           (c) => c.credentialId === credential.id,
         );
         if (!matchingCred) {
-          throw new ActionError({ code: "BAD_REQUEST", message: "Credential not found" });
+          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Credential not found" });
         }
 
-        const rpID = getRpId(context);
+        const rpID = getHostname(context);
         const origin = getOrigin(context);
 
         const verification = await verifyAuthenticationResponse({
@@ -88,7 +88,7 @@ export const server = {
         });
 
         if (!verification.verified) {
-          throw new ActionError({ code: "BAD_REQUEST", message: "Authentication failed" });
+          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Authentication failed" });
         }
 
         matchingCred.counter = verification.authenticationInfo.newCounter;
@@ -112,7 +112,7 @@ export const server = {
 
         const kv = getKV(context);
         const existingUser = await getUser(kv);
-        const rpID = getRpId(context);
+        const rpID = getHostname(context);
 
         const options = await generateRegistrationOptions({
           rpName: "blog.pangalos.dev",
@@ -144,11 +144,11 @@ export const server = {
         const email = await context.session.get("challengeEmail");
 
         if (!challenge || !email) {
-          throw new ActionError({ code: "BAD_REQUEST", message: "Challenge expired or invalid" });
+          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Challenge expired or invalid" });
         }
 
         const kv = getKV(context);
-        const rpID = getRpId(context);
+        const rpID = getHostname(context);
         const origin = getOrigin(context);
 
         const verification = await verifyRegistrationResponse({
@@ -160,7 +160,7 @@ export const server = {
         });
 
         if (!verification.verified || !verification.registrationInfo) {
-          throw new ActionError({ code: "BAD_REQUEST", message: "Verification failed" });
+          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Verification failed" });
         }
 
         const { credential: cred } = verification.registrationInfo;

@@ -47,7 +47,7 @@ export async function isAuthenticated(context: Context): Promise<boolean> {
   return email === ALLOWED_EMAIL;
 }
 
-export function getRpId(context: Context): string {
+export function getHostname(context: Context): string {
   return new URL(context.request.url).hostname;
 }
 

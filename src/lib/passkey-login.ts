@@ -35,46 +35,49 @@ form.addEventListener("submit", async (e) => {
     // Try login first
     const loginResult = await actions.auth.loginOptions({ email });
 
+    if (loginResult.error && loginResult.error.code !== "NOT_FOUND") {
+      showError(loginResult.error.message || "Login failed");
+      return;
+    }
+
     if (loginResult.data) {
       showSuccess("Tap your passkey to sign in...");
 
       const credential = await startAuthentication({ optionsJSON: loginResult.data.options });
-
       const verifyResult = await actions.auth.loginVerify({ credential });
 
-      if (verifyResult.data) {
-        showSuccess("Authenticated! Redirecting...");
-        window.location.href = "/admin";
+      if (verifyResult.error) {
+        showError(verifyResult.error.message || "Authentication failed");
         return;
       }
 
-      showError(verifyResult.error?.message || "Authentication failed");
-    } else if (loginResult.error?.code === "NOT_FOUND") {
-      showSuccess("No passkey found. Registering a new one...");
-
-      const regResult = await actions.auth.registerOptions({ email });
-
-      if (regResult.error) {
-        showError(regResult.error.message || "Registration failed");
-        return;
-      }
-
-      showSuccess("Create your passkey...");
-
-      const credential = await startRegistration({ optionsJSON: regResult.data.options });
-
-      const verifyResult = await actions.auth.registerVerify({ credential });
-
-      if (verifyResult.data) {
-        showSuccess("Passkey registered! Redirecting...");
-        window.location.href = "/admin";
-        return;
-      }
-
-      showError(verifyResult.error?.message || "Registration failed");
-    } else {
-      showError(loginResult.error?.message || "Login failed");
+      showSuccess("Authenticated! Redirecting...");
+      window.location.href = "/admin";
+      return;
     }
+
+    // No passkey found — register a new one
+    showSuccess("No passkey found. Registering a new one...");
+
+    const regResult = await actions.auth.registerOptions({ email });
+
+    if (regResult.error) {
+      showError(regResult.error.message || "Registration failed");
+      return;
+    }
+
+    showSuccess("Create your passkey...");
+
+    const credential = await startRegistration({ optionsJSON: regResult.data.options });
+    const verifyResult = await actions.auth.registerVerify({ credential });
+
+    if (verifyResult.error) {
+      showError(verifyResult.error.message || "Registration failed");
+      return;
+    }
+
+    showSuccess("Passkey registered! Redirecting...");
+    window.location.href = "/admin";
   } catch (err: any) {
     if (err.name === "NotAllowedError") {
       showError("Passkey operation was cancelled");

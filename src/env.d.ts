@@ -1,16 +1,8 @@
 /// <reference types="astro/client" />
+/// <reference path="../worker-configuration.d.ts" />
 
-type KVNamespace = import("@cloudflare/workers-types").KVNamespace;
-
-type Runtime = import("@astrojs/cloudflare").Runtime<{
-  BLOG_PANGALOS_AUTH_KV: KVNamespace;
-  SESSION_SECRET: string;
-}>;
+type Runtime = import("@astrojs/cloudflare").Runtime<Env>;
 
 declare namespace App {
-  interface Locals extends Runtime {
-    session: {
-      userId?: string;
-    };
-  }
+  interface Locals extends Runtime {}
 }

@@ -10,7 +10,7 @@ import {
 
 export const POST: APIRoute = async (context) => {
   try {
-    const { email } = await context.request.json();
+    const { email } = (await context.request.json()) as { email: string };
 
     if (!email || !isAllowedEmail(email)) {
       return new Response(JSON.stringify({ error: "Unauthorized email" }), {
@@ -19,9 +19,9 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
-    const kv = getKV(context as any);
+    const kv = getKV(context);
     const existingUser = await getUser(kv);
-    const rpID = getRpId(context as any);
+    const rpID = getRpId(context);
 
     const options = await generateRegistrationOptions({
       rpName: "blog.pangalos.dev",

@@ -14,9 +14,12 @@ import type { UserRecord } from "../../../lib/auth";
 
 export const POST: APIRoute = async (context) => {
   try {
-    const { credential, challengeId } = await context.request.json();
+    const { credential, challengeId } = (await context.request.json()) as {
+      credential: any;
+      challengeId: string;
+    };
 
-    const kv = getKV(context as any);
+    const kv = getKV(context);
     const challengeData = (await getChallenge(kv, challengeId)) as {
       challenge: string;
       email: string;
@@ -29,8 +32,8 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    const rpID = getRpId(context as any);
-    const origin = getOrigin(context as any);
+    const rpID = getRpId(context);
+    const origin = getOrigin(context);
 
     const verification = await verifyRegistrationResponse({
       response: credential,
@@ -65,7 +68,7 @@ export const POST: APIRoute = async (context) => {
     await saveUser(kv, user);
 
     const sessionToken = await createSession(kv);
-    setSessionCookie(context as any, sessionToken);
+    setSessionCookie(context, sessionToken);
 
     return new Response(JSON.stringify({ verified: true }), {
       headers: { "Content-Type": "application/json" },

@@ -1,4 +1,5 @@
 import type { AstroGlobal } from "astro";
+import type { APIContext } from "astro";
 
 const ALLOWED_EMAIL = "john@pangalos.dev";
 const SESSION_COOKIE = "admin_session";
@@ -16,12 +17,18 @@ export interface UserRecord {
   credentials: StoredCredential[];
 }
 
+type Context = AstroGlobal | APIContext;
+
 export function isAllowedEmail(email: string): boolean {
   return email.toLowerCase() === ALLOWED_EMAIL;
 }
 
-export function getKV(astro: AstroGlobal): KVNamespace {
-  return (astro.locals as any).runtime.env.BLOG_PANGALOS_AUTH_KV;
+export function getKV(context: Context): KVNamespace {
+  const kv = context.locals.runtime.env.BLOG_PANGALOS_AUTH_KV;
+  if (!kv) {
+    throw new Error("BLOG_PANGALOS_AUTH_KV binding is not configured");
+  }
+  return kv;
 }
 
 export async function getUser(kv: KVNamespace): Promise<UserRecord | null> {
@@ -83,12 +90,12 @@ export async function deleteSession(
   await kv.delete(`session:${token}`);
 }
 
-export function getSessionToken(astro: AstroGlobal): string | undefined {
-  return astro.cookies.get(SESSION_COOKIE)?.value;
+export function getSessionToken(context: Context): string | undefined {
+  return context.cookies.get(SESSION_COOKIE)?.value;
 }
 
-export function setSessionCookie(astro: AstroGlobal, token: string): void {
-  astro.cookies.set(SESSION_COOKIE, token, {
+export function setSessionCookie(context: Context, token: string): void {
+  context.cookies.set(SESSION_COOKIE, token, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
@@ -97,14 +104,14 @@ export function setSessionCookie(astro: AstroGlobal, token: string): void {
   });
 }
 
-export function clearSessionCookie(astro: AstroGlobal): void {
-  astro.cookies.delete(SESSION_COOKIE, { path: "/" });
+export function clearSessionCookie(context: Context): void {
+  context.cookies.delete(SESSION_COOKIE, { path: "/" });
 }
 
-export function getRpId(astro: AstroGlobal): string {
-  return new URL(astro.request.url).hostname;
+export function getRpId(context: Context): string {
+  return new URL(context.request.url).hostname;
 }
 
-export function getOrigin(astro: AstroGlobal): string {
-  return new URL(astro.request.url).origin;
+export function getOrigin(context: Context): string {
+  return new URL(context.request.url).origin;
 }

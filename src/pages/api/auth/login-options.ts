@@ -10,7 +10,7 @@ import {
 
 export const POST: APIRoute = async (context) => {
   try {
-    const { email } = await context.request.json();
+    const { email } = (await context.request.json()) as { email: string };
 
     if (!email || !isAllowedEmail(email)) {
       return new Response(JSON.stringify({ error: "Unauthorized email" }), {
@@ -19,7 +19,7 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
-    const kv = getKV(context as any);
+    const kv = getKV(context);
     const user = await getUser(kv);
 
     if (!user || user.credentials.length === 0) {
@@ -29,7 +29,7 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    const rpID = getRpId(context as any);
+    const rpID = getRpId(context);
 
     const options = await generateAuthenticationOptions({
       rpID,

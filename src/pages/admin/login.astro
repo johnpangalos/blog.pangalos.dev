@@ -72,7 +72,7 @@ if (token && (await verifySession(kv, token))) {
 
         if (loginRes.ok) {
           // User has a passkey registered, authenticate
-          const { options, challengeId } = await loginRes.json();
+          const { options, challengeId } = (await loginRes.json()) as { options: any; challengeId: string };
           showStatus("Tap your passkey to sign in...");
 
           const credential = await startAuthentication({ optionsJSON: options });
@@ -89,10 +89,10 @@ if (token && (await verifySession(kv, token))) {
             return;
           }
 
-          const verifyData = await verifyRes.json();
+          const verifyData = (await verifyRes.json()) as { error?: string };
           showStatus(verifyData.error || "Authentication failed", true);
         } else {
-          const loginData = await loginRes.json();
+          const loginData = (await loginRes.json()) as { error?: string; needsRegistration?: boolean };
 
           if (loginData.needsRegistration || loginRes.status === 404) {
             // No passkey registered, start registration
@@ -105,12 +105,12 @@ if (token && (await verifySession(kv, token))) {
             });
 
             if (!regRes.ok) {
-              const regData = await regRes.json();
+              const regData = (await regRes.json()) as { error?: string };
               showStatus(regData.error || "Registration failed", true);
               return;
             }
 
-            const { options, challengeId } = await regRes.json();
+            const { options, challengeId } = (await regRes.json()) as { options: any; challengeId: string };
             showStatus("Create your passkey...");
 
             const credential = await startRegistration({ optionsJSON: options });
@@ -127,7 +127,7 @@ if (token && (await verifySession(kv, token))) {
               return;
             }
 
-            const verifyData = await verifyRes.json();
+            const verifyData = (await verifyRes.json()) as { error?: string };
             showStatus(verifyData.error || "Registration failed", true);
           } else {
             showStatus(loginData.error || "Login failed", true);

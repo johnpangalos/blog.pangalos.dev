@@ -6,6 +6,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "cf-typegen": "wrangler types",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },

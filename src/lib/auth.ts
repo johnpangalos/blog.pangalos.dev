@@ -1,5 +1,6 @@
 import type { AstroGlobal } from "astro";
 import type { APIContext } from "astro";
+import type { AuthenticatorTransportFuture } from "@simplewebauthn/server";
 
 const ALLOWED_EMAIL = "john@pangalos.dev";
 
@@ -7,7 +8,7 @@ export interface StoredCredential {
   credentialId: string;
   publicKey: number[];
   counter: number;
-  transports?: string[];
+  transports?: AuthenticatorTransportFuture[];
 }
 
 export interface UserRecord {

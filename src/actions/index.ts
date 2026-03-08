@@ -11,15 +11,6 @@ import {
 } from "../lib/auth";
 import type { UserRecord } from "../lib/auth";
 
-type AuthenticatorTransport =
-  | "ble"
-  | "cable"
-  | "hybrid"
-  | "internal"
-  | "nfc"
-  | "smart-card"
-  | "usb";
-
 export const server = {
   auth: {
     loginOptions: defineAction({
@@ -43,7 +34,7 @@ export const server = {
           rpID,
           allowCredentials: user.credentials.map((cred) => ({
             id: cred.credentialId,
-            transports: cred.transports as AuthenticatorTransport[],
+            transports: cred.transports ,
           })),
           userVerification: "preferred",
         });
@@ -92,7 +83,7 @@ export const server = {
             id: matchingCred.credentialId,
             publicKey: new Uint8Array(matchingCred.publicKey),
             counter: matchingCred.counter,
-            transports: matchingCred.transports as AuthenticatorTransport[],
+            transports: matchingCred.transports ,
           },
         });
 
@@ -134,7 +125,7 @@ export const server = {
           },
           excludeCredentials: (existingUser?.credentials ?? []).map((cred) => ({
             id: cred.credentialId,
-            transports: cred.transports as AuthenticatorTransport[],
+            transports: cred.transports ,
           })),
         });
 

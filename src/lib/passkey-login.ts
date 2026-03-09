@@ -21,12 +21,19 @@ function showError(message: string) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const formData = new FormData(form);
+  const email = (formData.get("email") as string).trim();
+  if (!email) {
+    showError("Please enter your email");
+    return;
+  }
+
   submitBtn.disabled = true;
   submitBtn.textContent = "Working...";
 
   try {
     // Try login first
-    const loginResult = await actions.auth.loginOptions();
+    const loginResult = await actions.auth.loginOptions({ email });
 
     if (loginResult.error && loginResult.error.code !== "NOT_FOUND") {
       showError(loginResult.error.message || "Login failed");
@@ -52,7 +59,7 @@ form.addEventListener("submit", async (e) => {
     // No passkey found — register a new one
     showSuccess("No passkey found. Registering a new one...");
 
-    const regResult = await actions.auth.registerOptions();
+    const regResult = await actions.auth.registerOptions({ email });
 
     if (regResult.error) {
       showError(regResult.error.message || "Registration failed");

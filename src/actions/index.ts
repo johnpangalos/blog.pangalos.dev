@@ -2,7 +2,6 @@ import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
 import { generateAuthenticationOptions, generateRegistrationOptions, verifyAuthenticationResponse, verifyRegistrationResponse } from "@simplewebauthn/server";
 import {
-  isAllowedEmail,
   getKV,
   getUser,
   saveUser,
@@ -15,12 +14,7 @@ export const server = {
   auth: {
     loginOptions: defineAction({
       accept: "json",
-      input: z.object({ email: z.string().email() }),
-      handler: async ({ email }, context) => {
-        if (!isAllowedEmail(email)) {
-          throw new ActionError({ code: "FORBIDDEN", message: "Unauthorized email" });
-        }
-
+      handler: async (_input, context) => {
         const kv = getKV(context);
         const user = await getUser(kv);
 
@@ -40,7 +34,6 @@ export const server = {
         });
 
         context.session.set("challenge", options.challenge);
-        context.session.set("challengeEmail", email);
 
         return { options };
       },
@@ -51,9 +44,8 @@ export const server = {
       input: z.object({ credential: z.any() }),
       handler: async ({ credential }, context) => {
         const challenge = await context.session.get("challenge");
-        const email = await context.session.get("challengeEmail");
 
-        if (!challenge || !email) {
+        if (!challenge) {
           throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Challenge expired or invalid" });
         }
 
@@ -95,8 +87,7 @@ export const server = {
         await saveUser(kv, user);
 
         context.session.set("challenge", null);
-        context.session.set("challengeEmail", null);
-        context.session.set("email", email);
+        context.session.set("authenticated", true);
 
         return { verified: true };
       },
@@ -104,12 +95,7 @@ export const server = {
 
     registerOptions: defineAction({
       accept: "json",
-      input: z.object({ email: z.string().email() }),
-      handler: async ({ email }, context) => {
-        if (!isAllowedEmail(email)) {
-          throw new ActionError({ code: "FORBIDDEN", message: "Unauthorized email" });
-        }
-
+      handler: async (_input, context) => {
         const kv = getKV(context);
         const existingUser = await getUser(kv);
         const rpID = getHostname(context);
@@ -117,7 +103,7 @@ export const server = {
         const options = await generateRegistrationOptions({
           rpName: "blog.pangalos.dev",
           rpID,
-          userName: email,
+          userName: "admin",
           attestationType: "none",
           authenticatorSelection: {
             residentKey: "preferred",
@@ -130,7 +116,6 @@ export const server = {
         });
 
         context.session.set("challenge", options.challenge);
-        context.session.set("challengeEmail", email);
 
         return { options };
       },
@@ -141,9 +126,8 @@ export const server = {
       input: z.object({ credential: z.any() }),
       handler: async ({ credential }, context) => {
         const challenge = await context.session.get("challenge");
-        const email = await context.session.get("challengeEmail");
 
-        if (!challenge || !email) {
+        if (!challenge) {
           throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Challenge expired or invalid" });
         }
 
@@ -167,7 +151,6 @@ export const server = {
 
         const existingUser = await getUser(kv);
         const user: UserRecord = existingUser ?? {
-          email,
           credentials: [],
         };
 
@@ -181,8 +164,7 @@ export const server = {
         await saveUser(kv, user);
 
         context.session.set("challenge", null);
-        context.session.set("challengeEmail", null);
-        context.session.set("email", email);
+        context.session.set("authenticated", true);
 
         return { verified: true };
       },

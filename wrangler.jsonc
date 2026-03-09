@@ -10,7 +10,7 @@
   "kv_namespaces": [
     {
       "binding": "BLOG_PANGALOS_AUTH_KV",
-      "id": "BLOG_PANGALOS_AUTH_KV_NAMESPACE_ID"
+      "id": "0210a862785a4ed69e941d15237eed1c"
     },
     {
       "binding": "BLOG_PANGALOS_SESSION",
@@ -25,7 +25,7 @@
       "kv_namespaces": [
         {
           "binding": "BLOG_PANGALOS_AUTH_KV",
-          "id": "BLOG_PANGALOS_AUTH_KV_NAMESPACE_ID"
+          "id": "0210a862785a4ed69e941d15237eed1c"
         },
         {
           "binding": "BLOG_PANGALOS_SESSION",

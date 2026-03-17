@@ -7,11 +7,31 @@
   "observability": {
     "enabled": true
   },
+  "kv_namespaces": [
+    {
+      "binding": "BLOG_PANGALOS_AUTH_KV",
+      "id": "0210a862785a4ed69e941d15237eed1c"
+    },
+    {
+      "binding": "BLOG_PANGALOS_SESSION",
+      "id": "b5c364a241ef458a9333ff51f62862b5"
+    }
+  ],
   "env": {
     "preview": {
       "observability": {
         "enabled": true
-      }
+      },
+      "kv_namespaces": [
+        {
+          "binding": "BLOG_PANGALOS_AUTH_KV",
+          "id": "0210a862785a4ed69e941d15237eed1c"
+        },
+        {
+          "binding": "BLOG_PANGALOS_SESSION",
+          "id": "b5c364a241ef458a9333ff51f62862b5"
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isAuthenticated } from "../../lib/auth";
+
+if (await isAuthenticated(Astro)) {
+  return Astro.redirect("/admin");
+}
+---
+
+<BaseLayout title="Admin Login">
+  <div class="mx-auto mt-16 max-w-sm">
+    <h1 class="mb-8 text-center font-display text-3xl font-bold">
+      Admin Login
+    </h1>
+
+    <form id="login-form">
+      <label for="email" class="mb-2 block text-sm font-medium">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        class="mb-4 w-full rounded border border-stone-300 bg-white px-3 py-2 text-stone-900 focus:border-fuchsia-500 focus:outline-none focus:ring-1 focus:ring-fuchsia-500 dark:border-stone-600 dark:bg-stone-800 dark:text-white"
+      />
+      <button
+        type="submit"
+        class="w-full rounded bg-fuchsia-700 px-4 py-2 font-medium text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
+      >
+        Continue with Passkey
+      </button>
+    </form>
+
+    <div id="status-success" hidden class="mt-4 rounded bg-green-100 p-3 text-center text-sm text-green-700 dark:bg-green-900 dark:text-green-300"></div>
+    <div id="status-error" hidden class="mt-4 rounded bg-red-100 p-3 text-center text-sm text-red-700 dark:bg-red-900 dark:text-red-300"></div>
+  </div>
+
+  <script src="../../lib/passkey-login.ts"></script>
+</BaseLayout>

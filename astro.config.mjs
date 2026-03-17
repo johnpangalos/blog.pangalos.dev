@@ -12,7 +12,9 @@ export default defineConfig({
     tailwind({ applyBaseStyles: false }),
     mdx(),
   ],
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    sessionKVBindingName: "BLOG_PANGALOS_SESSION",
+  }),
   markdown: {
     rehypePlugins: [
       rehypeExternalLinks,

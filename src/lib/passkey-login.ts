@@ -43,21 +43,32 @@ form.addEventListener("submit", async (e) => {
     if (loginResult.data) {
       showSuccess("Tap your passkey to sign in...");
 
-      const credential = await startAuthentication({ optionsJSON: loginResult.data.options });
-      const verifyResult = await actions.auth.loginVerify({ credential });
+      try {
+        const credential = await startAuthentication({ optionsJSON: loginResult.data.options });
+        const verifyResult = await actions.auth.loginVerify({ credential });
 
-      if (verifyResult.error) {
-        showError(verifyResult.error.message || "Authentication failed");
+        if (verifyResult.error) {
+          showError(verifyResult.error.message || "Authentication failed");
+          return;
+        }
+
+        showSuccess("Authenticated! Redirecting...");
+        window.location.href = "/admin";
         return;
+      } catch (authErr: any) {
+        // Browser couldn't find a matching passkey for this domain (e.g. passkey
+        // was registered on a different hostname like a preview deployment).
+        // Fall through to registration so the user can create a new passkey.
+        if (authErr.name === "NotAllowedError") {
+          showSuccess("No passkey found for this domain. Registering a new one...");
+        } else {
+          throw authErr;
+        }
       }
-
-      showSuccess("Authenticated! Redirecting...");
-      window.location.href = "/admin";
-      return;
+    } else {
+      // No passkey found — register a new one
+      showSuccess("No passkey found. Registering a new one...");
     }
-
-    // No passkey found — register a new one
-    showSuccess("No passkey found. Registering a new one...");
 
     const regResult = await actions.auth.registerOptions({ email });
 

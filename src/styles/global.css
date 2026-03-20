@@ -12,7 +12,7 @@ html {
 }
 
 body {
-  @apply font-serif overflow-x-hidden;
+  @apply overflow-x-hidden font-serif;
 }
 
 pre {

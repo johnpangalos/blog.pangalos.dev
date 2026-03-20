@@ -8,10 +8,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export default defineConfig({
   output: "server",
-  integrations: [
-    tailwind({ applyBaseStyles: false }),
-    mdx(),
-  ],
+  integrations: [tailwind({ applyBaseStyles: false }), mdx()],
   adapter: cloudflare({
     sessionKVBindingName: "BLOG_PANGALOS_SESSION",
   }),

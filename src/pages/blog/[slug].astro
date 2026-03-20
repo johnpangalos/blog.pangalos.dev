@@ -1,19 +1,36 @@
 ---
 import { getCollection, render } from "astro:content";
+import { marked } from "marked";
 import BlogLayout from "../../layouts/BlogLayout.astro";
+import { getPost } from "../../lib/blog";
 
 const { slug } = Astro.params;
 
 const posts = await getCollection("blog");
-const post = posts.find((p) => p.id === slug);
+const staticPost = posts.find((p) => p.id === slug);
 
-if (!post) {
-  return Astro.redirect("/404");
+let title: string;
+let date: string;
+let Content: any = null;
+let dynamicHtml: string | null = null;
+
+if (staticPost) {
+  title = staticPost.data.title;
+  date = staticPost.data.date;
+  const rendered = await render(staticPost);
+  Content = rendered.Content;
+} else {
+  const dynamicPost = await getPost(Astro, slug!);
+  if (!dynamicPost) {
+    return Astro.redirect("/404");
+  }
+  title = dynamicPost.title;
+  date = dynamicPost.date;
+  dynamicHtml = await marked(dynamicPost.content);
 }
-
-const { Content } = await render(post);
 ---
 
-<BlogLayout title={post.data.title} date={post.data.date}>
-  <Content />
+<BlogLayout title={title} date={date}>
+  {Content && <Content />}
+  {dynamicHtml && <Fragment set:html={dynamicHtml} />}
 </BlogLayout>

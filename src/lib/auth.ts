@@ -16,7 +16,11 @@ export interface UserRecord {
   credentials: StoredCredential[];
 }
 
-type Context = AstroGlobal | APIContext;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Context =
+  | AstroGlobal
+  | APIContext
+  | { locals: any; session: any; request: any };
 
 export function isAllowedEmail(email: string): boolean {
   return email.toLowerCase() === ALLOWED_EMAIL;
@@ -37,7 +41,7 @@ export async function getUser(kv: KVNamespace): Promise<UserRecord | null> {
 
 export async function saveUser(
   kv: KVNamespace,
-  user: UserRecord,
+  user: UserRecord
 ): Promise<void> {
   await kv.put(`user:${ALLOWED_EMAIL}`, JSON.stringify(user));
 }

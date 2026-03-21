@@ -18,14 +18,36 @@ export interface BlogPost {
   content: string;
 }
 
-const POST_PREFIX = "post:";
+const GITHUB_REPO = "johnpangalos/blog.pangalos.dev";
+const CONTENT_PATH = "src/content/blog";
 
-function getKV(context: Context): KVNamespace {
-  const kv = context.locals.runtime.env.BLOG_PANGALOS_AUTH_KV;
-  if (!kv) {
-    throw new Error("BLOG_PANGALOS_AUTH_KV binding is not configured");
+function getGitHubToken(context: Context): string {
+  const token = context.locals.runtime.env.GITHUB_TOKEN;
+  if (!token) {
+    throw new Error("GITHUB_TOKEN is not configured");
   }
-  return kv;
+  return token;
+}
+
+async function githubApi(
+  token: string,
+  endpoint: string,
+  options: RequestInit = {},
+): Promise<Response> {
+  const url = endpoint.startsWith("https://")
+    ? endpoint
+    : `https://api.github.com/repos/${GITHUB_REPO}${endpoint}`;
+
+  return fetch(url, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
 }
 
 export function slugify(title: string): string {
@@ -35,42 +57,112 @@ export function slugify(title: string): string {
     .replace(/^-|-$/g, "");
 }
 
-export async function savePost(
+function buildMdxContent(post: Omit<BlogPost, "slug">): string {
+  const frontmatter = [
+    "---",
+    `author: "${post.author}"`,
+    `title: "${post.title}"`,
+    `date: "${post.date}"`,
+    `description: "${post.description}"`,
+    `tags: [${post.tags.map((t) => `"${t}"`).join(", ")}]`,
+    `categories: [${post.categories.map((c) => `"${c}"`).join(", ")}]`,
+    "---",
+  ].join("\n");
+
+  return `${frontmatter}\n\n${post.content}\n`;
+}
+
+export async function createPost(
   context: Context,
-  post: BlogPost
+  post: BlogPost,
 ): Promise<void> {
-  const kv = getKV(context);
-  await kv.put(`${POST_PREFIX}${post.slug}`, JSON.stringify(post));
+  const token = getGitHubToken(context);
+  const filePath = `${CONTENT_PATH}/${post.slug}.mdx`;
+  const fileContent = buildMdxContent(post);
+  const encodedContent = btoa(
+    new TextEncoder()
+      .encode(fileContent)
+      .reduce((acc, byte) => acc + String.fromCharCode(byte), ""),
+  );
+
+  const response = await githubApi(token, `/contents/${filePath}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      message: `Add blog post: ${post.title}`,
+      content: encodedContent,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(
+      `GitHub API error: ${(error as { message?: string }).message || response.statusText}`,
+    );
+  }
 }
 
-export async function getPost(
+export async function listPosts(
   context: Context,
-  slug: string
-): Promise<BlogPost | null> {
-  const kv = getKV(context);
-  const data = await kv.get(`${POST_PREFIX}${slug}`);
-  return data ? JSON.parse(data) : null;
-}
+): Promise<{ name: string; slug: string; sha: string }[]> {
+  const token = getGitHubToken(context);
+  const response = await githubApi(token, `/contents/${CONTENT_PATH}`);
 
-export async function listPosts(context: Context): Promise<BlogPost[]> {
-  const kv = getKV(context);
-  const keys = await kv.list({ prefix: POST_PREFIX });
-  const posts: BlogPost[] = [];
-
-  for (const key of keys.keys) {
-    const data = await kv.get(key.name);
-    if (data) {
-      posts.push(JSON.parse(data));
-    }
+  if (!response.ok) {
+    if (response.status === 404) return [];
+    throw new Error(`GitHub API error: ${response.statusText}`);
   }
 
-  return posts;
+  const files = (await response.json()) as {
+    name: string;
+    sha: string;
+    type: string;
+  }[];
+  return files
+    .filter((f) => f.type === "file" && f.name.endsWith(".mdx"))
+    .map((f) => ({
+      name: f.name.replace(/\.mdx$/, ""),
+      slug: f.name.replace(/\.mdx$/, ""),
+      sha: f.sha,
+    }));
 }
 
 export async function deletePost(
   context: Context,
-  slug: string
+  slug: string,
 ): Promise<void> {
-  const kv = getKV(context);
-  await kv.delete(`${POST_PREFIX}${slug}`);
+  const token = getGitHubToken(context);
+  const filePath = `${CONTENT_PATH}/${slug}.mdx`;
+
+  // Get the file SHA first
+  const getResponse = await githubApi(token, `/contents/${filePath}`);
+  if (!getResponse.ok) {
+    throw new Error(`Post not found: ${slug}`);
+  }
+
+  const fileInfo = (await getResponse.json()) as { sha: string };
+
+  const response = await githubApi(token, `/contents/${filePath}`, {
+    method: "DELETE",
+    body: JSON.stringify({
+      message: `Delete blog post: ${slug}`,
+      sha: fileInfo.sha,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(
+      `GitHub API error: ${(error as { message?: string }).message || response.statusText}`,
+    );
+  }
+}
+
+export async function postExists(
+  context: Context,
+  slug: string,
+): Promise<boolean> {
+  const token = getGitHubToken(context);
+  const filePath = `${CONTENT_PATH}/${slug}.mdx`;
+  const response = await githubApi(token, `/contents/${filePath}`);
+  return response.ok;
 }

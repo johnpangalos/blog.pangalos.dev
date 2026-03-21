@@ -16,7 +16,7 @@ import {
   getOrigin,
 } from "../lib/auth";
 import type { UserRecord } from "../lib/auth";
-import { savePost, getPost, listPosts, deletePost, slugify } from "../lib/blog";
+import { createPost, postExists, deletePost, slugify } from "../lib/blog";
 import type { BlogPost } from "../lib/blog";
 
 export const server = {
@@ -41,8 +41,8 @@ export const server = {
         }
 
         const slug = slugify(input.title);
-        const existing = await getPost(context, slug);
-        if (existing) {
+        const exists = await postExists(context, slug);
+        if (exists) {
           throw new ActionError({
             code: "CONFLICT",
             message: "A post with this slug already exists",
@@ -50,22 +50,8 @@ export const server = {
         }
 
         const post: BlogPost = { slug, ...input };
-        await savePost(context, post);
+        await createPost(context, post);
         return { slug };
-      },
-    }),
-
-    list: defineAction({
-      accept: "json",
-      handler: async (_input, context) => {
-        if (!(await isAuthenticated(context))) {
-          throw new ActionError({
-            code: "FORBIDDEN",
-            message: "Not authenticated",
-          });
-        }
-        const posts = await listPosts(context);
-        return { posts };
       },
     }),
 

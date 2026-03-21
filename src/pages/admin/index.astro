@@ -7,9 +7,14 @@ if (!(await isAuthenticated(Astro))) {
   return Astro.redirect("/admin/login");
 }
 
-const dynamicPosts = (await listPosts(Astro)).sort(
-  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-);
+let posts: { name: string; slug: string; sha: string }[] = [];
+let listError: string | null = null;
+
+try {
+  posts = await listPosts(Astro);
+} catch (e) {
+  listError = e instanceof Error ? e.message : "Failed to list posts";
+}
 ---
 
 <BaseLayout title="Admin">
@@ -33,22 +38,25 @@ const dynamicPosts = (await listPosts(Astro)).sort(
     </div>
 
     {
-      dynamicPosts.length > 0 && (
+      listError && (
+        <p class="mt-4 text-sm text-red-600 dark:text-red-400">{listError}</p>
+      )
+    }
+
+    {
+      posts.length > 0 && (
         <div class="mt-8">
-          <h2 class="font-display text-xl font-bold">Dynamic Posts</h2>
+          <h2 class="font-display text-xl font-bold">Blog Posts</h2>
           <ul class="mt-4 space-y-3">
-            {dynamicPosts.map((post) => (
+            {posts.map((post) => (
               <li class="flex items-center justify-between rounded border border-stone-200 p-3 dark:border-stone-700">
                 <div>
                   <a
                     href={`/blog/${post.slug}`}
                     class="font-bold text-fuchsia-700 hover:underline dark:text-fuchsia-400"
                   >
-                    {post.title}
+                    {post.name}
                   </a>
-                  <p class="text-sm text-stone-500 dark:text-stone-400">
-                    {post.date}
-                  </p>
                 </div>
                 <button
                   data-slug={post.slug}
@@ -77,7 +85,7 @@ const dynamicPosts = (await listPosts(Astro)).sort(
     document.querySelectorAll(".delete-btn").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const slug = (btn as HTMLElement).dataset.slug!;
-        if (!confirm(`Delete "${slug}"?`)) return;
+        if (!confirm(`Delete "${slug}"? This will commit a deletion to the repo.`)) return;
 
         const { error } = await actions.blog.delete({ slug });
         if (error) {

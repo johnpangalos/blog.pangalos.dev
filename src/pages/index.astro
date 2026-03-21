@@ -2,27 +2,17 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Button from "../components/Button.astro";
-import { listPosts } from "../lib/blog";
 
 const siteTitle = "some.blog.or.whatever";
 
-const staticPosts = (await getCollection("blog")).map((p) => ({
-  id: p.id,
-  title: p.data.title,
-  date: p.data.date,
-  description: p.data.description,
-}));
-
-const dynamicPosts = (await listPosts(Astro)).map((p) => ({
-  id: p.slug,
-  title: p.title,
-  date: p.date,
-  description: p.description,
-}));
-
-const posts = [...staticPosts, ...dynamicPosts].sort(
-  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-);
+const posts = (await getCollection("blog"))
+  .map((p) => ({
+    id: p.id,
+    title: p.data.title,
+    date: p.data.date,
+    description: p.data.description,
+  }))
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 ---
 
 <BaseLayout title={siteTitle}>

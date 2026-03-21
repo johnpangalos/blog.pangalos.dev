@@ -97,7 +97,7 @@ if (!(await isAuthenticated(Astro))) {
 
       <div>
         <label for="content" class="block text-sm font-bold"
-          >Content (Markdown)</label
+          >Content (MDX)</label
         >
         <textarea
           id="content"
@@ -105,7 +105,7 @@ if (!(await isAuthenticated(Astro))) {
           required
           rows="16"
           class="mt-1 w-full rounded border border-stone-300 bg-white px-3 py-2 font-mono text-sm text-stone-900 dark:border-stone-600 dark:bg-stone-800 dark:text-white"
-          placeholder="Write your blog post in Markdown..."></textarea>
+          placeholder="Write your blog post in MDX..."></textarea>
       </div>
 
       <div id="status" class="text-sm"></div>
@@ -144,7 +144,7 @@ if (!(await isAuthenticated(Astro))) {
         .map((c) => c.trim())
         .filter(Boolean);
 
-      const { data, error } = await actions.blog.create({
+      const { error } = await actions.blog.create({
         title: formData.get("title") as string,
         author: formData.get("author") as string,
         date: formData.get("date") as string,
@@ -160,9 +160,12 @@ if (!(await isAuthenticated(Astro))) {
         return;
       }
 
-      status.textContent = "Published!";
+      status.textContent =
+        "Post committed to repo! It will be live after the site rebuilds.";
       status.className = "text-sm text-green-600 dark:text-green-400";
-      window.location.href = `/blog/${data.slug}`;
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 2000);
     });
   </script>
 </BaseLayout>

@@ -1,8 +1,13 @@
 import { actions } from "astro:actions";
-import { startRegistration, startAuthentication } from "@simplewebauthn/browser";
+import {
+  startRegistration,
+  startAuthentication,
+} from "@simplewebauthn/browser";
 
 const form = document.getElementById("login-form") as HTMLFormElement;
-const submitBtn = form.querySelector("button[type=submit]") as HTMLButtonElement;
+const submitBtn = form.querySelector(
+  "button[type=submit]"
+) as HTMLButtonElement;
 const successDiv = document.getElementById("status-success") as HTMLDivElement;
 const errorDiv = document.getElementById("status-error") as HTMLDivElement;
 
@@ -44,7 +49,9 @@ form.addEventListener("submit", async (e) => {
       showSuccess("Tap your passkey to sign in...");
 
       try {
-        const credential = await startAuthentication({ optionsJSON: loginResult.data.options });
+        const credential = await startAuthentication({
+          optionsJSON: loginResult.data.options,
+        });
         const verifyResult = await actions.auth.loginVerify({ credential });
 
         if (verifyResult.error) {
@@ -60,7 +67,9 @@ form.addEventListener("submit", async (e) => {
         // was registered on a different hostname like a preview deployment).
         // Fall through to registration so the user can create a new passkey.
         if (authErr.name === "NotAllowedError") {
-          showSuccess("No passkey found for this domain. Registering a new one...");
+          showSuccess(
+            "No passkey found for this domain. Registering a new one..."
+          );
         } else {
           throw authErr;
         }
@@ -79,7 +88,9 @@ form.addEventListener("submit", async (e) => {
 
     showSuccess("Create your passkey...");
 
-    const credential = await startRegistration({ optionsJSON: regResult.data.options });
+    const credential = await startRegistration({
+      optionsJSON: regResult.data.options,
+    });
     const verifyResult = await actions.auth.registerVerify({ credential });
 
     if (verifyResult.error) {

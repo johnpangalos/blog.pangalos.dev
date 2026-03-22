@@ -1,9 +1,19 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthenticated } from "../../lib/auth";
+import { listPosts } from "../../lib/blog";
 
 if (!(await isAuthenticated(Astro))) {
   return Astro.redirect("/admin/login");
+}
+
+let posts: { name: string; slug: string; sha: string }[] = [];
+let listError: string | null = null;
+
+try {
+  posts = await listPosts(Astro);
+} catch (e) {
+  listError = e instanceof Error ? e.message : "Failed to list posts";
 }
 ---
 
@@ -11,20 +21,79 @@ if (!(await isAuthenticated(Astro))) {
   <div class="mt-16">
     <div class="flex items-center justify-between">
       <h1 class="font-display text-3xl font-bold">Admin</h1>
-      <button
-        id="logout-btn"
-        class="rounded bg-stone-200 px-3 py-1 text-sm hover:bg-stone-300 dark:bg-stone-700 dark:hover:bg-stone-600"
-      >
-        Logout
-      </button>
+      <div class="flex gap-2">
+        <a
+          href="/admin/new"
+          class="rounded bg-fuchsia-700 px-3 py-1 text-sm font-bold text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
+        >
+          New Post
+        </a>
+        <button
+          id="logout-btn"
+          class="rounded bg-stone-200 px-3 py-1 text-sm hover:bg-stone-300 dark:bg-stone-700 dark:hover:bg-stone-600"
+        >
+          Logout
+        </button>
+      </div>
     </div>
+
+    {
+      listError && (
+        <p class="mt-4 text-sm text-red-600 dark:text-red-400">{listError}</p>
+      )
+    }
+
+    {
+      posts.length > 0 && (
+        <div class="mt-8">
+          <h2 class="font-display text-xl font-bold">Blog Posts</h2>
+          <ul class="mt-4 space-y-3">
+            {posts.map((post) => (
+              <li class="flex items-center justify-between rounded border border-stone-200 p-3 dark:border-stone-700">
+                <div>
+                  <a
+                    href={`/blog/${post.slug}`}
+                    class="font-bold text-fuchsia-700 hover:underline dark:text-fuchsia-400"
+                  >
+                    {post.name}
+                  </a>
+                </div>
+                <button
+                  data-slug={post.slug}
+                  class="delete-btn rounded bg-red-600 px-2 py-1 text-xs text-white hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
   </div>
 
   <script>
     import { actions } from "astro:actions";
-    document.getElementById("logout-btn")!.addEventListener("click", async () => {
-      await actions.auth.logout({});
-      window.location.href = "/admin/login";
+
+    document
+      .getElementById("logout-btn")!
+      .addEventListener("click", async () => {
+        await actions.auth.logout({});
+        window.location.href = "/admin/login";
+      });
+
+    document.querySelectorAll(".delete-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const slug = (btn as HTMLElement).dataset.slug!;
+        if (!confirm(`Delete "${slug}"? This will commit a deletion to the repo.`)) return;
+
+        const { error } = await actions.blog.delete({ slug });
+        if (error) {
+          alert(`Error: ${error.message}`);
+          return;
+        }
+        window.location.reload();
+      });
     });
   </script>
 </BaseLayout>

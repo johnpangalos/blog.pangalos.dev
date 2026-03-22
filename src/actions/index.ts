@@ -1,8 +1,14 @@
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { generateAuthenticationOptions, generateRegistrationOptions, verifyAuthenticationResponse, verifyRegistrationResponse } from "@simplewebauthn/server";
+import {
+  generateAuthenticationOptions,
+  generateRegistrationOptions,
+  verifyAuthenticationResponse,
+  verifyRegistrationResponse,
+} from "@simplewebauthn/server";
 import {
   isAllowedEmail,
+  isAuthenticated,
   getKV,
   getUser,
   saveUser,
@@ -10,22 +16,81 @@ import {
   getOrigin,
 } from "../lib/auth";
 import type { UserRecord } from "../lib/auth";
+import { createPost, postExists, deletePost, slugify } from "../lib/blog";
+import type { BlogPost } from "../lib/blog";
 
 export const server = {
+  blog: {
+    create: defineAction({
+      accept: "json",
+      input: z.object({
+        title: z.string().min(1),
+        author: z.string().min(1),
+        date: z.string().min(1),
+        description: z.string().min(1),
+        tags: z.array(z.string()),
+        categories: z.array(z.string()),
+        content: z.string().min(1),
+      }),
+      handler: async (input, context) => {
+        if (!(await isAuthenticated(context))) {
+          throw new ActionError({
+            code: "FORBIDDEN",
+            message: "Not authenticated",
+          });
+        }
+
+        const slug = slugify(input.title);
+        const exists = await postExists(context, slug);
+        if (exists) {
+          throw new ActionError({
+            code: "CONFLICT",
+            message: "A post with this slug already exists",
+          });
+        }
+
+        const post: BlogPost = { slug, ...input };
+        await createPost(context, post);
+        return { slug };
+      },
+    }),
+
+    delete: defineAction({
+      accept: "json",
+      input: z.object({ slug: z.string().min(1) }),
+      handler: async ({ slug }, context) => {
+        if (!(await isAuthenticated(context))) {
+          throw new ActionError({
+            code: "FORBIDDEN",
+            message: "Not authenticated",
+          });
+        }
+        await deletePost(context, slug);
+        return { ok: true };
+      },
+    }),
+  },
+
   auth: {
     loginOptions: defineAction({
       accept: "json",
       input: z.object({ email: z.string().email() }),
       handler: async ({ email }, context) => {
         if (!isAllowedEmail(email)) {
-          throw new ActionError({ code: "FORBIDDEN", message: "Unauthorized email" });
+          throw new ActionError({
+            code: "FORBIDDEN",
+            message: "Unauthorized email",
+          });
         }
 
         const kv = getKV(context);
         const user = await getUser(kv);
 
         if (!user || user.credentials.length === 0) {
-          throw new ActionError({ code: "NOT_FOUND", message: "No passkey registered" });
+          throw new ActionError({
+            code: "NOT_FOUND",
+            message: "No passkey registered",
+          });
         }
 
         const rpID = getHostname(context);
@@ -34,7 +99,7 @@ export const server = {
           rpID,
           allowCredentials: user.credentials.map((cred) => ({
             id: cred.credentialId,
-            transports: cred.transports ,
+            transports: cred.transports,
           })),
           userVerification: "preferred",
         });
@@ -54,20 +119,29 @@ export const server = {
         const email = await context.session.get("challengeEmail");
 
         if (!challenge || !email) {
-          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Challenge expired or invalid" });
+          throw new ActionError({
+            code: "UNPROCESSABLE_CONTENT",
+            message: "Challenge expired or invalid",
+          });
         }
 
         const kv = getKV(context);
         const user = await getUser(kv);
         if (!user) {
-          throw new ActionError({ code: "NOT_FOUND", message: "User not found" });
+          throw new ActionError({
+            code: "NOT_FOUND",
+            message: "User not found",
+          });
         }
 
         const matchingCred = user.credentials.find(
-          (c) => c.credentialId === credential.id,
+          (c) => c.credentialId === credential.id
         );
         if (!matchingCred) {
-          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Credential not found" });
+          throw new ActionError({
+            code: "UNPROCESSABLE_CONTENT",
+            message: "Credential not found",
+          });
         }
 
         const rpID = getHostname(context);
@@ -83,12 +157,15 @@ export const server = {
             id: matchingCred.credentialId,
             publicKey: new Uint8Array(matchingCred.publicKey),
             counter: matchingCred.counter,
-            transports: matchingCred.transports ,
+            transports: matchingCred.transports,
           },
         });
 
         if (!verification.verified) {
-          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Authentication failed" });
+          throw new ActionError({
+            code: "UNPROCESSABLE_CONTENT",
+            message: "Authentication failed",
+          });
         }
 
         matchingCred.counter = verification.authenticationInfo.newCounter;
@@ -107,7 +184,10 @@ export const server = {
       input: z.object({ email: z.string().email() }),
       handler: async ({ email }, context) => {
         if (!isAllowedEmail(email)) {
-          throw new ActionError({ code: "FORBIDDEN", message: "Unauthorized email" });
+          throw new ActionError({
+            code: "FORBIDDEN",
+            message: "Unauthorized email",
+          });
         }
 
         const kv = getKV(context);
@@ -125,7 +205,7 @@ export const server = {
           },
           excludeCredentials: (existingUser?.credentials ?? []).map((cred) => ({
             id: cred.credentialId,
-            transports: cred.transports ,
+            transports: cred.transports,
           })),
         });
 
@@ -144,7 +224,10 @@ export const server = {
         const email = await context.session.get("challengeEmail");
 
         if (!challenge || !email) {
-          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Challenge expired or invalid" });
+          throw new ActionError({
+            code: "UNPROCESSABLE_CONTENT",
+            message: "Challenge expired or invalid",
+          });
         }
 
         const kv = getKV(context);
@@ -160,7 +243,10 @@ export const server = {
         });
 
         if (!verification.verified || !verification.registrationInfo) {
-          throw new ActionError({ code: "UNPROCESSABLE_CONTENT", message: "Verification failed" });
+          throw new ActionError({
+            code: "UNPROCESSABLE_CONTENT",
+            message: "Verification failed",
+          });
         }
 
         const { credential: cred } = verification.registrationInfo;

@@ -16,11 +16,11 @@ export interface UserRecord {
   credentials: StoredCredential[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Context =
-  | AstroGlobal
-  | APIContext
-  | { locals: any; session: any; request: any };
+type Context = {
+  locals: App.Locals;
+  session: APIContext["session"];
+  request: Request;
+};
 
 export function isAllowedEmail(email: string): boolean {
   return email.toLowerCase() === ALLOWED_EMAIL;

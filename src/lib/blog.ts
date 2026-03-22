@@ -1,11 +1,6 @@
-import type { AstroGlobal } from "astro";
-import type { APIContext } from "astro";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Context =
-  | AstroGlobal
-  | APIContext
-  | { locals: any; session: any; request: any };
+type Context = {
+  locals: App.Locals;
+};
 
 export interface BlogPost {
   slug: string;

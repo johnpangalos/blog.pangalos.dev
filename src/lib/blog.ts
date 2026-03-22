@@ -21,12 +21,103 @@ export interface BlogPost {
 const GITHUB_REPO = "johnpangalos/blog.pangalos.dev";
 const CONTENT_PATH = "src/content/blog";
 
-function getGitHubToken(context: Context): string {
-  const token = context.locals.runtime.env.GITHUB_TOKEN;
-  if (!token) {
-    throw new Error("GITHUB_TOKEN is not configured");
+function getAppCredentials(context: Context): {
+  appId: string;
+  installationId: string;
+  privateKey: string;
+} {
+  const env = context.locals.runtime.env;
+  const appId = env.BLOG_GITHUB_APP_ID;
+  const installationId = env.BLOG_GITHUB_APP_INSTALLATION_ID;
+  const privateKey = env.BLOG_GITHUB_APP_PRIVATE_KEY;
+
+  if (!appId || !installationId || !privateKey) {
+    throw new Error(
+      "GitHub App credentials not configured (BLOG_GITHUB_APP_ID, BLOG_GITHUB_APP_INSTALLATION_ID, BLOG_GITHUB_APP_PRIVATE_KEY)",
+    );
   }
-  return token;
+
+  return { appId, installationId, privateKey };
+}
+
+function pemToArrayBuffer(pem: string): ArrayBuffer {
+  const base64 = pem
+    .replace(/-----BEGIN PRIVATE KEY-----/, "")
+    .replace(/-----END PRIVATE KEY-----/, "")
+    .replace(/-----BEGIN RSA PRIVATE KEY-----/, "")
+    .replace(/-----END RSA PRIVATE KEY-----/, "")
+    .replace(/\s/g, "");
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+function base64url(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+async function createGitHubJWT(
+  appId: string,
+  privateKeyPem: string,
+): Promise<string> {
+  const now = Math.floor(Date.now() / 1000);
+  const header = base64url(
+    new TextEncoder().encode(JSON.stringify({ alg: "RS256", typ: "JWT" })),
+  );
+  const payload = base64url(
+    new TextEncoder().encode(
+      JSON.stringify({ iat: now - 60, exp: now + 600, iss: appId }),
+    ),
+  );
+
+  const key = await crypto.subtle.importKey(
+    "pkcs8",
+    pemToArrayBuffer(privateKeyPem),
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+
+  const signature = await crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    key,
+    new TextEncoder().encode(`${header}.${payload}`),
+  );
+
+  return `${header}.${payload}.${base64url(signature)}`;
+}
+
+async function getInstallationToken(context: Context): Promise<string> {
+  const { appId, installationId, privateKey } = getAppCredentials(context);
+  const jwt = await createGitHubJWT(appId, privateKey);
+
+  const res = await fetch(
+    `https://api.github.com/app/installations/${installationId}/access_tokens`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    },
+  );
+
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error(`Failed to get installation token: ${error}`);
+  }
+
+  const data = (await res.json()) as { token: string };
+  return data.token;
 }
 
 async function githubApi(
@@ -76,7 +167,7 @@ export async function createPost(
   context: Context,
   post: BlogPost,
 ): Promise<void> {
-  const token = getGitHubToken(context);
+  const token = await getInstallationToken(context);
   const filePath = `${CONTENT_PATH}/${post.slug}.mdx`;
   const fileContent = buildMdxContent(post);
   const encodedContent = btoa(
@@ -104,7 +195,7 @@ export async function createPost(
 export async function listPosts(
   context: Context,
 ): Promise<{ name: string; slug: string; sha: string }[]> {
-  const token = getGitHubToken(context);
+  const token = await getInstallationToken(context);
   const response = await githubApi(token, `/contents/${CONTENT_PATH}`);
 
   if (!response.ok) {
@@ -130,7 +221,7 @@ export async function deletePost(
   context: Context,
   slug: string,
 ): Promise<void> {
-  const token = getGitHubToken(context);
+  const token = await getInstallationToken(context);
   const filePath = `${CONTENT_PATH}/${slug}.mdx`;
 
   // Get the file SHA first
@@ -161,7 +252,7 @@ export async function postExists(
   context: Context,
   slug: string,
 ): Promise<boolean> {
-  const token = getGitHubToken(context);
+  const token = await getInstallationToken(context);
   const filePath = `${CONTENT_PATH}/${slug}.mdx`;
   const response = await githubApi(token, `/contents/${filePath}`);
   return response.ok;

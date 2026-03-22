@@ -1,6 +1,5 @@
 import type { APIContext } from "astro";
 import type { AuthenticatorTransportFuture } from "@simplewebauthn/server";
-import { env } from "cloudflare:workers";
 
 const ALLOWED_EMAIL = "john@pangalos.dev";
 
@@ -24,14 +23,6 @@ type Context = {
 
 export function isAllowedEmail(email: string): boolean {
   return email.toLowerCase() === ALLOWED_EMAIL;
-}
-
-export function getKV(_context: Context): KVNamespace {
-  const kv = env.BLOG_PANGALOS_AUTH_KV;
-  if (!kv) {
-    throw new Error("BLOG_PANGALOS_AUTH_KV binding is not configured");
-  }
-  return kv;
 }
 
 export async function getUser(kv: KVNamespace): Promise<UserRecord | null> {

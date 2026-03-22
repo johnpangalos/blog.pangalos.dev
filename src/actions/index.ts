@@ -9,7 +9,6 @@ import {
 import {
   isAllowedEmail,
   isAuthenticated,
-  getKV,
   getUser,
   saveUser,
   getHostname,
@@ -18,6 +17,7 @@ import {
 import type { UserRecord } from "../lib/auth";
 import { createPost, postExists, deletePost, slugify } from "../lib/blog";
 import type { BlogPost } from "../lib/blog";
+import { env } from "cloudflare:workers";
 
 export const server = {
   blog: {
@@ -83,7 +83,7 @@ export const server = {
           });
         }
 
-        const kv = getKV(context);
+        const kv = env.BLOG_PANGALOS_AUTH_KV;
         const user = await getUser(kv);
 
         if (!user || user.credentials.length === 0) {
@@ -125,7 +125,7 @@ export const server = {
           });
         }
 
-        const kv = getKV(context);
+        const kv = env.BLOG_PANGALOS_AUTH_KV;
         const user = await getUser(kv);
         if (!user) {
           throw new ActionError({
@@ -190,7 +190,7 @@ export const server = {
           });
         }
 
-        const kv = getKV(context);
+        const kv = env.BLOG_PANGALOS_AUTH_KV;
         const existingUser = await getUser(kv);
         const rpID = getHostname(context);
 
@@ -230,7 +230,7 @@ export const server = {
           });
         }
 
-        const kv = getKV(context);
+        const kv = env.BLOG_PANGALOS_AUTH_KV;
         const rpID = getHostname(context);
         const origin = getOrigin(context);
 

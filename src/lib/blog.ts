@@ -23,10 +23,9 @@ function getAppCredentials(): {
   installationId: string;
   privateKey: string;
 } {
-  const secrets = env as unknown as Record<string, string>;
-  const appId = secrets.BLOG_GITHUB_APP_ID;
-  const installationId = secrets.BLOG_GITHUB_APP_INSTALLATION_ID;
-  const privateKey = secrets.BLOG_GITHUB_APP_PRIVATE_KEY;
+  const appId = env.BLOG_GITHUB_APP_ID;
+  const installationId = env.BLOG_GITHUB_APP_INSTALLATION_ID;
+  const privateKey = env.BLOG_GITHUB_APP_PRIVATE_KEY;
 
   if (!appId || !installationId || !privateKey) {
     throw new Error(

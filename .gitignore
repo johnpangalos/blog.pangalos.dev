@@ -7,3 +7,4 @@ node_modules
 !.env.example
 .vitest-attachments
 worker-configuration.d.ts
+.wrangler/

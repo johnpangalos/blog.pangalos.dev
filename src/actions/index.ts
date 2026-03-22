@@ -104,8 +104,8 @@ export const server = {
           userVerification: "preferred",
         });
 
-        context.session.set("challenge", options.challenge);
-        context.session.set("challengeEmail", email);
+        context.session!.set("challenge", options.challenge);
+        context.session!.set("challengeEmail", email);
 
         return { options };
       },
@@ -115,8 +115,8 @@ export const server = {
       accept: "json",
       input: z.object({ credential: z.any() }),
       handler: async ({ credential }, context) => {
-        const challenge = await context.session.get("challenge");
-        const email = await context.session.get("challengeEmail");
+        const challenge = await context.session!.get("challenge");
+        const email = await context.session!.get("challengeEmail");
 
         if (!challenge || !email) {
           throw new ActionError({
@@ -171,9 +171,9 @@ export const server = {
         matchingCred.counter = verification.authenticationInfo.newCounter;
         await saveUser(kv, user);
 
-        context.session.set("challenge", null);
-        context.session.set("challengeEmail", null);
-        context.session.set("email", email);
+        context.session!.set("challenge", null);
+        context.session!.set("challengeEmail", null);
+        context.session!.set("email", email);
 
         return { verified: true };
       },
@@ -209,8 +209,8 @@ export const server = {
           })),
         });
 
-        context.session.set("challenge", options.challenge);
-        context.session.set("challengeEmail", email);
+        context.session!.set("challenge", options.challenge);
+        context.session!.set("challengeEmail", email);
 
         return { options };
       },
@@ -220,8 +220,8 @@ export const server = {
       accept: "json",
       input: z.object({ credential: z.any() }),
       handler: async ({ credential }, context) => {
-        const challenge = await context.session.get("challenge");
-        const email = await context.session.get("challengeEmail");
+        const challenge = await context.session!.get("challenge");
+        const email = await context.session!.get("challengeEmail");
 
         if (!challenge || !email) {
           throw new ActionError({
@@ -266,9 +266,9 @@ export const server = {
 
         await saveUser(kv, user);
 
-        context.session.set("challenge", null);
-        context.session.set("challengeEmail", null);
-        context.session.set("email", email);
+        context.session!.set("challenge", null);
+        context.session!.set("challengeEmail", null);
+        context.session!.set("email", email);
 
         return { verified: true };
       },
@@ -277,7 +277,7 @@ export const server = {
     logout: defineAction({
       accept: "json",
       handler: async (_input, context) => {
-        context.session.destroy();
+        context.session!.destroy();
         return { ok: true };
       },
     }),

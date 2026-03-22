@@ -1,3 +1,5 @@
+import { env } from "cloudflare:workers";
+
 type Context = {
   locals: App.Locals;
 };
@@ -16,15 +18,15 @@ export interface BlogPost {
 const GITHUB_REPO = "johnpangalos/blog.pangalos.dev";
 const CONTENT_PATH = "src/content/blog";
 
-function getAppCredentials(context: Context): {
+function getAppCredentials(): {
   appId: string;
   installationId: string;
   privateKey: string;
 } {
-  const env = context.locals.runtime.env;
-  const appId = env.BLOG_GITHUB_APP_ID;
-  const installationId = env.BLOG_GITHUB_APP_INSTALLATION_ID;
-  const privateKey = env.BLOG_GITHUB_APP_PRIVATE_KEY;
+  const secrets = env as unknown as Record<string, string>;
+  const appId = secrets.BLOG_GITHUB_APP_ID;
+  const installationId = secrets.BLOG_GITHUB_APP_INSTALLATION_ID;
+  const privateKey = secrets.BLOG_GITHUB_APP_PRIVATE_KEY;
 
   if (!appId || !installationId || !privateKey) {
     throw new Error(
@@ -50,7 +52,7 @@ function pemToArrayBuffer(pem: string): ArrayBuffer {
   return bytes.buffer;
 }
 
-function base64url(buffer: ArrayBuffer): string {
+function base64url(buffer: ArrayBuffer | Uint8Array): string {
   const bytes = new Uint8Array(buffer);
   let binary = "";
   for (const byte of bytes) {
@@ -91,7 +93,7 @@ async function createGitHubJWT(
 }
 
 async function getInstallationToken(context: Context): Promise<string> {
-  const { appId, installationId, privateKey } = getAppCredentials(context);
+  const { appId, installationId, privateKey } = getAppCredentials();
   const jwt = await createGitHubJWT(appId, privateKey);
 
   const res = await fetch(

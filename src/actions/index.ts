@@ -41,7 +41,7 @@ export const server = {
         }
 
         const slug = slugify(input.title);
-        const exists = await postExists(context, slug);
+        const exists = await postExists(slug);
         if (exists) {
           throw new ActionError({
             code: "CONFLICT",
@@ -50,7 +50,7 @@ export const server = {
         }
 
         const post: BlogPost = { slug, ...input };
-        await createPost(context, post);
+        await createPost(post);
         return { slug };
       },
     }),
@@ -65,7 +65,7 @@ export const server = {
             message: "Not authenticated",
           });
         }
-        await deletePost(context, slug);
+        await deletePost(slug);
         return { ok: true };
       },
     }),

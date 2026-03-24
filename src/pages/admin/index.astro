@@ -11,7 +11,7 @@ let posts: { name: string; slug: string; sha: string }[] = [];
 let listError: string | null = null;
 
 try {
-  posts = await listPosts(Astro);
+  posts = await listPosts();
 } catch (e) {
   listError = e instanceof Error ? e.message : "Failed to list posts";
 }

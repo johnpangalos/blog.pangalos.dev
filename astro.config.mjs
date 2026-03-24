@@ -1,6 +1,5 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
-import tailwind from "@astrojs/tailwind";
 import cloudflare from "@astrojs/cloudflare";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeSlug from "rehype-slug";
@@ -8,7 +7,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export default defineConfig({
   output: "server",
-  integrations: [tailwind({ applyBaseStyles: false }), mdx()],
+  integrations: [mdx()],
   adapter: cloudflare({
     sessionKVBindingName: "BLOG_PANGALOS_SESSION",
   }),

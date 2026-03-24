@@ -9,7 +9,6 @@ import {
 import {
   isAllowedEmail,
   isAuthenticated,
-  getKV,
   getUser,
   saveUser,
   getHostname,
@@ -18,6 +17,7 @@ import {
 import type { UserRecord } from "../lib/auth";
 import { createPost, postExists, deletePost, slugify } from "../lib/blog";
 import type { BlogPost } from "../lib/blog";
+import { env } from "cloudflare:workers";
 
 export const server = {
   blog: {
@@ -41,7 +41,7 @@ export const server = {
         }
 
         const slug = slugify(input.title);
-        const exists = await postExists(context, slug);
+        const exists = await postExists(slug);
         if (exists) {
           throw new ActionError({
             code: "CONFLICT",
@@ -50,7 +50,7 @@ export const server = {
         }
 
         const post: BlogPost = { slug, ...input };
-        await createPost(context, post);
+        await createPost(post);
         return { slug };
       },
     }),
@@ -65,7 +65,7 @@ export const server = {
             message: "Not authenticated",
           });
         }
-        await deletePost(context, slug);
+        await deletePost(slug);
         return { ok: true };
       },
     }),
@@ -83,7 +83,7 @@ export const server = {
           });
         }
 
-        const kv = getKV(context);
+        const kv = env.BLOG_PANGALOS_AUTH_KV;
         const user = await getUser(kv);
 
         if (!user || user.credentials.length === 0) {
@@ -104,8 +104,8 @@ export const server = {
           userVerification: "preferred",
         });
 
-        context.session.set("challenge", options.challenge);
-        context.session.set("challengeEmail", email);
+        context.session!.set("challenge", options.challenge);
+        context.session!.set("challengeEmail", email);
 
         return { options };
       },
@@ -115,8 +115,8 @@ export const server = {
       accept: "json",
       input: z.object({ credential: z.any() }),
       handler: async ({ credential }, context) => {
-        const challenge = await context.session.get("challenge");
-        const email = await context.session.get("challengeEmail");
+        const challenge = await context.session!.get("challenge");
+        const email = await context.session!.get("challengeEmail");
 
         if (!challenge || !email) {
           throw new ActionError({
@@ -125,7 +125,7 @@ export const server = {
           });
         }
 
-        const kv = getKV(context);
+        const kv = env.BLOG_PANGALOS_AUTH_KV;
         const user = await getUser(kv);
         if (!user) {
           throw new ActionError({
@@ -171,9 +171,9 @@ export const server = {
         matchingCred.counter = verification.authenticationInfo.newCounter;
         await saveUser(kv, user);
 
-        context.session.set("challenge", null);
-        context.session.set("challengeEmail", null);
-        context.session.set("email", email);
+        context.session!.set("challenge", null);
+        context.session!.set("challengeEmail", null);
+        context.session!.set("email", email);
 
         return { verified: true };
       },
@@ -190,7 +190,7 @@ export const server = {
           });
         }
 
-        const kv = getKV(context);
+        const kv = env.BLOG_PANGALOS_AUTH_KV;
         const existingUser = await getUser(kv);
         const rpID = getHostname(context);
 
@@ -209,8 +209,8 @@ export const server = {
           })),
         });
 
-        context.session.set("challenge", options.challenge);
-        context.session.set("challengeEmail", email);
+        context.session!.set("challenge", options.challenge);
+        context.session!.set("challengeEmail", email);
 
         return { options };
       },
@@ -220,8 +220,8 @@ export const server = {
       accept: "json",
       input: z.object({ credential: z.any() }),
       handler: async ({ credential }, context) => {
-        const challenge = await context.session.get("challenge");
-        const email = await context.session.get("challengeEmail");
+        const challenge = await context.session!.get("challenge");
+        const email = await context.session!.get("challengeEmail");
 
         if (!challenge || !email) {
           throw new ActionError({
@@ -230,7 +230,7 @@ export const server = {
           });
         }
 
-        const kv = getKV(context);
+        const kv = env.BLOG_PANGALOS_AUTH_KV;
         const rpID = getHostname(context);
         const origin = getOrigin(context);
 
@@ -266,9 +266,9 @@ export const server = {
 
         await saveUser(kv, user);
 
-        context.session.set("challenge", null);
-        context.session.set("challengeEmail", null);
-        context.session.set("email", email);
+        context.session!.set("challenge", null);
+        context.session!.set("challengeEmail", null);
+        context.session!.set("email", email);
 
         return { verified: true };
       },
@@ -277,7 +277,7 @@ export const server = {
     logout: defineAction({
       accept: "json",
       handler: async (_input, context) => {
-        context.session.destroy();
+        context.session!.destroy();
         return { ok: true };
       },
     }),

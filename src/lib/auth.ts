@@ -1,4 +1,3 @@
-import type { AstroGlobal } from "astro";
 import type { APIContext } from "astro";
 import type { AuthenticatorTransportFuture } from "@simplewebauthn/server";
 
@@ -24,14 +23,6 @@ type Context = {
 
 export function isAllowedEmail(email: string): boolean {
   return email.toLowerCase() === ALLOWED_EMAIL;
-}
-
-export function getKV(context: Context): KVNamespace {
-  const kv = context.locals.runtime.env.BLOG_PANGALOS_AUTH_KV;
-  if (!kv) {
-    throw new Error("BLOG_PANGALOS_AUTH_KV binding is not configured");
-  }
-  return kv;
 }
 
 export async function getUser(kv: KVNamespace): Promise<UserRecord | null> {

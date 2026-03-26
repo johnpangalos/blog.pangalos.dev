@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import Link from "./Link";
 
 interface Props {
@@ -11,7 +10,7 @@ interface Props {
 export default function Tooltip({ main, hover, to }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const triggerRef = useRef<HTMLSpanElement>(null);
+  const rootRef = useRef<HTMLSpanElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
@@ -26,10 +25,7 @@ export default function Tooltip({ main, hover, to }: Props) {
     if (!isMobile || !isOpen) return;
 
     const handleTouchOutside = (e: TouchEvent) => {
-      if (
-        triggerRef.current &&
-        !triggerRef.current.contains(e.target as Node)
-      ) {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -53,71 +49,53 @@ export default function Tooltip({ main, hover, to }: Props) {
     timeoutRef.current = setTimeout(() => setIsOpen(false), 100);
   };
 
-  // On mobile with a link, show plain text + link in tooltip
-  if (isMobile && to) {
-    return (
-      <span ref={triggerRef} className="relative !my-0 inline-flex">
-        <Popover>
-          <PopoverButton
-            as="span"
-            className="border-b-2 border-dotted border-fuchsia-700 font-medium text-orange-600 dark:text-orange-400"
-            onTouchStart={show}
-          >
-            {main}
-          </PopoverButton>
-          {isOpen && (
-            <PopoverPanel
-              static
-              anchor="top"
-              className="z-50 mx-2 my-0 w-max max-w-[250px] rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white [--anchor-gap:4px]"
-            >
-              <a
-                rel="noreferrer"
-                className="text-white underline"
-                href={to}
-                target="_blank"
-              >
-                {hover}
-              </a>
-            </PopoverPanel>
-          )}
-        </Popover>
+  const triggerContent =
+    isMobile && to ? (
+      <span className="font-medium text-orange-600 dark:text-orange-400">
+        {main}
       </span>
+    ) : to ? (
+      <Link className="no-underline" style={{ textWrap: "nowrap" }} to={to}>
+        {main}
+      </Link>
+    ) : (
+      main
     );
-  }
 
-  const triggerContent = to ? (
-    <Link className="no-underline" style={{ textWrap: "nowrap" }} to={to}>
-      {main}
-    </Link>
-  ) : (
-    main
-  );
+  const popupContent =
+    isMobile && to ? (
+      <a
+        rel="noreferrer"
+        className="text-white underline"
+        href={to}
+        target="_blank"
+      >
+        {hover}
+      </a>
+    ) : (
+      hover
+    );
 
   return (
-    <span ref={triggerRef} className="relative !my-0 inline-flex">
-      <Popover>
-        <PopoverButton
-          as="span"
-          className="border-b-2 border-dotted border-fuchsia-700"
+    <span ref={rootRef} className="relative !my-0 inline-flex">
+      <span
+        className="border-b-2 border-dotted border-fuchsia-700"
+        onMouseEnter={show}
+        onMouseLeave={hide}
+        onTouchStart={show}
+      >
+        {triggerContent}
+      </span>
+      {isOpen && (
+        <span
+          role="tooltip"
+          className="absolute bottom-full left-1/2 z-50 mb-1 w-max max-w-[250px] -translate-x-1/2 rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
           onMouseEnter={show}
           onMouseLeave={hide}
-          onTouchStart={show}
         >
-          {triggerContent}
-        </PopoverButton>
-        {isOpen && (
-          <PopoverPanel
-            static
-            anchor="top"
-            className="z-50 mx-2 my-0 w-max max-w-[250px] rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white [--anchor-gap:4px]"
-            onMouseEnter={show}
-            onMouseLeave={hide}
-          >
-            {hover}
-          </PopoverPanel>
-        )}
-      </Popover>
+          {popupContent}
+        </span>
+      )}
     </span>
   );
 }

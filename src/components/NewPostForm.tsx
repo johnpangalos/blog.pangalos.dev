@@ -61,17 +61,6 @@ export default function NewPostForm() {
     "mt-1 w-full rounded border border-stone-300 bg-white px-3 py-2 text-stone-900 dark:border-stone-600 dark:bg-stone-800 dark:text-white";
 
   return (
-    <div className="mt-16">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-3xl font-bold">New Post</h1>
-        <a
-          href="/admin"
-          className="rounded bg-stone-200 px-3 py-1 text-sm hover:bg-stone-300 dark:bg-stone-700 dark:hover:bg-stone-600"
-        >
-          Back
-        </a>
-      </div>
-
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
         <Field>
           <Label className="block text-sm font-bold">Title</Label>
@@ -173,6 +162,5 @@ export default function NewPostForm() {
           Publish
         </Button>
       </form>
-    </div>
   );
 }

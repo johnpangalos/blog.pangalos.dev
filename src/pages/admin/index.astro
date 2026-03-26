@@ -2,8 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthenticated } from "../../lib/auth";
 import { listPosts } from "../../lib/blog";
-import LogoutButton from "./_LogoutButton";
-import DeletePostButton from "./_DeletePostButton";
+import LogoutButton from "./_components/LogoutButton";
+import DeletePostButton from "./_components/DeletePostButton";
 
 if (!(await isAuthenticated(Astro))) {
   return Astro.redirect("/admin/login");

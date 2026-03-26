@@ -17,6 +17,71 @@ const GITHUB_REPO_OWNER = "johnpangalos";
 const GITHUB_REPO_NAME = "blog.pangalos.dev";
 const CONTENT_PATH = "src/content/blog";
 
+function derLength(length: number): number[] {
+  if (length < 0x80) return [length];
+  const bytes: number[] = [];
+  let temp = length;
+  while (temp > 0) {
+    bytes.unshift(temp & 0xff);
+    temp >>= 8;
+  }
+  return [0x80 | bytes.length, ...bytes];
+}
+
+function wrapDer(tag: number, content: Uint8Array): Uint8Array {
+  const len = derLength(content.length);
+  const result = new Uint8Array(1 + len.length + content.length);
+  result[0] = tag;
+  result.set(len, 1);
+  result.set(content, 1 + len.length);
+  return result;
+}
+
+/**
+ * Convert a PKCS#1 PEM private key to PKCS#8 format.
+ * universal-github-app-jwt v2 only supports PKCS#8.
+ */
+function convertPkcs1ToPkcs8(pem: string): string {
+  const base64 = pem
+    .replace(/-----BEGIN RSA PRIVATE KEY-----/, "")
+    .replace(/-----END RSA PRIVATE KEY-----/, "")
+    .replace(/\s/g, "");
+  const pkcs1Der = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+
+  // PrivateKeyInfo SEQUENCE { version INTEGER 0, AlgorithmIdentifier, OCTET STRING }
+  const version = new Uint8Array([0x02, 0x01, 0x00]);
+  // AlgorithmIdentifier: SEQUENCE { OID rsaEncryption (1.2.840.113549.1.1.1), NULL }
+  const algoId = wrapDer(
+    0x30,
+    new Uint8Array([
+      0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01, 0x01, 0x05,
+      0x00,
+    ]),
+  );
+  const octetString = wrapDer(0x04, pkcs1Der);
+
+  const inner = new Uint8Array(
+    version.length + algoId.length + octetString.length,
+  );
+  inner.set(version, 0);
+  inner.set(algoId, version.length);
+  inner.set(octetString, version.length + algoId.length);
+
+  const pkcs8Der = wrapDer(0x30, inner);
+  const pkcs8Base64 = btoa(
+    pkcs8Der.reduce((s, b) => s + String.fromCharCode(b), ""),
+  );
+  const lines = pkcs8Base64.match(/.{1,64}/g) || [];
+  return `-----BEGIN PRIVATE KEY-----\n${lines.join("\n")}\n-----END PRIVATE KEY-----`;
+}
+
+function ensurePkcs8(pem: string): string {
+  if (pem.includes("-----BEGIN RSA PRIVATE KEY-----")) {
+    return convertPkcs1ToPkcs8(pem);
+  }
+  return pem;
+}
+
 function getOctokit(): Octokit {
   const appId = env.BLOG_GITHUB_APP_CLIENT_ID;
   const installationId = env.BLOG_GITHUB_APP_INSTALLATION_ID;
@@ -32,7 +97,7 @@ function getOctokit(): Octokit {
     authStrategy: createAppAuth,
     auth: {
       appId,
-      privateKey,
+      privateKey: ensurePkcs8(privateKey),
       installationId,
     },
   });

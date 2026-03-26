@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthenticated } from "../../lib/auth";
-import LoginForm from "../../components/LoginForm";
+import LoginForm from "./_LoginForm";
 
 if (await isAuthenticated(Astro)) {
   return Astro.redirect("/admin");

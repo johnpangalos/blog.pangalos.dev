@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthenticated } from "../../lib/auth";
 import { listPosts } from "../../lib/blog";
-import AdminDashboard from "../../components/AdminDashboard";
+import LogoutButton from "../../components/LogoutButton";
+import DeletePostButton from "../../components/DeletePostButton";
 
 if (!(await isAuthenticated(Astro))) {
   return Astro.redirect("/admin/login");
@@ -19,5 +20,47 @@ try {
 ---
 
 <BaseLayout title="Admin">
-  <AdminDashboard client:load posts={posts} listError={listError} />
+  <div class="mt-16">
+    <div class="flex items-center justify-between">
+      <h1 class="font-display text-3xl font-bold">Admin</h1>
+      <div class="flex gap-2">
+        <a
+          href="/admin/new"
+          class="rounded bg-fuchsia-700 px-3 py-1 text-sm font-bold text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
+        >
+          New Post
+        </a>
+        <LogoutButton client:load />
+      </div>
+    </div>
+
+    {
+      listError && (
+        <p class="mt-4 text-sm text-red-600 dark:text-red-400">{listError}</p>
+      )
+    }
+
+    {
+      posts.length > 0 && (
+        <div class="mt-8">
+          <h2 class="font-display text-xl font-bold">Blog Posts</h2>
+          <ul class="mt-4 space-y-3">
+            {posts.map((post) => (
+              <li class="flex items-center justify-between rounded border border-stone-200 p-3 dark:border-stone-700">
+                <div>
+                  <a
+                    href={`/blog/${post.slug}`}
+                    class="font-bold text-fuchsia-700 hover:underline dark:text-fuchsia-400"
+                  >
+                    {post.name}
+                  </a>
+                </div>
+                <DeletePostButton client:load slug={post.slug} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
 </BaseLayout>

@@ -9,5 +9,10 @@ if (await isAuthenticated(Astro)) {
 ---
 
 <BaseLayout title="Admin Login">
-  <LoginForm client:load />
+  <div class="mx-auto mt-16 max-w-sm">
+    <h1 class="mb-8 text-center font-display text-3xl font-bold">
+      Admin Login
+    </h1>
+    <LoginForm client:load />
+  </div>
 </BaseLayout>

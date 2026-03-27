@@ -109,11 +109,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="mx-auto mt-16 max-w-sm">
-      <h1 className="mb-8 text-center font-display text-3xl font-bold">
-        Admin Login
-      </h1>
-
+    <>
       <form onSubmit={handleSubmit}>
         <Field>
           <Label className="mb-2 block text-sm font-medium">Email</Label>
@@ -144,6 +140,6 @@ export default function LoginForm() {
           {error}
         </div>
       )}
-    </div>
+    </>
   );
 }

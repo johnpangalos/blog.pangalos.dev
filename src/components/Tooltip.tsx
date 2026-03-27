@@ -1,10 +1,4 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  CloseButton,
-} from "@headlessui/react";
 import Link from "./Link";
 
 interface Props {
@@ -70,43 +64,44 @@ export default function Tooltip({ main, hover, to }: Props) {
 
   const popupContent =
     isMobile && to ? (
-      <CloseButton
-        as="a"
+      <a
         rel="noreferrer"
         className="text-white underline"
         href={to}
         target="_blank"
+        onClick={() => setIsOpen(false)}
       >
         {hover}
-      </CloseButton>
+      </a>
     ) : (
       hover
     );
 
   return (
     <span ref={rootRef} className="relative !my-0 inline-flex">
-      <Popover>
-        <PopoverButton
-          as="span"
-          className="border-b-2 border-dotted border-fuchsia-700"
+      <span
+        role="button"
+        tabIndex={0}
+        className="border-b-2 border-dotted border-fuchsia-700"
+        onMouseEnter={show}
+        onMouseLeave={hide}
+        onFocus={show}
+        onBlur={hide}
+        onTouchStart={show}
+        aria-expanded={isOpen}
+      >
+        {triggerContent}
+      </span>
+      {isOpen && (
+        <span
+          role="tooltip"
+          className="absolute bottom-full left-1/2 z-50 mb-1 w-max max-w-[250px] -translate-x-1/2 rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
           onMouseEnter={show}
           onMouseLeave={hide}
-          onTouchStart={show}
         >
-          {triggerContent}
-        </PopoverButton>
-        {isOpen && (
-          <PopoverPanel
-            static
-            as="span"
-            className="absolute bottom-full left-1/2 z-50 mb-1 w-max max-w-[250px] -translate-x-1/2 rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
-            onMouseEnter={show}
-            onMouseLeave={hide}
-          >
-            {popupContent}
-          </PopoverPanel>
-        )}
-      </Popover>
+          {popupContent}
+        </span>
+      )}
     </span>
   );
 }

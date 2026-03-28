@@ -1,4 +1,10 @@
-import { useState, useRef, useEffect, type ReactNode } from "react";
+import { useRef, useEffect, useState, type ReactNode } from "react";
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  CloseButton,
+} from "@headlessui/react";
 import Link from "./Link";
 
 interface Props {
@@ -8,9 +14,8 @@ interface Props {
 }
 
 export default function Tooltip({ main, hover, to }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const rootRef = useRef<HTMLSpanElement>(null);
+  const buttonRef = useRef<HTMLSpanElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
@@ -20,34 +25,6 @@ export default function Tooltip({ main, hover, to }: Props) {
       ),
     );
   }, []);
-
-  useEffect(() => {
-    if (!isMobile || !isOpen) return;
-
-    const handleTouchOutside = (e: TouchEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("touchstart", handleTouchOutside, {
-      capture: true,
-      passive: true,
-    });
-    return () =>
-      document.removeEventListener("touchstart", handleTouchOutside, {
-        capture: true,
-      });
-  }, [isMobile, isOpen]);
-
-  const show = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setIsOpen(true);
-  };
-
-  const hide = () => {
-    timeoutRef.current = setTimeout(() => setIsOpen(false), 100);
-  };
 
   const triggerContent =
     isMobile && to ? (
@@ -64,44 +41,67 @@ export default function Tooltip({ main, hover, to }: Props) {
 
   const popupContent =
     isMobile && to ? (
-      <a
+      <CloseButton
+        as="a"
         rel="noreferrer"
         className="text-white underline"
         href={to}
         target="_blank"
-        onClick={() => setIsOpen(false)}
       >
         {hover}
-      </a>
+      </CloseButton>
     ) : (
       hover
     );
 
   return (
-    <span ref={rootRef} className="relative !my-0 inline-flex">
-      <span
-        role="button"
-        tabIndex={0}
-        className="border-b-2 border-dotted border-fuchsia-700"
-        onMouseEnter={show}
-        onMouseLeave={hide}
-        onFocus={show}
-        onBlur={hide}
-        onTouchStart={show}
-        aria-expanded={isOpen}
-      >
-        {triggerContent}
-      </span>
-      {isOpen && (
-        <span
-          role="tooltip"
-          className="absolute bottom-full left-1/2 z-50 mb-1 w-max max-w-[250px] -translate-x-1/2 rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
-          onMouseEnter={show}
-          onMouseLeave={hide}
-        >
-          {popupContent}
-        </span>
-      )}
+    <span className="relative !my-0 inline-flex">
+      <Popover>
+        {({ open, close }) => {
+          const openPopover = () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            if (!open) buttonRef.current?.click();
+          };
+
+          const closePopover = () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            timeoutRef.current = setTimeout(() => close(), 100);
+          };
+
+          return (
+            <>
+              <PopoverButton
+                as="span"
+                ref={buttonRef}
+                className="border-b-2 border-dotted border-fuchsia-700 focus:outline-none"
+                onMouseEnter={openPopover}
+                onMouseLeave={closePopover}
+                onTouchStart={(e: React.TouchEvent) => {
+                  if (open) {
+                    e.preventDefault();
+                    close();
+                  }
+                }}
+              >
+                {triggerContent}
+              </PopoverButton>
+              {open && (
+                <PopoverPanel
+                  static
+                  as="span"
+                  className="absolute bottom-full left-1/2 z-50 mb-1 w-max max-w-[250px] -translate-x-1/2 rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
+                  onMouseEnter={() => {
+                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                  }}
+                  onMouseLeave={closePopover}
+                >
+                  {popupContent}
+                </PopoverPanel>
+              )}
+            </>
+          );
+        }}
+      </Popover>
     </span>
   );
 }

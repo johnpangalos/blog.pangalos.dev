@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import ThemeToggle from "../components/ThemeToggle";
 
 interface Props {
   title: string;
@@ -47,30 +48,11 @@ const isDark = theme === "dark";
         >
           blog.pangalos.dev
         </a>
-        <button id="theme-toggle">{theme}</button>
+        <ThemeToggle client:load initialTheme={theme} />
       </nav>
       <main>
         <slot />
       </main>
     </div>
-
-    <script>
-      const button = document.getElementById("theme-toggle")!;
-
-      button.addEventListener("click", async () => {
-        const isDark = document.documentElement.classList.contains("dark");
-        const newTheme = isDark ? "light" : "dark";
-
-        document.cookie = `theme=${newTheme};path=/;max-age=${60 * 60 * 24 * 30}`;
-
-        if (newTheme === "dark") {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-
-        button.textContent = newTheme;
-      });
-    </script>
   </body>
 </html>

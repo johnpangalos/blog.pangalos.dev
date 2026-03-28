@@ -1,9 +1,0 @@
----
-interface Props {
-  number: number;
-}
-
-const { number } = Astro.props;
----
-
-<span data-testid="footnote-anchor"><a class="text-fuchsia-500 dark:text-fuchsia-300" id={number.toString()}><sup>{number.toString()}</sup></a></span>

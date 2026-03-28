@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isAuthenticated } from "../../lib/auth";
 import { listPosts } from "../../lib/blog";
+import LogoutButton from "./_components/LogoutButton";
+import DeletePostButton from "./_components/DeletePostButton";
 
 if (!(await isAuthenticated(Astro))) {
   return Astro.redirect("/admin/login");
@@ -28,12 +30,7 @@ try {
         >
           New Post
         </a>
-        <button
-          id="logout-btn"
-          class="rounded bg-stone-200 px-3 py-1 text-sm hover:bg-stone-300 dark:bg-stone-700 dark:hover:bg-stone-600"
-        >
-          Logout
-        </button>
+        <LogoutButton client:load />
       </div>
     </div>
 
@@ -58,12 +55,7 @@ try {
                     {post.name}
                   </a>
                 </div>
-                <button
-                  data-slug={post.slug}
-                  class="delete-btn rounded bg-red-600 px-2 py-1 text-xs text-white hover:bg-red-700"
-                >
-                  Delete
-                </button>
+                <DeletePostButton client:load slug={post.slug} />
               </li>
             ))}
           </ul>
@@ -71,29 +63,4 @@ try {
       )
     }
   </div>
-
-  <script>
-    import { actions } from "astro:actions";
-
-    document
-      .getElementById("logout-btn")!
-      .addEventListener("click", async () => {
-        await actions.auth.logout({});
-        window.location.href = "/admin/login";
-      });
-
-    document.querySelectorAll(".delete-btn").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const slug = (btn as HTMLElement).dataset.slug!;
-        if (!confirm(`Delete "${slug}"? This will commit a deletion to the repo.`)) return;
-
-        const { error } = await actions.blog.delete({ slug });
-        if (error) {
-          alert(`Error: ${error.message}`);
-          return;
-        }
-        window.location.reload();
-      });
-    });
-  </script>
 </BaseLayout>

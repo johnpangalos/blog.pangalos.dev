@@ -2,11 +2,11 @@ import { useState } from "react";
 import { actions } from "astro:actions";
 import {
   Button,
-  Field,
+  TextField,
   Input,
   Label,
-  Textarea,
-} from "@headlessui/react";
+  TextArea,
+} from "react-aria-components";
 
 export default function NewPostForm() {
   const [status, setStatus] = useState<{
@@ -62,7 +62,7 @@ export default function NewPostForm() {
 
   return (
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-        <Field>
+        <TextField>
           <Label className="block text-sm font-bold">Title</Label>
           <Input
             type="text"
@@ -71,9 +71,9 @@ export default function NewPostForm() {
             className={inputClasses}
             placeholder="the.post.title"
           />
-        </Field>
+        </TextField>
 
-        <Field>
+        <TextField>
           <Label className="block text-sm font-bold">Author</Label>
           <Input
             type="text"
@@ -82,9 +82,9 @@ export default function NewPostForm() {
             defaultValue="John Pangalos"
             className={inputClasses}
           />
-        </Field>
+        </TextField>
 
-        <Field>
+        <TextField>
           <Label className="block text-sm font-bold">Date</Label>
           <Input
             type="text"
@@ -93,20 +93,20 @@ export default function NewPostForm() {
             className={inputClasses}
             placeholder="March 20, 2026"
           />
-        </Field>
+        </TextField>
 
-        <Field>
+        <TextField>
           <Label className="block text-sm font-bold">Description</Label>
-          <Textarea
+          <TextArea
             name="description"
             required
             rows={2}
             className={inputClasses}
             placeholder="A short description of the post..."
           />
-        </Field>
+        </TextField>
 
-        <Field>
+        <TextField>
           <Label className="block text-sm font-bold">
             Tags (comma-separated)
           </Label>
@@ -116,9 +116,9 @@ export default function NewPostForm() {
             className={inputClasses}
             placeholder="web, javascript, blogging"
           />
-        </Field>
+        </TextField>
 
-        <Field>
+        <TextField>
           <Label className="block text-sm font-bold">
             Categories (comma-separated)
           </Label>
@@ -128,18 +128,18 @@ export default function NewPostForm() {
             className={inputClasses}
             placeholder="web"
           />
-        </Field>
+        </TextField>
 
-        <Field>
+        <TextField>
           <Label className="block text-sm font-bold">Content (MDX)</Label>
-          <Textarea
+          <TextArea
             name="content"
             required
             rows={16}
             className={`${inputClasses} font-mono text-sm`}
             placeholder="Write your blog post in MDX..."
           />
-        </Field>
+        </TextField>
 
         {status.type !== "idle" && (
           <div

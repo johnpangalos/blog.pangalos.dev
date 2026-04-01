@@ -1,5 +1,5 @@
 import { actions } from "astro:actions";
-import { Button } from "@headlessui/react";
+import { Button } from "react-aria-components";
 
 interface Props {
   slug: string;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@headlessui/react";
+import { Button } from "react-aria-components";
 
 interface Props {
   initialTheme: string;

@@ -1,7 +1,10 @@
-import { useState, useRef, useEffect, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import {
   TooltipTrigger,
   Tooltip as AriaTooltip,
+  DialogTrigger,
+  Popover,
+  Pressable,
   Focusable,
 } from "react-aria-components";
 import Link from "./Link";
@@ -14,8 +17,6 @@ interface Props {
 
 export default function Tooltip({ main, hover, to }: Props) {
   const [isMobile, setIsMobile] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const rootRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     setIsMobile(
@@ -24,25 +25,6 @@ export default function Tooltip({ main, hover, to }: Props) {
       ),
     );
   }, []);
-
-  useEffect(() => {
-    if (!isMobile || !mobileOpen) return;
-
-    const handleTouchOutside = (e: TouchEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setMobileOpen(false);
-      }
-    };
-
-    document.addEventListener("touchstart", handleTouchOutside, {
-      capture: true,
-      passive: true,
-    });
-    return () =>
-      document.removeEventListener("touchstart", handleTouchOutside, {
-        capture: true,
-      });
-  }, [isMobile, mobileOpen]);
 
   const triggerContent =
     isMobile && to ? (
@@ -57,7 +39,7 @@ export default function Tooltip({ main, hover, to }: Props) {
       main
     );
 
-  // Mobile: custom tap-to-show (React Aria tooltips don't show on touch)
+  // Mobile: tap-to-show Popover (React Aria tooltips don't show on touch)
   if (isMobile) {
     const popupContent = to ? (
       <a
@@ -65,7 +47,6 @@ export default function Tooltip({ main, hover, to }: Props) {
         className="text-white underline"
         href={to}
         target="_blank"
-        onClick={() => setMobileOpen(false)}
       >
         {hover}
       </a>
@@ -74,21 +55,24 @@ export default function Tooltip({ main, hover, to }: Props) {
     );
 
     return (
-      <span ref={rootRef} className="relative !my-0 inline-flex">
-        <span
-          className="border-b-2 border-dotted border-fuchsia-700"
-          onTouchStart={() => setMobileOpen((o) => !o)}
-        >
-          {triggerContent}
-        </span>
-        {mobileOpen && (
-          <span
-            role="tooltip"
-            className="absolute bottom-full left-1/2 z-50 mb-1 w-max max-w-[250px] -translate-x-1/2 rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
+      <span className="!my-0 inline-flex">
+        <DialogTrigger>
+          <Pressable>
+            <span
+              role="button"
+              className="border-b-2 border-dotted border-fuchsia-700"
+            >
+              {triggerContent}
+            </span>
+          </Pressable>
+          <Popover
+            placement="top"
+            offset={4}
+            className="z-50 max-w-[250px] rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
           >
             {popupContent}
-          </span>
-        )}
+          </Popover>
+        </DialogTrigger>
       </span>
     );
   }

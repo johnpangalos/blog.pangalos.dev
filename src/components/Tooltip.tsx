@@ -1,4 +1,9 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
+import {
+  TooltipTrigger,
+  Tooltip as AriaTooltip,
+  Focusable,
+} from "react-aria-components";
 import Link from "./Link";
 
 interface Props {
@@ -8,10 +13,9 @@ interface Props {
 }
 
 export default function Tooltip({ main, hover, to }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const rootRef = useRef<HTMLSpanElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
     setIsMobile(
@@ -22,11 +26,11 @@ export default function Tooltip({ main, hover, to }: Props) {
   }, []);
 
   useEffect(() => {
-    if (!isMobile || !isOpen) return;
+    if (!isMobile || !mobileOpen) return;
 
     const handleTouchOutside = (e: TouchEvent) => {
       if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
+        setMobileOpen(false);
       }
     };
 
@@ -38,16 +42,7 @@ export default function Tooltip({ main, hover, to }: Props) {
       document.removeEventListener("touchstart", handleTouchOutside, {
         capture: true,
       });
-  }, [isMobile, isOpen]);
-
-  const show = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setIsOpen(true);
-  };
-
-  const hide = () => {
-    timeoutRef.current = setTimeout(() => setIsOpen(false), 100);
-  };
+  }, [isMobile, mobileOpen]);
 
   const triggerContent =
     isMobile && to ? (
@@ -62,13 +57,15 @@ export default function Tooltip({ main, hover, to }: Props) {
       main
     );
 
-  const popupContent =
-    isMobile && to ? (
+  // Mobile: custom tap-to-show (React Aria tooltips don't show on touch)
+  if (isMobile) {
+    const popupContent = to ? (
       <a
         rel="noreferrer"
         className="text-white underline"
         href={to}
         target="_blank"
+        onClick={() => setMobileOpen(false)}
       >
         {hover}
       </a>
@@ -76,26 +73,47 @@ export default function Tooltip({ main, hover, to }: Props) {
       hover
     );
 
-  return (
-    <span ref={rootRef} className="relative !my-0 inline-flex">
-      <span
-        className="border-b-2 border-dotted border-fuchsia-700"
-        onMouseEnter={show}
-        onMouseLeave={hide}
-        onTouchStart={show}
-      >
-        {triggerContent}
-      </span>
-      {isOpen && (
+    return (
+      <span ref={rootRef} className="relative !my-0 inline-flex">
         <span
-          role="tooltip"
-          className="absolute bottom-full left-1/2 z-50 mb-1 w-max max-w-[250px] -translate-x-1/2 rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
-          onMouseEnter={show}
-          onMouseLeave={hide}
+          className="border-b-2 border-dotted border-fuchsia-700"
+          onTouchStart={() => setMobileOpen((o) => !o)}
         >
-          {popupContent}
+          {triggerContent}
         </span>
-      )}
+        {mobileOpen && (
+          <span
+            role="tooltip"
+            className="absolute bottom-full left-1/2 z-50 mb-1 w-max max-w-[250px] -translate-x-1/2 rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
+          >
+            {popupContent}
+          </span>
+        )}
+      </span>
+    );
+  }
+
+  // Desktop: React Aria TooltipTrigger with native hover/focus
+  return (
+    <span className="!my-0 inline-flex">
+      <TooltipTrigger delay={300} closeDelay={100}>
+        <Focusable>
+          <span
+            role="button"
+            tabIndex={0}
+            className="border-b-2 border-dotted border-fuchsia-700"
+          >
+            {triggerContent}
+          </span>
+        </Focusable>
+        <AriaTooltip
+          placement="top"
+          offset={4}
+          className="z-50 w-max max-w-[250px] rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
+        >
+          {hover}
+        </AriaTooltip>
+      </TooltipTrigger>
     </span>
   );
 }

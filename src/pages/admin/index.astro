@@ -4,12 +4,13 @@ import { isAuthenticated } from "../../lib/auth";
 import { listPosts } from "../../lib/blog";
 import LogoutButton from "./_components/LogoutButton";
 import DeletePostButton from "./_components/DeletePostButton";
+import PublishPostButton from "./_components/PublishPostButton";
 
 if (!(await isAuthenticated(Astro))) {
   return Astro.redirect("/admin/login");
 }
 
-let posts: { name: string; slug: string; sha: string }[] = [];
+let posts: { name: string; slug: string; sha: string; draft: boolean }[] = [];
 let listError: string | null = null;
 
 try {
@@ -47,15 +48,25 @@ try {
           <ul class="mt-4 space-y-3">
             {posts.map((post) => (
               <li class="flex items-center justify-between rounded border border-stone-200 p-3 dark:border-stone-700">
-                <div>
+                <div class="flex items-center gap-2">
                   <a
                     href={`/blog/${post.slug}`}
                     class="font-bold text-fuchsia-700 hover:underline dark:text-fuchsia-400"
                   >
                     {post.name}
                   </a>
+                  {post.draft && (
+                    <span class="rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900 dark:text-amber-200">
+                      Draft
+                    </span>
+                  )}
                 </div>
-                <DeletePostButton client:load slug={post.slug} />
+                <div class="flex gap-2">
+                  {post.draft && (
+                    <PublishPostButton client:load slug={post.slug} />
+                  )}
+                  <DeletePostButton client:load slug={post.slug} />
+                </div>
               </li>
             ))}
           </ul>

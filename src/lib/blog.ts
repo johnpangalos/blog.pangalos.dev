@@ -271,6 +271,52 @@ export async function publishPost(slug: string): Promise<void> {
   });
 }
 
+export function parseMdxContent(
+  raw: string,
+  slug: string,
+  sha: string,
+): (BlogPost & { sha: string }) | null {
+  const fmMatch = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
+  if (!fmMatch) return null;
+
+  const fm = fmMatch[1];
+  const content = fmMatch[2].trim();
+
+  const get = (key: string) => {
+    // Match double-quoted: key: "value"
+    const dq = fm.match(new RegExp(`^${key}:\\s*"(.*)"\\s*$`, "m"));
+    if (dq) return dq[1];
+    // Match single-quoted: key: 'value' (with '' escape for literal ')
+    const sq = fm.match(new RegExp(`^${key}:\\s*'(.*)'\\s*$`, "m"));
+    if (sq) return sq[1].replace(/''/g, "'");
+    // Match unquoted: key: value
+    const uq = fm.match(new RegExp(`^${key}:\\s*(.+?)\\s*$`, "m"));
+    return uq ? uq[1] : "";
+  };
+
+  const getArray = (key: string): string[] => {
+    const m = fm.match(new RegExp(`^${key}:\\s*\\[(.*)\\]\\s*$`, "m"));
+    if (!m) return [];
+    return m[1]
+      .split(",")
+      .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+      .filter(Boolean);
+  };
+
+  return {
+    slug,
+    author: get("author"),
+    title: get("title"),
+    date: get("date"),
+    description: get("description"),
+    tags: getArray("tags"),
+    categories: getArray("categories"),
+    draft: /^draft:\s*true\s*$/m.test(fm),
+    content,
+    sha,
+  };
+}
+
 export async function getPost(
   slug: string,
 ): Promise<(BlogPost & { sha: string }) | null> {
@@ -293,38 +339,8 @@ export async function getPost(
         c.charCodeAt(0),
       ),
     );
-    const fmMatch = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
-    if (!fmMatch) return null;
 
-    const fm = fmMatch[1];
-    const content = fmMatch[2].trim();
-
-    const get = (key: string) => {
-      const m = fm.match(new RegExp(`^${key}:\\s*"(.*)"\\s*$`, "m"));
-      return m ? m[1] : "";
-    };
-
-    const getArray = (key: string): string[] => {
-      const m = fm.match(new RegExp(`^${key}:\\s*\\[(.*)\\]\\s*$`, "m"));
-      if (!m) return [];
-      return m[1]
-        .split(",")
-        .map((s) => s.trim().replace(/^"|"$/g, ""))
-        .filter(Boolean);
-    };
-
-    return {
-      slug,
-      author: get("author"),
-      title: get("title"),
-      date: get("date"),
-      description: get("description"),
-      tags: getArray("tags"),
-      categories: getArray("categories"),
-      draft: /^draft:\s*true\s*$/m.test(fm),
-      content,
-      sha: data.sha,
-    };
+    return parseMdxContent(raw, slug, data.sha);
   } catch {
     return null;
   }

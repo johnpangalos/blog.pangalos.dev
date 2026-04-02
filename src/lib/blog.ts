@@ -111,6 +111,13 @@ export function slugify(title: string): string {
     .replace(/^-|-$/g, "");
 }
 
+function addAstroDirectives(content: string): string {
+  return content.replace(
+    /<Tooltip(?![^>]*client:visible)/g,
+    "<Tooltip client:visible",
+  );
+}
+
 function buildMdxContent(post: Omit<BlogPost, "slug">): string {
   const frontmatter = [
     "---",
@@ -124,7 +131,9 @@ function buildMdxContent(post: Omit<BlogPost, "slug">): string {
     "---",
   ].join("\n");
 
-  return `${frontmatter}\n\n${post.content}\n`;
+  const content = addAstroDirectives(post.content);
+
+  return `${frontmatter}\n\n${content}\n`;
 }
 
 export async function createPost(

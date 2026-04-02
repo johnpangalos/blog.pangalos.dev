@@ -12,6 +12,7 @@ import {
   codeBlockPlugin,
   codeMirrorPlugin,
   toolbarPlugin,
+  jsxPlugin,
   BoldItalicUnderlineToggles,
   BlockTypeSelect,
   CreateLink,
@@ -20,9 +21,45 @@ import {
   ListsToggle,
   UndoRedo,
   InsertCodeBlock,
+  insertJsx$,
+  usePublisher,
   type MDXEditorMethods,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
+import { blogJsxComponentDescriptors } from "./jsxComponentDescriptors";
+
+function InsertComponentButton() {
+  const insertJsx = usePublisher(insertJsx$);
+
+  return (
+    <select
+      className="h-8 rounded border border-stone-300 bg-white px-2 text-sm dark:border-stone-600 dark:bg-stone-800"
+      value=""
+      onChange={(e) => {
+        const value = e.target.value;
+        if (value === "Tooltip") {
+          insertJsx({
+            kind: "text",
+            name: "Tooltip",
+            props: { main: "text", hover: "tooltip" },
+          });
+        } else if (value === "NerdAlert") {
+          insertJsx({ kind: "flow", name: "NerdAlert", props: {} });
+        } else if (value === "SpoilerAlert") {
+          insertJsx({ kind: "flow", name: "SpoilerAlert", props: {} });
+        }
+        e.target.value = "";
+      }}
+    >
+      <option value="" disabled>
+        + Component
+      </option>
+      <option value="Tooltip">Tooltip</option>
+      <option value="NerdAlert">Nerd Alert</option>
+      <option value="SpoilerAlert">Spoiler Alert</option>
+    </select>
+  );
+}
 
 export default function MdxEditorField({
   name,
@@ -52,6 +89,7 @@ export default function MdxEditorField({
             linkPlugin(),
             linkDialogPlugin(),
             tablePlugin(),
+            jsxPlugin({ jsxComponentDescriptors: blogJsxComponentDescriptors }),
             codeBlockPlugin({ defaultCodeBlockLanguage: "" }),
             codeMirrorPlugin({
               codeBlockLanguages: {
@@ -80,6 +118,7 @@ export default function MdxEditorField({
                   <InsertTable />
                   <InsertThematicBreak />
                   <InsertCodeBlock />
+                  <InsertComponentButton />
                 </>
               ),
             }),

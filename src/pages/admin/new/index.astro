@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { isAuthenticated } from "../../../lib/auth";
-import NewPostForm from "./_components/NewPostForm";
+import PostForm from "./_components/PostForm";
 
 if (!(await isAuthenticated(Astro))) {
   return Astro.redirect("/admin/login");
@@ -20,6 +20,6 @@ if (!(await isAuthenticated(Astro))) {
       </a>
     </div>
 
-    <NewPostForm client:load />
+    <PostForm client:load />
   </div>
 </BaseLayout>

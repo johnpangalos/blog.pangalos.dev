@@ -9,7 +9,26 @@ import {
 } from "react-aria-components";
 import MdxEditorField from "./MdxEditorField";
 
-export default function NewPostForm() {
+export interface PostFormData {
+  slug: string;
+  sha: string;
+  title: string;
+  author: string;
+  date: string;
+  description: string;
+  tags: string;
+  categories: string;
+  content: string;
+  draft: boolean;
+}
+
+export default function PostForm({
+  initialData,
+}: {
+  initialData?: PostFormData;
+}) {
+  const isEditing = !!initialData;
+
   const [status, setStatus] = useState<{
     message: string;
     type: "idle" | "loading" | "success" | "error";
@@ -22,7 +41,7 @@ export default function NewPostForm() {
     e.preventDefault();
 
     setStatus({
-      message: draft ? "Saving draft..." : "Publishing...",
+      message: draft ? "Saving draft..." : isEditing ? "Updating..." : "Publishing...",
       type: "loading",
     });
 
@@ -39,7 +58,7 @@ export default function NewPostForm() {
       .map((c) => c.trim())
       .filter(Boolean);
 
-    const { error } = await actions.blog.create({
+    const payload = {
       title: formData.get("title") as string,
       author: formData.get("author") as string,
       date: formData.get("date") as string,
@@ -48,7 +67,15 @@ export default function NewPostForm() {
       categories,
       content: formData.get("content") as string,
       draft,
-    });
+    };
+
+    const { error } = isEditing
+      ? await actions.blog.update({
+          slug: initialData.slug,
+          sha: initialData.sha,
+          ...payload,
+        })
+      : await actions.blog.create(payload);
 
     if (error) {
       setStatus({ message: `Error: ${error.message}`, type: "error" });
@@ -58,7 +85,9 @@ export default function NewPostForm() {
     setStatus({
       message: draft
         ? "Draft saved to repo!"
-        : "Post committed to repo! It will be live after the site rebuilds.",
+        : isEditing
+          ? "Post updated! It will be live after the site rebuilds."
+          : "Post committed to repo! It will be live after the site rebuilds.",
       type: "success",
     });
     setTimeout(() => {
@@ -80,7 +109,9 @@ export default function NewPostForm() {
             type="text"
             name="title"
             required
-            className={inputClasses}
+            readOnly={isEditing}
+            defaultValue={initialData?.title}
+            className={`${inputClasses}${isEditing ? " opacity-60" : ""}`}
             placeholder="the.post.title"
           />
         </TextField>
@@ -91,7 +122,7 @@ export default function NewPostForm() {
             type="text"
             name="author"
             required
-            defaultValue="John Pangalos"
+            defaultValue={initialData?.author ?? "John Pangalos"}
             className={inputClasses}
           />
         </TextField>
@@ -102,6 +133,7 @@ export default function NewPostForm() {
             type="text"
             name="date"
             required
+            defaultValue={initialData?.date}
             className={inputClasses}
             placeholder="March 20, 2026"
           />
@@ -113,6 +145,7 @@ export default function NewPostForm() {
             name="description"
             required
             rows={2}
+            defaultValue={initialData?.description}
             className={inputClasses}
             placeholder="A short description of the post..."
           />
@@ -125,6 +158,7 @@ export default function NewPostForm() {
           <Input
             type="text"
             name="tags"
+            defaultValue={initialData?.tags}
             className={inputClasses}
             placeholder="web, javascript, blogging"
           />
@@ -137,6 +171,7 @@ export default function NewPostForm() {
           <Input
             type="text"
             name="categories"
+            defaultValue={initialData?.categories}
             className={inputClasses}
             placeholder="web"
           />
@@ -145,7 +180,10 @@ export default function NewPostForm() {
         <div>
           <label className="block text-sm font-bold">Content (MDX)</label>
           <div className="mt-1">
-            <MdxEditorField name="content" />
+            <MdxEditorField
+              name="content"
+              defaultValue={initialData?.content}
+            />
           </div>
         </div>
 
@@ -168,7 +206,7 @@ export default function NewPostForm() {
             type="submit"
             className="rounded bg-fuchsia-700 px-4 py-2 font-bold text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
           >
-            Publish
+            {isEditing ? "Update" : "Publish"}
           </Button>
           <Button
             type="button"

@@ -103,75 +103,64 @@ export default function PostForm({
         onSubmit={(e) => handleSubmit(e, false)}
         className="mt-8 space-y-4"
       >
-        <TextField>
+        <TextField defaultValue={initialData?.title} isReadOnly={isEditing} isRequired>
           <Label className="block text-sm font-bold">Title</Label>
           <Input
             type="text"
             name="title"
-            required
-            readOnly={isEditing}
-            defaultValue={initialData?.title}
             className={`${inputClasses}${isEditing ? " opacity-60" : ""}`}
             placeholder="the.post.title"
           />
         </TextField>
 
-        <TextField>
+        <TextField defaultValue={initialData?.author ?? "John Pangalos"} isRequired>
           <Label className="block text-sm font-bold">Author</Label>
           <Input
             type="text"
             name="author"
-            required
-            defaultValue={initialData?.author ?? "John Pangalos"}
             className={inputClasses}
           />
         </TextField>
 
-        <TextField>
+        <TextField defaultValue={initialData?.date} isRequired>
           <Label className="block text-sm font-bold">Date</Label>
           <Input
             type="text"
             name="date"
-            required
-            defaultValue={initialData?.date}
             className={inputClasses}
             placeholder="March 20, 2026"
           />
         </TextField>
 
-        <TextField>
+        <TextField defaultValue={initialData?.description} isRequired>
           <Label className="block text-sm font-bold">Description</Label>
           <TextArea
             name="description"
-            required
             rows={2}
-            defaultValue={initialData?.description}
             className={inputClasses}
             placeholder="A short description of the post..."
           />
         </TextField>
 
-        <TextField>
+        <TextField defaultValue={initialData?.tags}>
           <Label className="block text-sm font-bold">
             Tags (comma-separated)
           </Label>
           <Input
             type="text"
             name="tags"
-            defaultValue={initialData?.tags}
             className={inputClasses}
             placeholder="web, javascript, blogging"
           />
         </TextField>
 
-        <TextField>
+        <TextField defaultValue={initialData?.categories}>
           <Label className="block text-sm font-bold">
             Categories (comma-separated)
           </Label>
           <Input
             type="text"
             name="categories"
-            defaultValue={initialData?.categories}
             className={inputClasses}
             placeholder="web"
           />

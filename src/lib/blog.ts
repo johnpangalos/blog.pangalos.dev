@@ -11,6 +11,7 @@ export interface BlogPost {
   tags: string[];
   categories: string[];
   content: string;
+  draft: boolean;
 }
 
 const GITHUB_REPO_OWNER = "johnpangalos";
@@ -119,6 +120,7 @@ function buildMdxContent(post: Omit<BlogPost, "slug">): string {
     `description: "${post.description}"`,
     `tags: [${post.tags.map((t) => `"${t}"`).join(", ")}]`,
     `categories: [${post.categories.map((c) => `"${c}"`).join(", ")}]`,
+    `draft: ${post.draft}`,
     "---",
   ].join("\n");
 
@@ -147,7 +149,7 @@ export async function createPost(
 }
 
 export async function listPosts(): Promise<
-  { name: string; slug: string; sha: string }[]
+  { name: string; slug: string; sha: string; draft: boolean }[]
 > {
   const octokit = getOctokit();
 
@@ -160,13 +162,39 @@ export async function listPosts(): Promise<
 
     if (!Array.isArray(data)) return [];
 
-    return data
-      .filter((f) => f.type === "file" && f.name.endsWith(".mdx"))
-      .map((f) => ({
-        name: f.name.replace(/\.mdx$/, ""),
-        slug: f.name.replace(/\.mdx$/, ""),
-        sha: f.sha,
-      }));
+    const files = data.filter(
+      (f) => f.type === "file" && f.name.endsWith(".mdx"),
+    );
+
+    const posts = await Promise.all(
+      files.map(async (f) => {
+        let draft = false;
+        try {
+          const { data: fileData } = await octokit.repos.getContent({
+            owner: GITHUB_REPO_OWNER,
+            repo: GITHUB_REPO_NAME,
+            path: f.path,
+          });
+          if (!Array.isArray(fileData) && "content" in fileData && fileData.content) {
+            const content = atob(fileData.content.replace(/\n/g, ""));
+            const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
+            if (match) {
+              draft = /^draft:\s*true\s*$/m.test(match[1]);
+            }
+          }
+        } catch {
+          // If we can't read the file, assume not a draft
+        }
+        return {
+          name: f.name.replace(/\.mdx$/, ""),
+          slug: f.name.replace(/\.mdx$/, ""),
+          sha: f.sha,
+          draft,
+        };
+      }),
+    );
+
+    return posts;
   } catch (e: unknown) {
     if (e instanceof Error && "status" in e && (e as { status: number }).status === 404) return [];
     throw e;
@@ -194,6 +222,42 @@ export async function deletePost(
     repo: GITHUB_REPO_NAME,
     path: filePath,
     message: `Delete blog post: ${slug}`,
+    sha: data.sha,
+  });
+}
+
+export async function publishPost(slug: string): Promise<void> {
+  const octokit = getOctokit();
+  const filePath = `${CONTENT_PATH}/${slug}.mdx`;
+
+  const { data } = await octokit.repos.getContent({
+    owner: GITHUB_REPO_OWNER,
+    repo: GITHUB_REPO_NAME,
+    path: filePath,
+  });
+
+  if (Array.isArray(data) || !("content" in data) || !data.content) {
+    throw new Error(`Post not found: ${slug}`);
+  }
+
+  const content = atob(data.content.replace(/\n/g, ""));
+  const updatedContent = content.replace(
+    /^(---\s*\n[\s\S]*?)draft:\s*true\s*\n([\s\S]*?---)/m,
+    "$1draft: false\n$2",
+  );
+
+  const encodedContent = btoa(
+    new TextEncoder()
+      .encode(updatedContent)
+      .reduce((acc, byte) => acc + String.fromCharCode(byte), ""),
+  );
+
+  await octokit.repos.createOrUpdateFileContents({
+    owner: GITHUB_REPO_OWNER,
+    repo: GITHUB_REPO_NAME,
+    path: filePath,
+    message: `Publish blog post: ${slug}`,
+    content: encodedContent,
     sha: data.sha,
   });
 }

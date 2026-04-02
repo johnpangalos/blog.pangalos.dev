@@ -6,6 +6,7 @@ import Button from "../components/Button";
 const siteTitle = "some.blog.or.whatever";
 
 const posts = (await getCollection("blog"))
+  .filter((p) => !p.data.draft)
   .map((p) => ({
     id: p.id,
     title: p.data.title,

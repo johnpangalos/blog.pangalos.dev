@@ -7,7 +7,7 @@ const { slug } = Astro.params;
 const posts = await getCollection("blog");
 const post = posts.find((p) => p.id === slug);
 
-if (!post) {
+if (!post || post.data.draft) {
   return Astro.redirect("/404");
 }
 

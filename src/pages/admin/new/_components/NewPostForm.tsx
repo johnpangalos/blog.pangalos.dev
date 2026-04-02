@@ -15,10 +15,16 @@ export default function NewPostForm() {
     type: "idle" | "loading" | "success" | "error";
   }>({ message: "", type: "idle" });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    draft: boolean,
+  ) => {
     e.preventDefault();
 
-    setStatus({ message: "Publishing...", type: "loading" });
+    setStatus({
+      message: draft ? "Saving draft..." : "Publishing...",
+      type: "loading",
+    });
 
     const formData = new FormData(e.currentTarget);
     const tagsRaw = (formData.get("tags") as string) || "";
@@ -41,6 +47,7 @@ export default function NewPostForm() {
       tags,
       categories,
       content: formData.get("content") as string,
+      draft,
     });
 
     if (error) {
@@ -49,8 +56,9 @@ export default function NewPostForm() {
     }
 
     setStatus({
-      message:
-        "Post committed to repo! It will be live after the site rebuilds.",
+      message: draft
+        ? "Draft saved to repo!"
+        : "Post committed to repo! It will be live after the site rebuilds.",
       type: "success",
     });
     setTimeout(() => {
@@ -62,7 +70,10 @@ export default function NewPostForm() {
     "mt-1 w-full rounded border border-stone-300 bg-white px-3 py-2 text-stone-900 dark:border-stone-600 dark:bg-stone-800 dark:text-white";
 
   return (
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+      <form
+        onSubmit={(e) => handleSubmit(e, false)}
+        className="mt-8 space-y-4"
+      >
         <TextField>
           <Label className="block text-sm font-bold">Title</Label>
           <Input
@@ -152,12 +163,29 @@ export default function NewPostForm() {
           </div>
         )}
 
-        <Button
-          type="submit"
-          className="rounded bg-fuchsia-700 px-4 py-2 font-bold text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
-        >
-          Publish
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            type="submit"
+            className="rounded bg-fuchsia-700 px-4 py-2 font-bold text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
+          >
+            Publish
+          </Button>
+          <Button
+            type="button"
+            onPress={(e) => {
+              const form = (e.target as HTMLElement).closest("form");
+              if (form && form.reportValidity()) {
+                handleSubmit(
+                  { preventDefault: () => {}, currentTarget: form } as React.FormEvent<HTMLFormElement>,
+                  true,
+                );
+              }
+            }}
+            className="rounded border border-stone-300 bg-white px-4 py-2 font-bold text-stone-700 hover:bg-stone-100 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700"
+          >
+            Save as Draft
+          </Button>
+        </div>
       </form>
   );
 }

@@ -300,7 +300,7 @@ export async function getPost(
     const content = fmMatch[2].trim();
 
     const get = (key: string) => {
-      const m = fm.match(new RegExp(`^${key}:\\s*"(.*)"\s*$`, "m"));
+      const m = fm.match(new RegExp(`^${key}:\\s*"(.*)"\\s*$`, "m"));
       return m ? m[1] : "";
     };
 

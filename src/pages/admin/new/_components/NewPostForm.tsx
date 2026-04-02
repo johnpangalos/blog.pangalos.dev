@@ -7,6 +7,7 @@ import {
   Label,
   TextArea,
 } from "react-aria-components";
+import MdxEditorField from "./MdxEditorField";
 
 export default function NewPostForm() {
   const [status, setStatus] = useState<{
@@ -130,16 +131,12 @@ export default function NewPostForm() {
           />
         </TextField>
 
-        <TextField>
-          <Label className="block text-sm font-bold">Content (MDX)</Label>
-          <TextArea
-            name="content"
-            required
-            rows={16}
-            className={`${inputClasses} font-mono text-sm`}
-            placeholder="Write your blog post in MDX..."
-          />
-        </TextField>
+        <div>
+          <label className="block text-sm font-bold">Content (MDX)</label>
+          <div className="mt-1">
+            <MdxEditorField name="content" />
+          </div>
+        </div>
 
         {status.type !== "idle" && (
           <div

@@ -291,7 +291,8 @@ export function parseMdxContent(
     if (sq) return sq[1].replace(/''/g, "'");
     // Match unquoted: key: value
     const uq = fm.match(new RegExp(`^${key}:\\s*(.+?)\\s*$`, "m"));
-    return uq ? uq[1] : "";
+    if (uq) return uq[1];
+    return "";
   };
 
   const getArray = (key: string): string[] => {

@@ -22,6 +22,24 @@ export interface PostFormData {
   draft: boolean;
 }
 
+function getLoadingMessage(draft: boolean, isEditing: boolean) {
+  if (draft) return "Saving draft...";
+  if (isEditing) return "Updating...";
+  return "Publishing...";
+}
+
+function getSuccessMessage(draft: boolean, isEditing: boolean) {
+  if (draft) return "Draft saved to repo!";
+  if (isEditing) return "Post updated! It will be live after the site rebuilds.";
+  return "Post committed to repo! It will be live after the site rebuilds.";
+}
+
+function getStatusColorClass(type: string) {
+  if (type === "error") return "text-red-600 dark:text-red-400";
+  if (type === "success") return "text-green-600 dark:text-green-400";
+  return "text-stone-500";
+}
+
 export default function PostForm({
   initialData,
 }: {
@@ -41,7 +59,7 @@ export default function PostForm({
     e.preventDefault();
 
     setStatus({
-      message: draft ? "Saving draft..." : isEditing ? "Updating..." : "Publishing...",
+      message: getLoadingMessage(draft, isEditing),
       type: "loading",
     });
 
@@ -69,25 +87,24 @@ export default function PostForm({
       draft,
     };
 
-    const { error } = isEditing
-      ? await actions.blog.update({
-          slug: initialData.slug,
-          sha: initialData.sha,
-          ...payload,
-        })
-      : await actions.blog.create(payload);
+    let result;
+    if (isEditing) {
+      result = await actions.blog.update({
+        slug: initialData.slug,
+        sha: initialData.sha,
+        ...payload,
+      });
+    } else {
+      result = await actions.blog.create(payload);
+    }
 
-    if (error) {
-      setStatus({ message: `Error: ${error.message}`, type: "error" });
+    if (result.error) {
+      setStatus({ message: `Error: ${result.error.message}`, type: "error" });
       return;
     }
 
     setStatus({
-      message: draft
-        ? "Draft saved to repo!"
-        : isEditing
-          ? "Post updated! It will be live after the site rebuilds."
-          : "Post committed to repo! It will be live after the site rebuilds.",
+      message: getSuccessMessage(draft, isEditing),
       type: "success",
     });
     setTimeout(() => {
@@ -97,6 +114,14 @@ export default function PostForm({
 
   const inputClasses =
     "mt-1 w-full rounded border border-stone-300 bg-white px-3 py-2 text-stone-900 dark:border-stone-600 dark:bg-stone-800 dark:text-white";
+
+  let titleClassName = inputClasses;
+  if (isEditing) {
+    titleClassName += " opacity-60";
+  }
+
+  const authorDefault = initialData?.author || "John Pangalos";
+  const submitLabel = isEditing ? "Update" : "Publish";
 
   return (
       <form
@@ -108,12 +133,12 @@ export default function PostForm({
           <Input
             type="text"
             name="title"
-            className={`${inputClasses}${isEditing ? " opacity-60" : ""}`}
+            className={titleClassName}
             placeholder="the.post.title"
           />
         </TextField>
 
-        <TextField defaultValue={initialData?.author ?? "John Pangalos"} isRequired>
+        <TextField defaultValue={authorDefault} isRequired>
           <Label className="block text-sm font-bold">Author</Label>
           <Input
             type="text"
@@ -177,15 +202,7 @@ export default function PostForm({
         </div>
 
         {status.type !== "idle" && (
-          <div
-            className={`text-sm ${
-              status.type === "error"
-                ? "text-red-600 dark:text-red-400"
-                : status.type === "success"
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-stone-500"
-            }`}
-          >
+          <div className={`text-sm ${getStatusColorClass(status.type)}`}>
             {status.message}
           </div>
         )}
@@ -195,7 +212,7 @@ export default function PostForm({
             type="submit"
             className="rounded bg-fuchsia-700 px-4 py-2 font-bold text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
           >
-            {isEditing ? "Update" : "Publish"}
+            {submitLabel}
           </Button>
           <Button
             type="button"

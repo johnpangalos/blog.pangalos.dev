@@ -4,10 +4,11 @@ import BaseLayout from "./BaseLayout.astro";
 interface Props {
   title: string;
   date: string;
+  draft?: boolean;
 }
 
 const siteTitle = "some.blog.or.whatever";
-const { title, date } = Astro.props;
+const { title, date, draft } = Astro.props;
 ---
 
 <BaseLayout title={`${title} - ${siteTitle}`}>
@@ -15,6 +16,11 @@ const { title, date } = Astro.props;
     class="prose prose-slate prose-headings:font-display pt-10 pb-20 dark:prose-invert lg:prose-lg prose-headings:font-bold"
   >
     <article>
+      {draft && (
+        <div class="mb-4 rounded-md border border-amber-400 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-900 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-200">
+          Draft &mdash; this post is not published
+        </div>
+      )}
       <h1 class="!mb-0 pb-2">{title}</h1>
       <p class="!m-0 pb-1 font-bold">{date}</p>
       <slot />

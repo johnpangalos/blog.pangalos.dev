@@ -1,19 +1,27 @@
 ---
 import { getCollection, render } from "astro:content";
 import BlogLayout from "../../layouts/BlogLayout.astro";
+import { isAuthenticated } from "../../lib/auth";
 
 const { slug } = Astro.params;
 
 const posts = await getCollection("blog");
 const post = posts.find((p) => p.id === slug);
 
-if (!post || post.data.draft) {
+if (!post) {
   return Astro.redirect("/404");
+}
+
+if (post.data.draft) {
+  const isAdmin = await isAuthenticated(Astro);
+  if (!isAdmin) {
+    return Astro.redirect("/404");
+  }
 }
 
 const { Content } = await render(post);
 ---
 
-<BlogLayout title={post.data.title} date={post.data.date}>
+<BlogLayout title={post.data.title} date={post.data.date} draft={post.data.draft}>
   <Content />
 </BlogLayout>

@@ -43,7 +43,7 @@ export const blogJsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: "Tooltip",
     kind: "text",
-    source: "../../components/Tooltip.tsx",
+    source: "../../components/Tooltip.astro",
     defaultExport: true,
     props: [
       { name: "main", type: "string", required: true },

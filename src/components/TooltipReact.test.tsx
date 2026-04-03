@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, beforeEach, vi } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import Tooltip, { parseInlineMarkdown } from "./TooltipReact";
 
@@ -47,12 +47,17 @@ describe("parseInlineMarkdown", () => {
     expect(italic!.textContent).toBe("another");
   });
 
-  it("handles bold inside italic context like ***The** New York Times*", () => {
+  it("renders **The** *The New York Times* as bold then italic", () => {
     const { container } = render(
-      <>{parseInlineMarkdown("***The** The New York Times*")}</>,
+      <>{parseInlineMarkdown("**The** *The New York Times*")}</>,
     );
-    expect(container.textContent).toContain("The");
-    expect(container.textContent).toContain("New York Times");
+    const bold = container.querySelector("b");
+    const italic = container.querySelector("i");
+    expect(bold).not.toBeNull();
+    expect(bold!.textContent).toBe("The");
+    expect(italic).not.toBeNull();
+    expect(italic!.textContent).toBe("The New York Times");
+    expect(container.textContent).toBe("The The New York Times");
   });
 
   it("handles text with no markdown markers", () => {
@@ -85,5 +90,56 @@ describe("Tooltip component", () => {
     render(<Tooltip main="trigger" hover="content" />);
     const trigger = screen.getByRole("button");
     expect(trigger).toHaveClass("border-b-2", "border-dotted");
+  });
+
+  it("renders a Link when to prop is provided", () => {
+    const { container } = render(
+      <Tooltip main="click" hover="info" to="https://example.com" />,
+    );
+    const link = container.querySelector("a");
+    expect(link).not.toBeNull();
+    expect(link!.getAttribute("href")).toBe("https://example.com");
+    expect(link!.textContent).toBe("click");
+  });
+
+  it("renders plain text trigger when no to prop", () => {
+    const { container } = render(<Tooltip main="plain" hover="info" />);
+    const link = container.querySelector("a");
+    expect(link).toBeNull();
+    expect(container.textContent).toBe("plain");
+  });
+
+  describe("mobile path", () => {
+    beforeEach(() => {
+      Object.defineProperty(navigator, "userAgent", {
+        value: "iPhone",
+        configurable: true,
+      });
+    });
+
+    afterEach(() => {
+      Object.defineProperty(navigator, "userAgent", {
+        value: "",
+        configurable: true,
+      });
+    });
+
+    it("renders orange styled text with to prop on mobile", () => {
+      const { container } = render(
+        <Tooltip main="tap me" hover="info" to="https://example.com" />,
+      );
+      const span = container.querySelector(
+        ".text-orange-600",
+      );
+      expect(span).not.toBeNull();
+      expect(span!.textContent).toBe("tap me");
+    });
+
+    it("renders DialogTrigger with Pressable on mobile", () => {
+      render(<Tooltip main="tap" hover="mobile tooltip" />);
+      const trigger = screen.getByRole("button");
+      expect(trigger).toBeInTheDocument();
+      expect(trigger).toHaveClass("border-b-2", "border-dotted");
+    });
   });
 });

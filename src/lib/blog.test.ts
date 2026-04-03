@@ -37,10 +37,10 @@ tags: ["web-dev", "svelte"]
 categories: ["game-development"]
 ---
 
-import Tooltip from "../../components/Tooltip.tsx";
+import Tooltip from "../../components/Tooltip.astro";
 import Link from "../../components/Link.tsx";
 
-Some MDX content with <Tooltip client:visible main="hi" hover="there" />.
+Some MDX content with <Tooltip main="hi" hover="there" />.
 `;
 
 const PUBLISHED = `---
@@ -103,7 +103,7 @@ describe("parseMdxContent", () => {
 
     expect(result).not.toBeNull();
     expect(result!.content).toContain('import Tooltip from');
-    expect(result!.content).toContain('<Tooltip client:visible');
+    expect(result!.content).toContain('<Tooltip main=');
   });
 
   it("parses draft: false as not draft", () => {

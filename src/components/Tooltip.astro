@@ -1,0 +1,13 @@
+---
+import TooltipReact from "./TooltipReact.tsx";
+
+interface Props {
+  main: string;
+  hover: string;
+  to?: string;
+}
+
+const { main, hover, to } = Astro.props;
+---
+
+<TooltipReact client:visible main={main} hover={hover} to={to} />

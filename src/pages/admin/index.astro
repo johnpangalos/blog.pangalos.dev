@@ -47,7 +47,7 @@ try {
           <h2 class="font-display text-xl font-bold">Blog Posts</h2>
           <ul class="mt-4 space-y-3">
             {posts.map((post) => (
-              <li class="flex items-center justify-between rounded border border-stone-200 p-3 dark:border-stone-700">
+              <li class="flex flex-col gap-3 rounded border border-stone-200 p-4 dark:border-stone-700 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center gap-2">
                   <a
                     href={`/blog/${post.slug}`}
@@ -62,6 +62,12 @@ try {
                   )}
                 </div>
                 <div class="flex gap-2">
+                  <a
+                    href={`/admin/edit/${post.slug}`}
+                    class="rounded bg-fuchsia-700 px-2 py-1 text-xs text-white hover:bg-fuchsia-800 dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700"
+                  >
+                    Edit
+                  </a>
                   {post.draft && (
                     <PublishPostButton client:load slug={post.slug} />
                   )}

@@ -15,7 +15,7 @@ import {
   getOrigin,
 } from "../lib/auth";
 import type { UserRecord } from "../lib/auth";
-import { createPost, postExists, deletePost, publishPost, slugify } from "../lib/blog";
+import { createPost, updatePost, postExists, deletePost, publishPost, slugify } from "../lib/blog";
 import type { BlogPost } from "../lib/blog";
 import { env } from "cloudflare:workers";
 
@@ -52,6 +52,35 @@ export const server = {
 
         const post: BlogPost = { slug, ...input };
         await createPost(post);
+        return { slug };
+      },
+    }),
+
+    update: defineAction({
+      accept: "json",
+      input: z.object({
+        slug: z.string().min(1),
+        sha: z.string().min(1),
+        title: z.string().min(1),
+        author: z.string().min(1),
+        date: z.string().min(1),
+        description: z.string().min(1),
+        tags: z.array(z.string()),
+        categories: z.array(z.string()),
+        content: z.string().min(1),
+        draft: z.boolean().optional().default(false),
+      }),
+      handler: async (input, context) => {
+        if (!(await isAuthenticated(context))) {
+          throw new ActionError({
+            code: "FORBIDDEN",
+            message: "Not authenticated",
+          });
+        }
+
+        const { slug, sha, ...rest } = input;
+        const post = { slug, ...rest };
+        await updatePost(post, sha);
         return { slug };
       },
     }),

@@ -15,8 +15,7 @@ import {
   getOrigin,
 } from "../lib/auth";
 import type { UserRecord } from "../lib/auth";
-import { createPost, updatePost, postExists, deletePost, publishPost, slugify } from "../lib/blog";
-import type { BlogPost } from "../lib/blog";
+import { createPost, updatePost, postExists, deletePost, publishPost, slugify, extractTitle } from "../lib/blog";
 import { env } from "cloudflare:workers";
 
 export const server = {
@@ -24,12 +23,6 @@ export const server = {
     create: defineAction({
       accept: "json",
       input: z.object({
-        title: z.string().min(1),
-        author: z.string().min(1),
-        date: z.string().min(1),
-        description: z.string().min(1),
-        tags: z.array(z.string()),
-        categories: z.array(z.string()),
         content: z.string().min(1),
         draft: z.boolean().optional().default(false),
       }),
@@ -41,7 +34,15 @@ export const server = {
           });
         }
 
-        const slug = slugify(input.title);
+        const title = extractTitle(input.content);
+        if (!title) {
+          throw new ActionError({
+            code: "BAD_REQUEST",
+            message: "Content must include a title in frontmatter",
+          });
+        }
+
+        const slug = slugify(title);
         const exists = await postExists(slug);
         if (exists) {
           throw new ActionError({
@@ -50,8 +51,7 @@ export const server = {
           });
         }
 
-        const post: BlogPost = { slug, ...input };
-        await createPost(post);
+        await createPost(slug, input.content, input.draft);
         return { slug };
       },
     }),
@@ -61,12 +61,6 @@ export const server = {
       input: z.object({
         slug: z.string().min(1),
         sha: z.string().min(1),
-        title: z.string().min(1),
-        author: z.string().min(1),
-        date: z.string().min(1),
-        description: z.string().min(1),
-        tags: z.array(z.string()),
-        categories: z.array(z.string()),
         content: z.string().min(1),
         draft: z.boolean().optional().default(false),
       }),
@@ -78,10 +72,8 @@ export const server = {
           });
         }
 
-        const { slug, sha, ...rest } = input;
-        const post = { slug, ...rest };
-        await updatePost(post, sha);
-        return { slug };
+        await updatePost(input.slug, input.content, input.draft, input.sha);
+        return { slug: input.slug };
       },
     }),
 

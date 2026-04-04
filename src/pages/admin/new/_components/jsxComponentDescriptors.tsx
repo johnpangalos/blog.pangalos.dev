@@ -1,14 +1,15 @@
 import type { JsxComponentDescriptor, JsxEditorProps } from "@mdxeditor/editor";
 import { useMdastNodeUpdater } from "@mdxeditor/editor";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import {
   Button,
   TextField,
   Input,
   Label,
-  TooltipTrigger,
-  Tooltip as AriaTooltip,
-  Focusable,
+  DialogTrigger,
+  Popover,
+  Pressable,
+  Dialog,
 } from "react-aria-components";
 
 function NerdAlertEditor() {
@@ -70,19 +71,11 @@ function TooltipEditor({ mdastNode }: JsxEditorProps) {
   const hover = getAttrValue(mdastNode.attributes, "hover");
   const to = getAttrValue(mdastNode.attributes, "to");
 
-  const [editing, setEditing] = useState(false);
   const [editMain, setEditMain] = useState(main);
   const [editHover, setEditHover] = useState(hover);
   const [editTo, setEditTo] = useState(to);
-  const mainInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (editing && mainInputRef.current) {
-      mainInputRef.current.focus();
-    }
-  }, [editing]);
-
-  function save() {
+  function save(close: () => void) {
     const attrs: typeof mdastNode.attributes = [
       { type: "mdxJsxAttribute", name: "main", value: editMain },
       { type: "mdxJsxAttribute", name: "hover", value: editHover },
@@ -91,102 +84,93 @@ function TooltipEditor({ mdastNode }: JsxEditorProps) {
       attrs.push({ type: "mdxJsxAttribute", name: "to", value: editTo });
     }
     updateMdastNode({ attributes: attrs });
-    setEditing(false);
+    close();
   }
 
-  if (editing) {
-    return (
-      <span
-        className="inline-flex items-center gap-1"
-        contentEditable={false}
-      >
-        <span className="inline-flex flex-col gap-0.5 rounded border border-fuchsia-600 bg-fuchsia-50 p-1.5 text-[13px]">
-          <TextField
-            autoFocus
-            value={editMain}
-            onChange={setEditMain}
-            className="flex items-center gap-1"
-          >
-            <Label className="min-w-[40px] font-semibold text-fuchsia-900">
-              main
-            </Label>
-            <Input
-              ref={mainInputRef}
-              className="w-[140px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]"
-            />
-          </TextField>
-          <TextField
-            value={editHover}
-            onChange={setEditHover}
-            className="flex items-center gap-1"
-          >
-            <Label className="min-w-[40px] font-semibold text-fuchsia-900">
-              hover
-            </Label>
-            <Input className="w-[140px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]" />
-          </TextField>
-          <TextField
-            value={editTo}
-            onChange={setEditTo}
-            className="flex items-center gap-1"
-          >
-            <Label className="min-w-[40px] font-semibold text-fuchsia-900">
-              link
-            </Label>
-            <Input
-              placeholder="optional URL"
-              className="w-[140px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]"
-            />
-          </TextField>
-          <span className="mt-0.5 flex gap-1">
-            <Button
-              onPress={save}
-              className="cursor-pointer rounded-sm bg-fuchsia-600 px-2 py-px text-xs text-white"
-            >
-              Save
-            </Button>
-            <Button
-              onPress={() => setEditing(false)}
-              className="cursor-pointer rounded-sm bg-zinc-200 px-2 py-px text-xs"
-            >
-              Cancel
-            </Button>
-          </span>
-        </span>
-      </span>
-    );
+  function resetFields() {
+    setEditMain(main);
+    setEditHover(hover);
+    setEditTo(to);
   }
-
-  const hoverText = `hover: ${hover}${to ? `\nlink: ${to}` : ""}`;
 
   return (
     <span className="inline-flex" contentEditable={false}>
-      <TooltipTrigger delay={300} closeDelay={100}>
-        <Focusable>
+      <DialogTrigger onOpenChange={(isOpen) => {
+        if (isOpen) {
+          resetFields();
+        }
+      }}>
+        <Pressable>
           <span
             role="button"
-            tabIndex={0}
             className="cursor-pointer border-b-2 border-dotted border-fuchsia-700"
-            onClick={() => {
-              setEditMain(main);
-              setEditHover(hover);
-              setEditTo(to);
-              setEditing(true);
-            }}
           >
             {main || (
               <span className="text-zinc-400">empty tooltip</span>
             )}
           </span>
-        </Focusable>
-        <AriaTooltip
-          placement="top"
+        </Pressable>
+        <Popover
+          placement="bottom"
           offset={4}
-          className="z-50 w-max max-w-[250px] whitespace-pre-line rounded bg-fuchsia-700 p-2 text-center text-sm leading-5 text-white"
+          className="z-50 flex flex-col gap-1 rounded border border-fuchsia-600 bg-white p-2 text-[13px] shadow-lg"
         >
-          {hoverText}
-        </AriaTooltip>
-      </TooltipTrigger>
+          <Dialog className="flex flex-col gap-1 outline-none">
+            {({ close }) => (
+              <>
+                <TextField
+                  autoFocus
+                  value={editMain}
+                  onChange={setEditMain}
+                  className="flex items-center gap-1"
+                >
+                  <Label className="min-w-[40px] font-semibold text-fuchsia-900">
+                    main
+                  </Label>
+                  <Input className="w-[160px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]" />
+                </TextField>
+                <TextField
+                  value={editHover}
+                  onChange={setEditHover}
+                  className="flex items-center gap-1"
+                >
+                  <Label className="min-w-[40px] font-semibold text-fuchsia-900">
+                    hover
+                  </Label>
+                  <Input className="w-[160px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]" />
+                </TextField>
+                <TextField
+                  value={editTo}
+                  onChange={setEditTo}
+                  className="flex items-center gap-1"
+                >
+                  <Label className="min-w-[40px] font-semibold text-fuchsia-900">
+                    link
+                  </Label>
+                  <Input
+                    placeholder="optional URL"
+                    className="w-[160px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]"
+                  />
+                </TextField>
+                <span className="mt-1 flex gap-1">
+                  <Button
+                    onPress={() => save(close)}
+                    className="cursor-pointer rounded-sm bg-fuchsia-600 px-2 py-0.5 text-xs text-white"
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    onPress={close}
+                    className="cursor-pointer rounded-sm bg-zinc-200 px-2 py-0.5 text-xs"
+                  >
+                    Cancel
+                  </Button>
+                </span>
+              </>
+            )}
+          </Dialog>
+        </Popover>
+      </DialogTrigger>
     </span>
   );
 }

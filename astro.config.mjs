@@ -5,6 +5,7 @@ import cloudflare from "@astrojs/cloudflare";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import remarkMergeBlockquotes from "./src/plugins/remark-merge-blockquotes.js";
 
 export default defineConfig({
   output: "server",
@@ -13,6 +14,7 @@ export default defineConfig({
     sessionKVBindingName: "BLOG_PANGALOS_SESSION",
   }),
   markdown: {
+    remarkPlugins: [remarkMergeBlockquotes],
     rehypePlugins: [
       rehypeExternalLinks,
       rehypeSlug,

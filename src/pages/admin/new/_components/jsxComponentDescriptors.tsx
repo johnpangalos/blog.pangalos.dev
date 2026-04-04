@@ -6,6 +6,7 @@ import {
   TextField,
   Input,
   Label,
+  TextArea,
   DialogTrigger,
   Popover,
   Pressable,
@@ -132,12 +133,15 @@ function TooltipEditor({ mdastNode }: JsxEditorProps) {
                 <TextField
                   value={editHover}
                   onChange={setEditHover}
-                  className="flex items-center gap-1"
+                  className="flex gap-1"
                 >
-                  <Label className="min-w-[40px] font-semibold text-fuchsia-900">
+                  <Label className="mt-px min-w-[40px] font-semibold text-fuchsia-900">
                     hover
                   </Label>
-                  <Input className="w-[160px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]" />
+                  <TextArea
+                    rows={3}
+                    className="w-[160px] resize-y rounded-sm border border-zinc-300 px-1 py-px text-[13px]"
+                  />
                 </TextField>
                 <TextField
                   value={editTo}

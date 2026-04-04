@@ -13,11 +13,13 @@ import {
   codeMirrorPlugin,
   toolbarPlugin,
   jsxPlugin,
+  frontmatterPlugin,
   BoldItalicUnderlineToggles,
   BlockTypeSelect,
   CreateLink,
   InsertTable,
   InsertThematicBreak,
+  InsertFrontmatter,
   ListsToggle,
   UndoRedo,
   InsertCodeBlock,
@@ -89,6 +91,7 @@ export default function MdxEditorField({
             linkPlugin(),
             linkDialogPlugin(),
             tablePlugin(),
+            frontmatterPlugin(),
             jsxPlugin({ jsxComponentDescriptors: blogJsxComponentDescriptors }),
             codeBlockPlugin({ defaultCodeBlockLanguage: "" }),
             codeMirrorPlugin({
@@ -118,6 +121,7 @@ export default function MdxEditorField({
                   <InsertTable />
                   <InsertThematicBreak />
                   <InsertCodeBlock />
+                  <InsertFrontmatter />
                   <InsertComponentButton />
                 </>
               ),

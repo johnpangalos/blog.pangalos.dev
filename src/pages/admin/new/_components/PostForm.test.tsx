@@ -21,46 +21,19 @@ vi.mock("./MdxEditorField", () => ({
 
 afterEach(cleanup);
 
-function getInput(name: string): HTMLInputElement | HTMLTextAreaElement {
-  return document.querySelector(`[name="${name}"]`)!;
-}
-
 const sampleData: PostFormData = {
   slug: "test-post",
   sha: "abc123",
-  title: "Test Post Title",
-  author: "John Pangalos",
-  date: "April 2, 2026",
-  description: "A test description for the post.",
-  tags: "web, javascript",
-  categories: "web",
-  content: "## Hello\n\nSome content here.",
-  draft: true,
+  content: '---\nauthor: "John Pangalos"\ntitle: "Test Post Title"\n---\n\n## Hello\n\nSome content here.',
 };
 
 describe("PostForm", () => {
   describe("edit mode (with initialData)", () => {
-    it("populates all fields with initial data", () => {
+    it("passes full content to MDX editor", () => {
       render(<PostForm initialData={sampleData} />);
 
-      expect(getInput("title")).toHaveValue("Test Post Title");
-      expect(getInput("author")).toHaveValue("John Pangalos");
-      expect(getInput("date")).toHaveValue("April 2, 2026");
-      expect(getInput("description")).toHaveValue("A test description for the post.");
-      expect(getInput("tags")).toHaveValue("web, javascript");
-      expect(getInput("categories")).toHaveValue("web");
-    });
-
-    it("makes title read-only in edit mode", () => {
-      render(<PostForm initialData={sampleData} />);
-
-      expect(getInput("title")).toHaveAttribute("readonly");
-    });
-
-    it("passes content to MDX editor", () => {
-      render(<PostForm initialData={sampleData} />);
-
-      expect(getInput("content")).toHaveValue("## Hello\n\nSome content here.");
+      const editor = screen.getByTestId("mdx-editor");
+      expect(editor).toHaveValue(sampleData.content);
     });
 
     it("shows Update button instead of Publish", () => {
@@ -74,14 +47,12 @@ describe("PostForm", () => {
   });
 
   describe("create mode (no initialData)", () => {
-    it("renders empty fields with author default", () => {
+    it("renders editor with default frontmatter template", () => {
       render(<PostForm />);
 
-      expect(getInput("title")).toHaveValue("");
-      expect(getInput("title")).not.toHaveAttribute("readonly");
-      expect(getInput("author")).toHaveValue("John Pangalos");
-      expect(getInput("date")).toHaveValue("");
-      expect(getInput("description")).toHaveValue("");
+      const editor = screen.getByTestId("mdx-editor") as HTMLTextAreaElement;
+      expect(editor.value).toContain("---");
+      expect(editor.value).toContain('author: "John Pangalos"');
     });
 
     it("shows Publish button", () => {

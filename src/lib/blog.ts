@@ -2,16 +2,10 @@ import { env } from "cloudflare:workers";
 import { Octokit } from "@octokit/rest";
 import { createAppAuth } from "@octokit/auth-app";
 
-export interface BlogPost {
+export interface RawPost {
   slug: string;
-  author: string;
-  title: string;
-  date: string;
-  description: string;
-  tags: string[];
-  categories: string[];
+  sha: string;
   content: string;
-  draft: boolean;
 }
 
 const GITHUB_REPO_OWNER = "johnpangalos";
@@ -118,30 +112,39 @@ function addAstroDirectives(content: string): string {
   );
 }
 
-function buildMdxContent(post: Omit<BlogPost, "slug">): string {
-  const frontmatter = [
-    "---",
-    `author: "${post.author}"`,
-    `title: "${post.title}"`,
-    `date: "${post.date}"`,
-    `description: "${post.description}"`,
-    `tags: [${post.tags.map((t) => `"${t}"`).join(", ")}]`,
-    `categories: [${post.categories.map((c) => `"${c}"`).join(", ")}]`,
-    `draft: ${post.draft}`,
-    "---",
-  ].join("\n");
+export function extractTitle(content: string): string {
+  const dq = content.match(/title:\s*"(.+?)"/);
+  if (dq) return dq[1];
+  const sq = content.match(/title:\s*'(.+?)'/);
+  if (sq) return sq[1];
+  const uq = content.match(/title:\s*(.+)/);
+  if (uq) return uq[1].trim();
+  return "";
+}
 
-  const content = addAstroDirectives(post.content);
+export function setDraftFlag(content: string, draft: boolean): string {
+  const replaced = content.replace(
+    /^(---\s*\n[\s\S]*?)draft:\s*(true|false)\s*$/m,
+    `$1draft: ${draft}`,
+  );
+  if (replaced !== content) return replaced;
+  return content.replace(/^(---\s*\n)/m, `$1draft: ${draft}\n`);
+}
 
-  return `${frontmatter}\n\n${content}\n`;
+function prepareContent(content: string, draft: boolean): string {
+  const withDraft = setDraftFlag(content, draft);
+  return addAstroDirectives(withDraft);
 }
 
 export async function createPost(
-  post: BlogPost,
+  slug: string,
+  content: string,
+  draft: boolean,
 ): Promise<void> {
   const octokit = getOctokit();
-  const filePath = `${CONTENT_PATH}/${post.slug}.mdx`;
-  const fileContent = buildMdxContent(post);
+  const filePath = `${CONTENT_PATH}/${slug}.mdx`;
+  const fileContent = prepareContent(content, draft);
+  const title = extractTitle(content);
   const encodedContent = btoa(
     new TextEncoder()
       .encode(fileContent)
@@ -152,7 +155,7 @@ export async function createPost(
     owner: GITHUB_REPO_OWNER,
     repo: GITHUB_REPO_NAME,
     path: filePath,
-    message: `Add blog post: ${post.title}`,
+    message: `Add blog post: ${title}`,
     content: encodedContent,
   });
 }
@@ -271,56 +274,9 @@ export async function publishPost(slug: string): Promise<void> {
   });
 }
 
-export function parseMdxContent(
-  raw: string,
-  slug: string,
-  sha: string,
-): (BlogPost & { sha: string }) | null {
-  const fmMatch = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
-  if (!fmMatch) return null;
-
-  const fm = fmMatch[1];
-  const content = fmMatch[2].trim();
-
-  const get = (key: string) => {
-    // Match double-quoted: key: "value"
-    const dq = fm.match(new RegExp(`^${key}:\\s*"(.*)"\\s*$`, "m"));
-    if (dq) return dq[1];
-    // Match single-quoted: key: 'value' (with '' escape for literal ')
-    const sq = fm.match(new RegExp(`^${key}:\\s*'(.*)'\\s*$`, "m"));
-    if (sq) return sq[1].replace(/''/g, "'");
-    // Match unquoted: key: value
-    const uq = fm.match(new RegExp(`^${key}:\\s*(.+?)\\s*$`, "m"));
-    if (uq) return uq[1];
-    return "";
-  };
-
-  const getArray = (key: string): string[] => {
-    const m = fm.match(new RegExp(`^${key}:\\s*\\[(.*)\\]\\s*$`, "m"));
-    if (!m) return [];
-    return m[1]
-      .split(",")
-      .map((s) => s.trim().replace(/^["']|["']$/g, ""))
-      .filter(Boolean);
-  };
-
-  return {
-    slug,
-    author: get("author"),
-    title: get("title"),
-    date: get("date"),
-    description: get("description"),
-    tags: getArray("tags"),
-    categories: getArray("categories"),
-    draft: /^draft:\s*true\s*$/m.test(fm),
-    content,
-    sha,
-  };
-}
-
 export async function getPost(
   slug: string,
-): Promise<(BlogPost & { sha: string }) | null> {
+): Promise<RawPost | null> {
   const octokit = getOctokit();
   const filePath = `${CONTENT_PATH}/${slug}.mdx`;
 
@@ -335,25 +291,28 @@ export async function getPost(
       return null;
     }
 
-    const raw = new TextDecoder().decode(
+    const content = new TextDecoder().decode(
       Uint8Array.from(atob(data.content.replace(/\n/g, "")), (c) =>
         c.charCodeAt(0),
       ),
     );
 
-    return parseMdxContent(raw, slug, data.sha);
+    return { slug, sha: data.sha, content };
   } catch {
     return null;
   }
 }
 
 export async function updatePost(
-  post: BlogPost,
+  slug: string,
+  content: string,
+  draft: boolean,
   sha: string,
 ): Promise<void> {
   const octokit = getOctokit();
-  const filePath = `${CONTENT_PATH}/${post.slug}.mdx`;
-  const fileContent = buildMdxContent(post);
+  const filePath = `${CONTENT_PATH}/${slug}.mdx`;
+  const fileContent = prepareContent(content, draft);
+  const title = extractTitle(content);
   const encodedContent = btoa(
     new TextEncoder()
       .encode(fileContent)
@@ -364,7 +323,7 @@ export async function updatePost(
     owner: GITHUB_REPO_OWNER,
     repo: GITHUB_REPO_NAME,
     path: filePath,
-    message: `Update blog post: ${post.title}`,
+    message: `Update blog post: ${title}`,
     content: encodedContent,
     sha,
   });

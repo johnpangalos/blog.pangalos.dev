@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseMdxContent } from "./blog";
+import { extractTitle, setDraftFlag } from "./blog";
 
 const DOUBLE_QUOTED = `---
 author: "John Pangalos"
@@ -16,111 +16,58 @@ draft: true
 Hello my name is John and I have a problem.
 `;
 
-const SINGLE_QUOTED_DESC = `---
+const SINGLE_QUOTED = `---
+title: 'the.winds.of.2025'
 author: "John Pangalos"
-title: "the.winds.of.2025"
-date: "January 19, 2025"
-description: 'Writing pace be damned! Sometimes it''s better to not write anything. Like a Donald Trump once said, "If you don''t have something nice to say, don''t say anything at all"'
-tags: ["Game of Thrones", "writing", "jokes"]
-categories: ["books"]
 ---
 
 Some content here.
 `;
 
-const WITH_IMPORTS = `---
+const NO_DRAFT = `---
 author: "John Pangalos"
-title: "looking.svelte"
-date: "May 2, 2021"
-description: "A post about Svelte."
-tags: ["web-dev", "svelte"]
-categories: ["game-development"]
+title: "no-draft-field"
 ---
 
-import Tooltip from "../../components/Tooltip.astro";
-import Link from "../../components/Link.tsx";
-
-Some MDX content with <Tooltip main="hi" hover="there" />.
+Content.
 `;
 
-const PUBLISHED = `---
-author: "John Pangalos"
-title: "published.post"
-date: "March 1, 2025"
-description: "A published post."
-tags: ["test"]
-categories: ["misc"]
-draft: false
----
-
-Published content.
-`;
-
-describe("parseMdxContent", () => {
-  it("parses double-quoted frontmatter fields", () => {
-    const result = parseMdxContent(DOUBLE_QUOTED, "obligatory-ai-post", "abc123");
-
-    expect(result).not.toBeNull();
-    expect(result!.slug).toBe("obligatory-ai-post");
-    expect(result!.sha).toBe("abc123");
-    expect(result!.author).toBe("John Pangalos");
-    expect(result!.title).toBe("obligatory.ai.post");
-    expect(result!.date).toBe("April 2, 2026");
-    expect(result!.description).toBe(
-      "You are absolutely right, I have updated my blog again.",
-    );
-    expect(result!.draft).toBe(true);
+describe("extractTitle", () => {
+  it("extracts double-quoted title", () => {
+    expect(extractTitle(DOUBLE_QUOTED)).toBe("obligatory.ai.post");
   });
 
-  it("parses tags and categories arrays", () => {
-    const result = parseMdxContent(DOUBLE_QUOTED, "test", "sha1");
-
-    expect(result!.tags).toEqual(["bloging", "astro", "ai"]);
-    expect(result!.categories).toEqual(["web", "ai"]);
+  it("extracts single-quoted title", () => {
+    expect(extractTitle(SINGLE_QUOTED)).toBe("the.winds.of.2025");
   });
 
-  it("parses single-quoted description with escaped quotes", () => {
-    const result = parseMdxContent(SINGLE_QUOTED_DESC, "the-winds-of-2025", "sha2");
+  it("returns empty string when no title", () => {
+    expect(extractTitle("no frontmatter")).toBe("");
+  });
+});
 
-    expect(result).not.toBeNull();
-    expect(result!.title).toBe("the.winds.of.2025");
-    expect(result!.description).toBe(
-      `Writing pace be damned! Sometimes it's better to not write anything. Like a Donald Trump once said, "If you don't have something nice to say, don't say anything at all"`,
-    );
-    expect(result!.tags).toEqual(["Game of Thrones", "writing", "jokes"]);
+describe("setDraftFlag", () => {
+  it("replaces existing draft: true with draft: false", () => {
+    const result = setDraftFlag(DOUBLE_QUOTED, false);
+    expect(result).toContain("draft: false");
+    expect(result).not.toContain("draft: true");
   });
 
-  it("separates content from frontmatter", () => {
-    const result = parseMdxContent(DOUBLE_QUOTED, "test", "sha1");
-
-    expect(result!.content).toBe(
-      "## getting.sloppy\n\nHello my name is John and I have a problem.",
-    );
+  it("replaces existing draft: false with draft: true", () => {
+    const content = DOUBLE_QUOTED.replace("draft: true", "draft: false");
+    const result = setDraftFlag(content, true);
+    expect(result).toContain("draft: true");
+    expect(result).not.toContain("draft: false");
   });
 
-  it("preserves import statements in content", () => {
-    const result = parseMdxContent(WITH_IMPORTS, "looking-svelte", "sha3");
-
-    expect(result).not.toBeNull();
-    expect(result!.content).toContain('import Tooltip from');
-    expect(result!.content).toContain('<Tooltip main=');
+  it("adds draft field when not present", () => {
+    const result = setDraftFlag(NO_DRAFT, true);
+    expect(result).toContain("draft: true");
   });
 
-  it("parses draft: false as not draft", () => {
-    const result = parseMdxContent(PUBLISHED, "published-post", "sha4");
-
-    expect(result!.draft).toBe(false);
-  });
-
-  it("defaults draft to false when not specified", () => {
-    const result = parseMdxContent(SINGLE_QUOTED_DESC, "test", "sha5");
-
-    expect(result!.draft).toBe(false);
-  });
-
-  it("returns null for invalid frontmatter", () => {
-    const result = parseMdxContent("no frontmatter here", "test", "sha6");
-
-    expect(result).toBeNull();
+  it("preserves other frontmatter fields", () => {
+    const result = setDraftFlag(DOUBLE_QUOTED, false);
+    expect(result).toContain('title: "obligatory.ai.post"');
+    expect(result).toContain('author: "John Pangalos"');
   });
 });

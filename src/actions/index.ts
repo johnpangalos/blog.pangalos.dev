@@ -228,6 +228,17 @@ export const server = {
         }
 
         const rpID = getHostname(context);
+        const isProduction = rpID === "blog.pangalos.dev";
+
+        let excludeCredentials: { id: string; transports?: string[] }[] = [];
+        if (isProduction) {
+          const kv = env.BLOG_PANGALOS_AUTH_KV;
+          const existingUser = await getUser(kv);
+          excludeCredentials = (existingUser?.credentials ?? []).map((cred) => ({
+            id: cred.credentialId,
+            transports: cred.transports as string[] | undefined,
+          }));
+        }
 
         const options = await generateRegistrationOptions({
           rpName: "blog.pangalos.dev",
@@ -238,6 +249,7 @@ export const server = {
             residentKey: "preferred",
             userVerification: "preferred",
           },
+          excludeCredentials,
         });
 
         context.session!.set("challenge", options.challenge);

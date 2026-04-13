@@ -308,7 +308,7 @@ export async function updatePost(
   content: string,
   draft: boolean,
   sha: string,
-): Promise<void> {
+): Promise<string> {
   const octokit = getOctokit();
   const filePath = `${CONTENT_PATH}/${slug}.mdx`;
   const fileContent = prepareContent(content, draft);
@@ -319,7 +319,7 @@ export async function updatePost(
       .reduce((acc, byte) => acc + String.fromCharCode(byte), ""),
   );
 
-  await octokit.repos.createOrUpdateFileContents({
+  const response = await octokit.repos.createOrUpdateFileContents({
     owner: GITHUB_REPO_OWNER,
     repo: GITHUB_REPO_NAME,
     path: filePath,
@@ -327,6 +327,8 @@ export async function updatePost(
     content: encodedContent,
     sha,
   });
+
+  return response.data.content?.sha ?? sha;
 }
 
 export async function postExists(

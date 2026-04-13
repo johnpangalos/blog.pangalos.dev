@@ -66,9 +66,11 @@ function InsertComponentButton() {
 export default function MdxEditorField({
   name,
   defaultValue = "",
+  onChange,
 }: {
   name: string;
   defaultValue?: string;
+  onChange?: (value: string) => void;
 }) {
   const editorRef = useRef<MDXEditorMethods>(null);
   const [value, setValue] = useState(defaultValue);
@@ -80,7 +82,12 @@ export default function MdxEditorField({
         <MDXEditor
           ref={editorRef}
           markdown={defaultValue}
-          onChange={setValue}
+          onChange={(newValue) => {
+            setValue(newValue);
+            if (onChange) {
+              onChange(newValue);
+            }
+          }}
           contentEditableClassName="prose dark:prose-invert max-w-none min-h-[300px] px-4 py-2"
           plugins={[
             headingsPlugin(),

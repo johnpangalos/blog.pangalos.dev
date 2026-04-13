@@ -72,8 +72,8 @@ export const server = {
           });
         }
 
-        await updatePost(input.slug, input.content, input.draft, input.sha);
-        return { slug: input.slug };
+        const newSha = await updatePost(input.slug, input.content, input.draft, input.sha);
+        return { slug: input.slug, sha: newSha };
       },
     }),
 

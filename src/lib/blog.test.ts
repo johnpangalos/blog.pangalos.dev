@@ -65,6 +65,11 @@ describe("setDraftFlag", () => {
     expect(result).toContain("draft: true");
   });
 
+  it("does not duplicate draft field when value is unchanged", () => {
+    const result = setDraftFlag(DOUBLE_QUOTED, true);
+    expect(result.match(/^draft:/gm)?.length).toBe(1);
+  });
+
   it("preserves other frontmatter fields", () => {
     const result = setDraftFlag(DOUBLE_QUOTED, false);
     expect(result).toContain('title: "obligatory.ai.post"');

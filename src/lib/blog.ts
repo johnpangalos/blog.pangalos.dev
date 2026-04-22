@@ -123,11 +123,10 @@ export function extractTitle(content: string): string {
 }
 
 export function setDraftFlag(content: string, draft: boolean): string {
-  const replaced = content.replace(
-    /^(---\s*\n[\s\S]*?)draft:\s*(true|false)\s*$/m,
-    `$1draft: ${draft}`,
-  );
-  if (replaced !== content) return replaced;
+  const regex = /^(---\s*\n[\s\S]*?)draft:\s*(true|false)\s*$/m;
+  if (regex.test(content)) {
+    return content.replace(regex, `$1draft: ${draft}`);
+  }
   return content.replace(/^(---\s*\n)/m, `$1draft: ${draft}\n`);
 }
 

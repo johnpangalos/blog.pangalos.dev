@@ -44,6 +44,14 @@ describe("PostForm", () => {
       expect(buttonTexts).toContain("Update");
       expect(buttonTexts).not.toContain("Publish");
     });
+
+    it("does not show Save as Draft button", () => {
+      render(<PostForm initialData={sampleData} />);
+
+      const buttons = screen.getAllByRole("button");
+      const buttonTexts = buttons.map((b) => b.textContent);
+      expect(buttonTexts).not.toContain("Save as Draft");
+    });
   });
 
   describe("create mode (no initialData)", () => {
@@ -62,6 +70,14 @@ describe("PostForm", () => {
       const buttonTexts = buttons.map((b) => b.textContent);
       expect(buttonTexts).toContain("Publish");
       expect(buttonTexts).not.toContain("Update");
+    });
+
+    it("shows Save as Draft button", () => {
+      render(<PostForm />);
+
+      const buttons = screen.getAllByRole("button");
+      const buttonTexts = buttons.map((b) => b.textContent);
+      expect(buttonTexts).toContain("Save as Draft");
     });
   });
 });

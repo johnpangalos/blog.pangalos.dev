@@ -21,7 +21,7 @@ export default function PublishPostButton({ slug }: Props) {
   return (
     <Button
       onClick={handlePublish}
-      className="rounded bg-green-600 px-2 py-1 text-xs text-white hover:bg-green-700"
+      className="rounded bg-green-600 px-4 py-2 text-sm font-bold text-white hover:bg-green-700"
     >
       Publish
     </Button>

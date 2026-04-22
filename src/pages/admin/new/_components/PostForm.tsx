@@ -22,15 +22,19 @@ draft: true
 `;
 
 function getLoadingMessage(draft: boolean, isEditing: boolean) {
-  if (draft) return "Saving draft...";
   if (isEditing) return "Updating...";
+  if (draft) return "Saving draft...";
   return "Publishing...";
 }
 
 function getSuccessMessage(draft: boolean, isEditing: boolean) {
-  if (draft) return "Draft saved to repo!";
   if (isEditing) return "Post updated! It will be live after the site rebuilds.";
+  if (draft) return "Draft saved to repo!";
   return "Post committed to repo! It will be live after the site rebuilds.";
+}
+
+function isDraftContent(content: string): boolean {
+  return /^draft:\s*true\s*$/m.test(content);
 }
 
 function getStatusColorClass(type: string) {
@@ -91,12 +95,15 @@ export default function PostForm({
     }, 2000);
   };
 
-  const defaultContent = isEditing ? initialData.content : DEFAULT_CONTENT;
-  const submitLabel = isEditing ? "Update" : "Publish";
+  let defaultContent = DEFAULT_CONTENT;
+  if (isEditing) defaultContent = initialData.content;
+  let submitLabel = "Publish";
+  if (isEditing) submitLabel = "Update";
+  const submitDraft = isEditing && isDraftContent(initialData.content);
 
   return (
       <form
-        onSubmit={(e) => handleSubmit(e, false)}
+        onSubmit={(e) => handleSubmit(e, submitDraft)}
         className="mt-8 space-y-4"
       >
         <div>
@@ -122,21 +129,23 @@ export default function PostForm({
           >
             {submitLabel}
           </Button>
-          <Button
-            type="button"
-            onPress={(e) => {
-              const form = (e.target as HTMLElement).closest("form");
-              if (form && form.reportValidity()) {
-                handleSubmit(
-                  { preventDefault: () => {}, currentTarget: form } as React.FormEvent<HTMLFormElement>,
-                  true,
-                );
-              }
-            }}
-            className="rounded border border-stone-300 bg-white px-4 py-2 font-bold text-stone-700 hover:bg-stone-100 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700"
-          >
-            Save as Draft
-          </Button>
+          {!isEditing && (
+            <Button
+              type="button"
+              onPress={(e) => {
+                const form = (e.target as HTMLElement).closest("form");
+                if (form && form.reportValidity()) {
+                  handleSubmit(
+                    { preventDefault: () => {}, currentTarget: form } as React.FormEvent<HTMLFormElement>,
+                    true,
+                  );
+                }
+              }}
+              className="rounded border border-stone-300 bg-white px-4 py-2 font-bold text-stone-700 hover:bg-stone-100 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700"
+            >
+              Save as Draft
+            </Button>
+          )}
         </div>
       </form>
   );

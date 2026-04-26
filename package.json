@@ -48,7 +48,7 @@
   "dependencies": {
     "@astrojs/cloudflare": "^13.2.1",
     "@astrojs/mdx": "^5.0.4",
-    "@astrojs/react": "^5.0.2",
+    "@astrojs/react": "^5.0.4",
     "@mdxeditor/editor": "^3.55.0",
     "@octokit/auth-app": "^8.2.0",
     "@octokit/rest": "^22.0.1",

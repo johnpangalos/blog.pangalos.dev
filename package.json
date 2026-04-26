@@ -22,7 +22,7 @@
     "@typescript-eslint/parser": "^5.48.0",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.31.0",
-    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-prettier": "^10.1.8",
     "jsdom": "^29.0.2",
     "postcss": "^8.5.12",
     "prettier": "^2.8.1",

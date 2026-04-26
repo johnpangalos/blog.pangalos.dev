@@ -52,7 +52,7 @@
     "@mdxeditor/editor": "^3.53.1",
     "@octokit/auth-app": "^8.2.0",
     "@octokit/rest": "^22.0.1",
-    "@simplewebauthn/browser": "^13.2.2",
+    "@simplewebauthn/browser": "^13.3.0",
     "@simplewebauthn/server": "^13.2.3",
     "astro": "^6.0.0",
     "react": "^19.2.4",

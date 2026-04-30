@@ -179,6 +179,124 @@ function TooltipEditor({ mdastNode }: JsxEditorProps) {
   );
 }
 
+function YouTubeEditor({ mdastNode }: JsxEditorProps) {
+  const updateMdastNode = useMdastNodeUpdater();
+
+  const videoId = getAttrValue(mdastNode.attributes, "videoId");
+  const title = getAttrValue(mdastNode.attributes, "title");
+
+  const [editVideoId, setEditVideoId] = useState(videoId);
+  const [editTitle, setEditTitle] = useState(title);
+
+  function save(close: () => void) {
+    const attrs: typeof mdastNode.attributes = [
+      { type: "mdxJsxAttribute", name: "videoId", value: editVideoId },
+    ];
+    if (editTitle) {
+      attrs.push({ type: "mdxJsxAttribute", name: "title", value: editTitle });
+    }
+    updateMdastNode({ attributes: attrs });
+    close();
+  }
+
+  function resetFields() {
+    setEditVideoId(videoId);
+    setEditTitle(title);
+  }
+
+  function renderTrigger() {
+    if (!videoId) {
+      return (
+        <span
+          role="button"
+          className="cursor-pointer border-b-2 border-dotted border-red-700 text-zinc-400"
+        >
+          empty video
+        </span>
+      );
+    }
+    return (
+      <span
+        role="button"
+        className="inline-block cursor-pointer overflow-hidden rounded border-2 border-red-700"
+      >
+        <img
+          src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+          alt={title || "YouTube thumbnail"}
+          className="block w-[240px]"
+        />
+      </span>
+    );
+  }
+
+  return (
+    <div className="flex w-full justify-center py-2" contentEditable={false}>
+      <DialogTrigger
+        onOpenChange={(isOpen) => {
+          if (isOpen) {
+            resetFields();
+          }
+        }}
+      >
+        <Pressable>{renderTrigger()}</Pressable>
+        <Popover
+          placement="bottom"
+          offset={4}
+          className="z-50 flex flex-col gap-1 rounded border border-red-600 bg-white p-2 text-[13px] shadow-lg"
+        >
+          <Dialog className="flex flex-col gap-1 outline-none">
+            {({ close }) => (
+              <>
+                <TextField
+                  autoFocus
+                  value={editVideoId}
+                  onChange={setEditVideoId}
+                  className="flex items-center gap-1"
+                >
+                  <Label className="min-w-[40px] font-semibold text-red-900">
+                    id
+                  </Label>
+                  <Input
+                    placeholder="e.g. dQw4w9WgXcQ"
+                    className="w-[200px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]"
+                  />
+                </TextField>
+                <TextField
+                  value={editTitle}
+                  onChange={setEditTitle}
+                  className="flex items-center gap-1"
+                >
+                  <Label className="min-w-[40px] font-semibold text-red-900">
+                    title
+                  </Label>
+                  <Input
+                    placeholder="optional title"
+                    className="w-[200px] rounded-sm border border-zinc-300 px-1 py-px text-[13px]"
+                  />
+                </TextField>
+                <span className="mt-1 flex gap-1">
+                  <Button
+                    onPress={() => save(close)}
+                    className="cursor-pointer rounded-sm bg-red-600 px-2 py-0.5 text-xs text-white"
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    onPress={close}
+                    className="cursor-pointer rounded-sm bg-zinc-200 px-2 py-0.5 text-xs"
+                  >
+                    Cancel
+                  </Button>
+                </span>
+              </>
+            )}
+          </Dialog>
+        </Popover>
+      </DialogTrigger>
+    </div>
+  );
+}
+
 export const blogJsxComponentDescriptors: JsxComponentDescriptor[] = [
   {
     name: "Tooltip",
@@ -210,5 +328,17 @@ export const blogJsxComponentDescriptors: JsxComponentDescriptor[] = [
     props: [],
     hasChildren: false,
     Editor: SpoilerAlertEditor,
+  },
+  {
+    name: "YouTube",
+    kind: "flow",
+    source: "../../components/YouTube.tsx",
+    defaultExport: true,
+    props: [
+      { name: "videoId", type: "string", required: true },
+      { name: "title", type: "string" },
+    ],
+    hasChildren: false,
+    Editor: YouTubeEditor,
   },
 ];

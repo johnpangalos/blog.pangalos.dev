@@ -49,6 +49,12 @@ function InsertComponentButton() {
           insertJsx({ kind: "flow", name: "NerdAlert", props: {} });
         } else if (value === "SpoilerAlert") {
           insertJsx({ kind: "flow", name: "SpoilerAlert", props: {} });
+        } else if (value === "YouTube") {
+          insertJsx({
+            kind: "flow",
+            name: "YouTube",
+            props: { videoId: "" },
+          });
         }
         e.target.value = "";
       }}
@@ -59,6 +65,7 @@ function InsertComponentButton() {
       <option value="Tooltip">Tooltip</option>
       <option value="NerdAlert">Nerd Alert</option>
       <option value="SpoilerAlert">Spoiler Alert</option>
+      <option value="YouTube">YouTube</option>
     </select>
   );
 }

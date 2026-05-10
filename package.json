@@ -12,7 +12,7 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.8",
+    "@astrojs/check": "0.9.9",
     "@tailwindcss/typography": "0.5.19",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
@@ -46,7 +46,7 @@
     ]
   },
   "dependencies": {
-    "@astrojs/cloudflare": "13.2.1",
+    "@astrojs/cloudflare": "13.5.0",
     "@astrojs/mdx": "5.0.4",
     "@astrojs/react": "5.0.4",
     "@mdxeditor/editor": "3.55.0",
@@ -54,7 +54,7 @@
     "@octokit/rest": "22.0.1",
     "@simplewebauthn/browser": "13.3.0",
     "@simplewebauthn/server": "13.3.0",
-    "astro": "6.1.9",
+    "astro": "6.3.0",
     "react": "19.2.5",
     "react-aria-components": "1.16.0",
     "react-dom": "19.2.5"

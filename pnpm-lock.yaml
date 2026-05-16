@@ -79,8 +79,8 @@ importers:
         specifier: 8.10.2
         version: 8.10.2(eslint@8.57.1)
       jsdom:
-        specifier: 29.0.2
-        version: 29.0.2
+        specifier: 29.1.1
+        version: 29.1.1
       postcss:
         specifier: 8.5.14
         version: 8.5.14
@@ -110,7 +110,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.1.6
-        version: 4.1.6(jsdom@29.0.2)(vite@7.3.2(jiti@1.21.7)(yaml@2.8.2))
+        version: 4.1.6(jsdom@29.1.1)(vite@7.3.2(jiti@1.21.7)(yaml@2.8.2))
       wrangler:
         specifier: 4.85.0
         version: 4.85.0
@@ -3078,8 +3078,8 @@ packages:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
-  jsdom@29.0.2:
-    resolution: {integrity: sha512-9VnGEBosc/ZpwyOsJBCQ/3I5p7Q5ngOY14a9bf5btenAORmZfDse1ZEheMiWcJ3h81+Fv7HmJFdS0szo/waF2w==}
+  jsdom@29.1.1:
+    resolution: {integrity: sha512-ECi4Fi2f7BdJtUKTflYRTiaMxIB0O6zfR1fX0GXpUrf6flp8QIYn1UT20YQqdSOfk2dfkCwS8LAFoJDEppNK5Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
@@ -8205,7 +8205,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@29.0.2:
+  jsdom@29.1.1:
     dependencies:
       '@asamuzakjp/css-color': 5.1.11
       '@asamuzakjp/dom-selector': 7.1.1
@@ -9870,7 +9870,7 @@ snapshots:
     optionalDependencies:
       vite: 7.3.2(jiti@1.21.7)(yaml@2.8.2)
 
-  vitest@4.1.6(jsdom@29.0.2)(vite@7.3.2(jiti@1.21.7)(yaml@2.8.2)):
+  vitest@4.1.6(jsdom@29.1.1)(vite@7.3.2(jiti@1.21.7)(yaml@2.8.2)):
     dependencies:
       '@vitest/expect': 4.1.6
       '@vitest/mocker': 4.1.6(vite@7.3.2(jiti@1.21.7)(yaml@2.8.2))
@@ -9893,7 +9893,7 @@ snapshots:
       vite: 7.3.2(jiti@1.21.7)(yaml@2.8.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      jsdom: 29.0.2
+      jsdom: 29.1.1
     transitivePeerDependencies:
       - msw
 

@@ -21,7 +21,7 @@
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "autoprefixer": "10.5.0",
-    "eslint": "8.57.1",
+    "eslint": "10.4.0",
     "eslint-config-prettier": "8.10.2",
     "jsdom": "29.1.1",
     "postcss": "8.5.14",

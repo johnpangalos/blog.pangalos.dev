@@ -14,8 +14,18 @@ vi.mock("astro:actions", () => ({
 
 // Mock MDXEditor since it requires browser APIs not available in jsdom
 vi.mock("./MdxEditorField", () => ({
-  default: ({ name, defaultValue }: { name: string; defaultValue?: string }) => (
-    <textarea data-testid="mdx-editor" name={name} defaultValue={defaultValue} />
+  default: ({
+    name,
+    defaultValue,
+  }: {
+    name: string;
+    defaultValue?: string;
+  }) => (
+    <textarea
+      data-testid="mdx-editor"
+      name={name}
+      defaultValue={defaultValue}
+    />
   ),
 }));
 
@@ -24,7 +34,8 @@ afterEach(cleanup);
 const sampleData: PostFormData = {
   slug: "test-post",
   sha: "abc123",
-  content: '---\nauthor: "John Pangalos"\ntitle: "Test Post Title"\n---\n\n## Hello\n\nSome content here.',
+  content:
+    '---\nauthor: "John Pangalos"\ntitle: "Test Post Title"\n---\n\n## Hello\n\nSome content here.',
 };
 
 describe("PostForm", () => {

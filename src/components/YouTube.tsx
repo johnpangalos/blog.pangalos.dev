@@ -5,7 +5,7 @@ interface Props {
 
 export default function YouTube({ videoId, title }: Props) {
   return (
-    <div className="flex justify-center aspect-video">
+    <div className="flex aspect-video justify-center">
       <iframe
         className="w-full"
         height="378px"

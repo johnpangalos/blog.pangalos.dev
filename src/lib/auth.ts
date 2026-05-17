@@ -32,7 +32,7 @@ export async function getUser(kv: KVNamespace): Promise<UserRecord | null> {
 
 export async function saveUser(
   kv: KVNamespace,
-  user: UserRecord
+  user: UserRecord,
 ): Promise<void> {
   await kv.put(`user:${ALLOWED_EMAIL}`, JSON.stringify(user));
 }

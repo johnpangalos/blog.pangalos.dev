@@ -6,7 +6,7 @@ import {
 
 const form = document.getElementById("login-form") as HTMLFormElement;
 const submitBtn = form.querySelector(
-  "button[type=submit]"
+  "button[type=submit]",
 ) as HTMLButtonElement;
 const successDiv = document.getElementById("status-success") as HTMLDivElement;
 const errorDiv = document.getElementById("status-error") as HTMLDivElement;
@@ -68,7 +68,7 @@ form.addEventListener("submit", async (e) => {
         // Fall through to registration so the user can create a new passkey.
         if (authErr.name === "NotAllowedError") {
           showSuccess(
-            "No passkey found for this domain. Registering a new one..."
+            "No passkey found for this domain. Registering a new one...",
           );
         } else {
           throw authErr;

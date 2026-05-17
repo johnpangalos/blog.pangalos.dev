@@ -4,12 +4,7 @@ import {
   startRegistration,
   startAuthentication,
 } from "@simplewebauthn/browser";
-import {
-  Button,
-  TextField,
-  Input,
-  Label,
-} from "react-aria-components";
+import { Button, TextField, Input, Label } from "react-aria-components";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -111,16 +106,9 @@ export default function LoginForm() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <TextField
-          type="email"
-          isRequired
-          value={email}
-          onChange={setEmail}
-        >
+        <TextField type="email" isRequired value={email} onChange={setEmail}>
           <Label className="mb-2 block text-sm font-medium">Email</Label>
-          <Input
-            className="mb-4 w-full rounded border border-stone-300 bg-white px-3 py-2 text-stone-900 focus:border-fuchsia-500 focus:outline-none focus:ring-1 focus:ring-fuchsia-500 dark:border-stone-600 dark:bg-stone-800 dark:text-white"
-          />
+          <Input className="mb-4 w-full rounded border border-stone-300 bg-white px-3 py-2 text-stone-900 focus:border-fuchsia-500 focus:outline-none focus:ring-1 focus:ring-fuchsia-500 dark:border-stone-600 dark:bg-stone-800 dark:text-white" />
         </TextField>
         <Button
           type="submit"

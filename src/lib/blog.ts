@@ -186,7 +186,11 @@ export async function listPosts(): Promise<
             repo: GITHUB_REPO_NAME,
             path: f.path,
           });
-          if (!Array.isArray(fileData) && "content" in fileData && fileData.content) {
+          if (
+            !Array.isArray(fileData) &&
+            "content" in fileData &&
+            fileData.content
+          ) {
             const content = atob(fileData.content.replace(/\n/g, ""));
             const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
             if (match) {
@@ -207,14 +211,17 @@ export async function listPosts(): Promise<
 
     return posts;
   } catch (e: unknown) {
-    if (e instanceof Error && "status" in e && (e as { status: number }).status === 404) return [];
+    if (
+      e instanceof Error &&
+      "status" in e &&
+      (e as { status: number }).status === 404
+    )
+      return [];
     throw e;
   }
 }
 
-export async function deletePost(
-  slug: string,
-): Promise<void> {
+export async function deletePost(slug: string): Promise<void> {
   const octokit = getOctokit();
   const filePath = `${CONTENT_PATH}/${slug}.mdx`;
 
@@ -273,9 +280,7 @@ export async function publishPost(slug: string): Promise<void> {
   });
 }
 
-export async function getPost(
-  slug: string,
-): Promise<RawPost | null> {
+export async function getPost(slug: string): Promise<RawPost | null> {
   const octokit = getOctokit();
   const filePath = `${CONTENT_PATH}/${slug}.mdx`;
 
@@ -328,9 +333,7 @@ export async function updatePost(
   });
 }
 
-export async function postExists(
-  slug: string,
-): Promise<boolean> {
+export async function postExists(slug: string): Promise<boolean> {
   const octokit = getOctokit();
   const filePath = `${CONTENT_PATH}/${slug}.mdx`;
 

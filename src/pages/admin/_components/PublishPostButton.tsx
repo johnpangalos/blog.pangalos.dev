@@ -7,7 +7,11 @@ interface Props {
 
 export default function PublishPostButton({ slug }: Props) {
   const handlePublish = async () => {
-    if (!confirm(`Publish "${slug}"? This will make it live after the site rebuilds.`))
+    if (
+      !confirm(
+        `Publish "${slug}"? This will make it live after the site rebuilds.`,
+      )
+    )
       return;
 
     const { error } = await actions.blog.publish({ slug });

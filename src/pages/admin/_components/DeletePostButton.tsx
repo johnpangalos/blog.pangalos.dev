@@ -7,11 +7,7 @@ interface Props {
 
 export default function DeletePostButton({ slug }: Props) {
   const handleDelete = async () => {
-    if (
-      !confirm(
-        `Delete "${slug}"? This will commit a deletion to the repo.`,
-      )
-    )
+    if (!confirm(`Delete "${slug}"? This will commit a deletion to the repo.`))
       return;
 
     const { error } = await actions.blog.delete({ slug });

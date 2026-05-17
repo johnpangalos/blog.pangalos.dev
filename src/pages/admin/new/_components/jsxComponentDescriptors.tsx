@@ -96,19 +96,19 @@ function TooltipEditor({ mdastNode }: JsxEditorProps) {
 
   return (
     <span className="inline-flex" contentEditable={false}>
-      <DialogTrigger onOpenChange={(isOpen) => {
-        if (isOpen) {
-          resetFields();
-        }
-      }}>
+      <DialogTrigger
+        onOpenChange={(isOpen) => {
+          if (isOpen) {
+            resetFields();
+          }
+        }}
+      >
         <Pressable>
           <span
             role="button"
             className="cursor-pointer border-b-2 border-dotted border-fuchsia-700"
           >
-            {main || (
-              <span className="text-zinc-400">empty tooltip</span>
-            )}
+            {main || <span className="text-zinc-400">empty tooltip</span>}
           </span>
         </Pressable>
         <Popover

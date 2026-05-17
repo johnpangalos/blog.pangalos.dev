@@ -128,9 +128,7 @@ describe("Tooltip component", () => {
       const { container } = render(
         <Tooltip main="tap me" hover="info" to="https://example.com" />,
       );
-      const span = container.querySelector(
-        ".text-orange-600",
-      );
+      const span = container.querySelector(".text-orange-600");
       expect(span).not.toBeNull();
       expect(span!.textContent).toBe("tap me");
     });

@@ -33,7 +33,8 @@ function getLoadingMessage(draft: boolean, isEditing: boolean) {
 }
 
 function getSuccessMessage(draft: boolean, isEditing: boolean) {
-  if (isEditing) return "Post updated! It will be live after the site rebuilds.";
+  if (isEditing)
+    return "Post updated! It will be live after the site rebuilds.";
   if (draft) return "Draft saved to repo!";
   return "Post committed to repo! It will be live after the site rebuilds.";
 }
@@ -79,7 +80,10 @@ export default function PostForm({
     try {
       const stored = localStorage.getItem(storageKey);
       if (stored) {
-        const parsed = JSON.parse(stored) as { content: string; savedAt: string };
+        const parsed = JSON.parse(stored) as {
+          content: string;
+          savedAt: string;
+        };
         setLocalContent(parsed.content);
         setLocalSavedAt(parsed.savedAt);
       }
@@ -232,7 +236,10 @@ export default function PostForm({
               const form = (e.target as HTMLElement).closest("form");
               if (form && form.reportValidity()) {
                 handleSubmit(
-                  { preventDefault: () => {}, currentTarget: form } as React.FormEvent<HTMLFormElement>,
+                  {
+                    preventDefault: () => undefined,
+                    currentTarget: form,
+                  } as React.FormEvent<HTMLFormElement>,
                   true,
                 );
               }

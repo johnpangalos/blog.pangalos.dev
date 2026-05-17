@@ -17,4 +17,12 @@ module.exports = {
     es2017: true,
     node: true,
   },
+  overrides: [
+    {
+      files: ["*.d.ts"],
+      rules: {
+        "@typescript-eslint/triple-slash-reference": "off",
+      },
+    },
+  ],
 };

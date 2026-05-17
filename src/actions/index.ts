@@ -15,7 +15,15 @@ import {
   getOrigin,
 } from "../lib/auth";
 import type { UserRecord } from "../lib/auth";
-import { createPost, updatePost, postExists, deletePost, publishPost, slugify, extractTitle } from "../lib/blog";
+import {
+  createPost,
+  updatePost,
+  postExists,
+  deletePost,
+  publishPost,
+  slugify,
+  extractTitle,
+} from "../lib/blog";
 import { env } from "cloudflare:workers";
 
 export const server = {
@@ -172,7 +180,7 @@ export const server = {
         }
 
         const matchingCred = user.credentials.find(
-          (c) => c.credentialId === credential.id
+          (c) => c.credentialId === credential.id,
         );
         if (!matchingCred) {
           throw new ActionError({
@@ -233,10 +241,12 @@ export const server = {
         if (env.ENVIRONMENT === "production") {
           const kv = env.BLOG_PANGALOS_AUTH_KV;
           const existingUser = await getUser(kv);
-          excludeCredentials = (existingUser?.credentials ?? []).map((cred) => ({
-            id: cred.credentialId,
-            transports: cred.transports as string[] | undefined,
-          }));
+          excludeCredentials = (existingUser?.credentials ?? []).map(
+            (cred) => ({
+              id: cred.credentialId,
+              transports: cred.transports as string[] | undefined,
+            }),
+          );
         }
 
         const options = await generateRegistrationOptions({

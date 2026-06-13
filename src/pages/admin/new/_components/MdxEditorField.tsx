@@ -101,7 +101,6 @@ export default function MdxEditorField({
             listsPlugin(),
             quotePlugin(),
             thematicBreakPlugin(),
-            markdownShortcutPlugin(),
             linkPlugin(),
             linkDialogPlugin(),
             tablePlugin(),
@@ -140,6 +139,9 @@ export default function MdxEditorField({
                 </>
               ),
             }),
+            // Must come last: it only enables typing shortcuts (like
+            // [text](url) for links) for plugins registered before it.
+            markdownShortcutPlugin(),
           ]}
         />
       </div>

@@ -56,7 +56,6 @@
     "@simplewebauthn/browser": "13.3.0",
     "@simplewebauthn/server": "13.3.0",
     "astro": "6.3.2",
-    "lexical": "0.35.0",
     "react": "19.2.6",
     "react-aria-components": "1.17.0",
     "react-dom": "19.2.6"

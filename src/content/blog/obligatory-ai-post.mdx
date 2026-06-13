@@ -41,3 +41,56 @@ Why am I so tired you ask? Because I do nothing but read line after line of most
 <NerdAlert />
 
 ## double.nerd.alert
+
+First you’re going to have to learn about ternaries. Let’s start with an example:
+
+```ts
+const x = true;
+
+const y = x ? "yes" : "no"
+
+console.log(y)
+```
+
+What do you think happens if you run this code? Who cares it uses a ternary and ternaries are awful! Here is another example, this time go and learn the frontend rendering library \[React]\(https://react.dev/learn). Don‘t worry, I’ll wait… You done? Good. Here feast your eyes on this!
+
+```tsx
+function myComponent(params) {
+  return (
+    <>
+      {x === y ? (
+        <div>first value</div>
+      ) : x === z ? (
+        <div>second value</div>
+      ) : x === 🐒 ? (
+        <div>monkey value</div>
+      ) : null}
+    </>
+  );
+}
+```
+
+Do you know what‘s going on here? I don’t! but this is what AI spits out all day. Monday garbage ternaries, Tuesday terrible ternaries, the rest of the week garbage piled on top of more garbage ternaries. And although I churning out features faster than a the Amish churn out butter! And they’re riddled with code like the one above.
+
+Now you could tell the AI no ternarie, but then it never shuts up about it. For example:
+
+```tsx
+function myComponent(params) {
+  // I used if statements instead of ternaries, please notice me!
+
+  if (x === y) {
+    return <div>first value</div>;
+  }
+
+  if (x === z) {
+    return <div>second value</div>;
+  }
+  if (x === 🐒) {
+    return <div>monkey value</div>;
+  }
+
+  return null;
+}
+```
+
+And there are a million other small things that are things that I would never write if I coded it myself.&#x20;

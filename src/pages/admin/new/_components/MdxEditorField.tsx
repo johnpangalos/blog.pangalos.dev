@@ -29,6 +29,7 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { blogJsxComponentDescriptors } from "./jsxComponentDescriptors";
+import { pasteMarkdownPlugin } from "./pasteMarkdownPlugin";
 
 function InsertComponentButton() {
   const insertJsx = usePublisher(insertJsx$);
@@ -104,6 +105,7 @@ export default function MdxEditorField({
             markdownShortcutPlugin(),
             linkPlugin(),
             linkDialogPlugin(),
+            pasteMarkdownPlugin(),
             tablePlugin(),
             frontmatterPlugin(),
             jsxPlugin({ jsxComponentDescriptors: blogJsxComponentDescriptors }),

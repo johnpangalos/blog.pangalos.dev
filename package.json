@@ -54,7 +54,7 @@
     "@octokit/auth-app": "8.2.0",
     "@octokit/rest": "22.0.1",
     "@simplewebauthn/browser": "13.3.0",
-    "@simplewebauthn/server": "13.3.0",
+    "@simplewebauthn/server": "13.3.2",
     "astro": "6.3.2",
     "react": "19.2.6",
     "react-aria-components": "1.17.0",

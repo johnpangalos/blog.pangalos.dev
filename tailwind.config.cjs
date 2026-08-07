@@ -8,6 +8,8 @@ module.exports = {
         slate: {
           css: {
             "--tw-prose-headings": theme("colors.amber[600]"),
+            "--tw-prose-links": theme("colors.orange[600]"),
+            "--tw-prose-invert-links": theme("colors.orange[400]"),
           },
         },
       }),
